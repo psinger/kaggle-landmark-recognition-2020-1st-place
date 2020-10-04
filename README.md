@@ -1,0 +1,1 @@
+# kaggle-landmark-recognition-2020-1st-place
