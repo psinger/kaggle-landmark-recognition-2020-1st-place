@@ -1,6 +1,7 @@
 # Kaggle Landmark Recognition 2020 competition: Winner solution
 
-This repository contains the code for our winning solution to the 2020 edition of the Google Landmark Recognition competition hosted on Kaggle: https://www.kaggle.com/c/landmark-recognition-2020/leaderboard
+This repository contains the code for our winning solution to the 2020 edition of the Google Landmark Recognition competition hosted on Kaggle: 
+https://www.kaggle.com/c/landmark-recognition-2020/leaderboard
 
 The full solution is described in a paper hosted on arxiv: https://arxiv.org/abs/2010.01650
 
