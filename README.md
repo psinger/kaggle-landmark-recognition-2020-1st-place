@@ -6,7 +6,7 @@ The full solution is described in a paper hosted on arxiv: https://arxiv.org/abs
 
 In order to run this code you need the train and test data from GLDv2: https://github.com/cvdfoundation/google-landmark
 
-To train a model, please run ```src/train.py``` with respective config as flag:
+To train a model, please run ```src/train.py``` with a config file as flag:
 ```
 python train.py --config config1
 ```

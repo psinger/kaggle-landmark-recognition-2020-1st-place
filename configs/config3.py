@@ -63,7 +63,7 @@ args = {
     'n_classes':81313,
     'data_frac':1.,
 
-    'neptune_project':'Zoo/kaggle-landmark',
+    'neptune_project':'xx/kaggle-landmark',
 }
 
 args['tr_aug'] = A.Compose([A.Resize(height=656,width=656,p=1.),

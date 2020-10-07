@@ -69,7 +69,7 @@ args = {
     
     'crop_size': 448,
 
-    'neptune_project':'Zoo/kaggle-landmark',
+    'neptune_project':'xx/kaggle-landmark',
 }
 
 args['tr_aug'] = A.Compose([ A.LongestMaxSize(512,p=1),

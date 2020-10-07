@@ -70,7 +70,7 @@ args = {
     
     'crop_size': 600,
 
-    'neptune_project':'Zoo/kaggle-landmark',
+    'neptune_project':'xx/kaggle-landmark',
 }
 
 
