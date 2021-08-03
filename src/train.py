@@ -90,7 +90,7 @@ def setup():
 
     train_filter['target'] = train_filter['landmark_id'].apply(lambda x: landmark_id2class_val.get(x,-1))
 
-    train = train.head(args.batch_size*2)
+    #train = train.head(args.batch_size*2)
 
     return train, valid, train_filter, landmark_ids, landmark_id2class, landmark_id2class_val, class_weights, allowed_classes
 
