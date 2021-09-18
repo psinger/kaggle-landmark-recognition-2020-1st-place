@@ -33,6 +33,7 @@ class GLRDataset(Dataset):
         self.img_folder = self.df.img_folder.values
         self.suffix = suffix
         self.image_names = self.df.id.values
+        # self.image_names = self.df.images.values  # SLY CODE
         self.images_cache = {}
         self.images_in_cache = False
 

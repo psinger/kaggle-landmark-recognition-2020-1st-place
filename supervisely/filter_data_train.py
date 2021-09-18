@@ -32,12 +32,13 @@ def load_csv_table(csv_path):
 
 def write_csv_table(csv_path, table_data):
     with open(csv_path, 'w') as file:
-        file.write('landmark_id,images\n')
+        file.write('landmark_id,id\n')
         for curr_landmark_id, data in tqdm(table_data.items(),
                                            total=len(table_data.keys()),
                                            desc='writing to file'):
             if len(data) > 0:
-                file.write(f'{curr_landmark_id},{" ".join(data)}\n')
+                for curr_image_id in data:
+                    file.write(f'{curr_landmark_id},{curr_image_id}\n')
 
 
 def show_stats(table_data):
@@ -59,13 +60,13 @@ def show_stats(table_data):
     )
 
 
-flag = 'test'
+flag = 'train'
 
 input_data_path = f'/root/gld_data/{flag}'
 csv_input_file_path = f'/root/gld_data/{flag}.csv'
 csv_output_file_path = f'/root/gld_data/{flag}_filtered.csv'
 
-min_images_count_for_id = 1
+min_images_count_for_id = 3
 
 table_rows = load_csv_table(csv_input_file_path)
 images_names_all = set(get_existed_files_names(input_data_path, ['.jpg', '.jpeg']))
