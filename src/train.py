@@ -1,3 +1,5 @@
+import os
+
 from conf import *
 from utils import *
 from data import *
@@ -25,6 +27,8 @@ import warnings
 import torch.distributed as dist
 import shutil
 import pickle
+
+import functions
 
 
 def fix_row(row):
@@ -287,6 +291,35 @@ class Model(pl.LightningModule):
         for key in out_tr_filter.keys():
             out_tr_filter[key] = out_tr_filter[key].detach().cpu().numpy().astype(np.float32)
 
+        ## HERE MUST BE SLY CODE
+
+        # out_val['idx'] = [0, 1, 2, ...]
+        # out_val['targets'] = [1, 2, ...]
+        # out_val['embeddings'] = [[512-dim emb1], ...]
+
+        # out_tr_filter['idx'] = [0, 1, 2, ...]
+        # out_tr_filter['targets'] = [1, 2, ...]
+        # out_tr_filter['embeddings'] = [[512-dim emb1], ...]
+
+        # output_path = os.path.join(args.model_path, args.experiment_name, 'visualizations', str(self.current_epoch))
+        #
+        # if os.path.exists(output_path):
+        #     shutil.rmtree(output_path)
+        #
+        # os.makedirs(output_path, exist_ok=True)
+        #
+        # for index, val_image_index_in_ds in enumerate(out_val['idx'][:30]):
+        #     pred_index_of_labels, pred_dist = functions.calculate_top_n_cosine_sim(out_tr_filter['embeddings'],
+        #                                                                            [out_val['embeddings'][index]],
+        #                                                                            top_n=8)
+        #
+        #     save_path = os.path.join(output_path, str(index))
+        #
+        #     query_img = val_ds.get_original_item(int(val_image_index_in_ds))['input'].permute(1, 2, 0).numpy()
+        #     functions.save_tensors_by_indexes([query_img], tr_ds, pred_index_of_labels, pred_dist, save_path)
+
+        ## HERE MUST BE END OF SLY CODE
+
         if rank == 0:
             experiment_path = args.model_path + args.experiment_name + '/'
             with open(experiment_path + '/' + 'out_val.p', 'wb') as handle:
@@ -398,10 +431,10 @@ if __name__ == '__main__':
     else:
         logger = None
 
-    ckpt_save_path = experiment_path + '/ckpt/'
+    ckpt_save_path = experiment_path + 'ckpt/'
     if not os.path.exists(ckpt_save_path):
         os.makedirs(ckpt_save_path)
-    ckpt = ModelCheckpoint(ckpt_save_path, monitor='val_gap_pp', verbose=False, mode='max', period=1, save_top_k=1,
+    ckpt = ModelCheckpoint(ckpt_save_path, monitor='val_gap_pp', verbose=False, mode='max', period=1, save_top_k=5,
                            save_last=True, save_weights_only=args.save_weights_only)
 
     trainer = Trainer(gpus=args.gpus,
@@ -416,7 +449,9 @@ if __name__ == '__main__':
                       num_sanity_val_steps=args.num_sanity_val_steps,
                       gradient_clip_val=5.0,
                       distributed_backend=args.distributed_backend,
-                      sync_batchnorm=args.sync_batchnorm)
+                      sync_batchnorm=args.sync_batchnorm,
+                      # fast_dev_run=True
+                      )
 
     model = Model(args, tr_dl, val_dl, tr_filter_dl, train_filter=train_filter, metric_crit=metric_crit,
                   metric_crit_val=metric_crit_val, allowed_classes=allowed_classes)
