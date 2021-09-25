@@ -76,14 +76,14 @@ def img_is_color(img):
     return False
 
 
-def save_tensors_by_indexes(query_images, train_dataset, pred_index_of_labels, pred_dist, save_path):
+def save_tensors_by_indexes(query_images, train_dataset, pred_index_of_labels, pred_dist, output_path):
     for query_index in range(len(query_images)):
         curr_tensors_list = []
 
         curr_pred_index_of_labels = pred_index_of_labels[query_index]
         curr_pred_dist = [f'[{index + 1} place] — ' \
                           f't: {int(train_dataset.get_original_item(int(image_index_in_dataset))["target"])},' \
-                          f'\nscore: {round(curr_score, 4)}' for index, (curr_score, image_index_in_dataset) in
+                          f'\nscore: {round(float(curr_score), 4)}' for index, (curr_score, image_index_in_dataset) in
                           enumerate(zip(pred_dist[query_index], curr_pred_index_of_labels))]
 
         for current_index in curr_pred_index_of_labels:
@@ -92,6 +92,8 @@ def save_tensors_by_indexes(query_images, train_dataset, pred_index_of_labels, p
 
         curr_tensors_list.insert(0, query_images[query_index])
         curr_pred_dist.insert(0, 'query image')
+
+        save_path = os.path.join(output_path, str(query_index))
 
         save_image_list(list_images=curr_tensors_list,
                         list_titles=curr_pred_dist,
@@ -168,3 +170,5 @@ def save_image_list(list_images, list_titles=None, list_cmaps=None, grid=True, n
     #     _ = plt.show()
     plt.savefig(save_path)
     fig.clf()
+    plt.close(fig)
+
