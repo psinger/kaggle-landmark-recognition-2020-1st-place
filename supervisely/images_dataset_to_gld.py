@@ -87,40 +87,44 @@ def show_stats(table_data):
     )
 
 
-flag = 'test'
-
-dataset_root_path = '/root/snacks_data/'
-input_data_path = os.path.join(dataset_root_path, f'input_{flag}')
-output_data_path = os.path.join(dataset_root_path, f'{flag}')
-
-csv_output_file_path = f'/root/snacks_data/{flag}_filtered.csv'
-
-classes_labels = os.listdir(input_data_path)
-
-out_data_dict = {}
+flag = 'train'
 
 
-for class_label in tqdm(classes_labels):  # by every class in image folder ds
-    input_data_label_path = os.path.join(input_data_path, class_label)
-    images_paths = get_files_paths(input_data_label_path, ['.jpg', '.png'])
+for seq_num in range(1, 6):
+    print(f'processing: {seq_num}')
 
-    for image_path in images_paths:   # by every image in current class
-        img_name = str(image_path.split('/')[-1]).split('.')[0]
-        img_extension = str(image_path.split('/')[-1]).split('.')[-1]
+    dataset_root_path = '/root/snacks_data/'
+    input_data_path = os.path.join(dataset_root_path, f'{seq_num}', f'train_image_folder')
+    output_data_path = os.path.join(dataset_root_path, f'{seq_num}', f'{flag}')
 
-        img_uuid = get_uuid_by_string(img_name + class_label + flag)  # generate unique image name
+    csv_output_file_path = f'/root/snacks_data/{seq_num}/{flag}_filtered.csv'
 
-        gld_output_class_path = os.path.join(output_data_path, f'{img_uuid[0]}/{img_uuid[1]}/{img_uuid[2]}')
-        os.makedirs(gld_output_class_path, exist_ok=True)
-        gld_output_class_image_path = os.path.join(gld_output_class_path, f'{img_uuid}.{img_extension}')
-        shutil.copy(image_path, gld_output_class_image_path)  # copy image with unique name
+    classes_labels = os.listdir(input_data_path)
 
-        class_images = out_data_dict.get(class_label, [])  # update out_data_dict
-        class_images.append(img_uuid)
-        out_data_dict[class_label] = class_images
+    out_data_dict = {}
 
-write_csv_table(csv_output_file_path, out_data_dict, is_train=(flag == 'train'))
-show_stats(out_data_dict)
+
+    for class_label in tqdm(classes_labels):  # by every class in image folder ds
+        input_data_label_path = os.path.join(input_data_path, class_label)
+        images_paths = get_files_paths(input_data_label_path, ['.jpg', '.png'])
+
+        for image_path in images_paths:   # by every image in current class
+            img_name = str(image_path.split('/')[-1]).split('.')[0]
+            img_extension = str(image_path.split('/')[-1]).split('.')[-1]
+
+            img_uuid = get_uuid_by_string(img_name + class_label + flag)  # generate unique image name
+
+            gld_output_class_path = os.path.join(output_data_path, f'{img_uuid[0]}/{img_uuid[1]}/{img_uuid[2]}')
+            os.makedirs(gld_output_class_path, exist_ok=True)
+            gld_output_class_image_path = os.path.join(gld_output_class_path, f'{img_uuid}.{img_extension}')
+            shutil.copy(image_path, gld_output_class_image_path)  # copy image with unique name
+
+            class_images = out_data_dict.get(class_label, [])  # update out_data_dict
+            class_images.append(img_uuid)
+            out_data_dict[class_label] = class_images
+
+    write_csv_table(csv_output_file_path, out_data_dict, is_train=(flag == 'train'))
+    show_stats(out_data_dict)
 
 
 
