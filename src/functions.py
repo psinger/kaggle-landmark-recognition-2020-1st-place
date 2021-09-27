@@ -76,6 +76,22 @@ def img_is_color(img):
     return False
 
 
+def frame_image(img, frame_width, color='green'):
+    b = frame_width  # border size in pixel
+    ny, nx = img.shape[0], img.shape[1]  # resolution / number of pixels in x and y
+    if img.ndim == 3:  # rgb or rgba array
+        framed_img = np.ones((b + ny + b, b + nx + b, img.shape[2]))
+    if color == 'green':
+        framed_img = framed_img * np.array([1, 255, 1])
+    elif color == 'red':
+        framed_img = framed_img * np.array([255, 1, 1])
+    elif color == 'yellow':
+        framed_img = framed_img * np.array([255, 255, 1])
+
+    framed_img[b:-b, b:-b] = img
+    return framed_img
+
+
 def save_tensors_by_indexes(query_images, train_dataset, pred_index_of_labels, pred_dist, output_path):
     for query_index in range(len(query_images)):
         curr_tensors_list = []
@@ -102,6 +118,96 @@ def save_tensors_by_indexes(query_images, train_dataset, pred_index_of_labels, p
                         grid=False,
                         title_fontsize=20,
                         save_path=save_path)
+
+
+def sort_sum_dist_labels(pred_labels, pred_distances):
+    """
+        returns labels sorted by sum of dists
+        e.g:
+            # pred_labels = np.array([0,0,1,1,3,3,4,1])
+            # pred_distances = np.array([0.5,0.4,0.9,0.9,0.1,0.1,0.5,0.9])
+            # unique_labels == [0, 1, 3, 4]
+            # masks == [0.9, 2.7, 0.2, 0.5] # sum for class 0, sum for class 1, et.c.
+            # returns array([1, 0, 4, 3]), array([2.7, 0.9, 0.5, 0.2])
+
+    """
+    unique_labels = list(set(pred_labels))
+    confs = [sum(pred_distances[pred_labels == x]) for x in unique_labels]
+    sort_ind = np.argsort(confs)[::-1]
+    sorted_confs = np.array(confs)[sort_ind]
+    sorted_labels = np.array(unique_labels)[sort_ind]
+    return sorted_labels, sorted_confs
+
+
+def save_tensors_unique(query_images, train_dataset, pred_index_of_labels, pred_dist, query_labels, output_path, num_cols=5):
+    num_rows = len(query_images)
+    fig, axes = plt.subplots(num_rows, num_cols, figsize=figsize)
+    TP = 0
+    TP_in_top = 0
+    for query_index in range(len(query_images)):
+        pred_labels = np.array([
+            int(train_dataset.get_original_item(int(x))["input"]) for x in pred_index_of_labels[query_index]
+        ])
+        pred_distances = pred_dist[query_index]
+        target_label = query_labels[query_index]
+        pred_labels_unique, pred_distances_unique = sort_sum_dist_labels(pred_labels, pred_distances)
+
+        if target_label == pred_labels_unique[0]:
+            TP += 1
+            TP_in_top += 1
+        elif target_label in pred_labels_unique:
+            TP_in_top += 1
+
+        imgs = []
+        for l in pred_labels_unique:  # TODO: Map to reference, not train!
+            train_img_index = pred_index_of_labels[query_index][
+                np.argwhere(pred_labels == l)[0]]  # just first match in train
+            imgs.append(train_dataset.get_original_item(int(train_img_index))['input'].permute(1, 2, 0).numpy())
+
+        # setup query image with target label class and "query image" string as distance
+        imgs.insert(0, query_images[query_index])
+        pred_distances_unique.insert(0, 'query image')
+        pred_labels_unique.insert(0, target_label)
+
+        plot_query_result(axes, imgs, pred_distances_unique, pred_labels_unique)
+
+    plot_title = f"Acc: {TP/num_rows:.2f}, Top {num_cols} Acc: {TP_in_top/num_rows:.2f}"
+    print(plot_title)
+    plt.title(plot_title)
+    plt.savefig(os.path.join(output_path, "resplot.png"))
+    fig.clf()
+
+
+
+def plot_query_result(axes, list_images, list_confs, list_classes, title_fontsize=30):
+    if isinstance(axes, np.ndarray):
+        list_axes = list(axes.flat)
+    else:
+        list_axes = [axes]
+    for i in range(len(list_images)):
+        img = list_images[i]
+        img = frame_image(img, 3, color='green')
+
+        if i == 1:
+            if list_classes[i] == list_classes[0]:
+                img = frame_image(img, 3, color='green')
+            else:
+                img = frame_image(img, 3, color='red')
+        elif i > 1 and not list_classes[1] == list_classes[0]:
+            if list_classes[i] == list_classes[0]:
+                img = frame_image(img, 3, color='yellow')
+
+        title = f"{list_classes[i]}:{list_confs[i]}"
+
+        list_axes[i].imshow(img.astype(np.uint8))
+        list_axes[i].set_title(title, fontsize=title_fontsize)
+        list_axes[i].axis('off')
+        list_axes[i].grid(False)
+
+    for i in range(num_images, len(list_axes)):
+        list_axes[i].set_visible(True)
+
+
 
 
 def save_image_list(list_images, list_titles=None, list_cmaps=None, grid=True, num_cols=2, figsize=(20, 10),

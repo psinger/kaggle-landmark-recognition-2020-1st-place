@@ -145,14 +145,17 @@ def process_visualization(outputs_train, outputs_test, current_epoch):
     pred_index_of_labels = [list(curr_row) for curr_row in list(pred_index_of_labels.data.cpu().numpy())][:30]
 
     query_images = []
+    query_labels = []
     for index, val_image_index_in_ds in enumerate(outputs_test['idx'][:30]):
 
         # pred_index_of_labels, pred_dist = functions.calculate_top_n_cosine_sim(outputs_train['embeddings'],
         #                                                                        [outputs_test['embeddings'][index]],
         #                                                                        top_n=8)
-        query_img = test_ds.get_original_item(int(val_image_index_in_ds))['input'].permute(1, 2, 0).numpy()
-        query_images.append(query_img)
+        query_data = test_ds.get_original_item(int(val_image_index_in_ds))
+        query_labels.append(query_data['target'].numpy())
+        query_images.append(query_data['input'].permute(1, 2, 0).numpy())
 
+    functions.save_tensors_unique(query_images, tr_ds, pred_index_of_labels, pred_dist, query_labels, output_path, 5)
     functions.save_tensors_by_indexes(query_images, tr_ds, pred_index_of_labels, pred_dist, output_path)
 
 
