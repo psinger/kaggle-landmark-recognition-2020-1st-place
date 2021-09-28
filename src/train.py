@@ -318,6 +318,35 @@ class Model(pl.LightningModule):
         #     query_img = val_ds.get_original_item(int(val_image_index_in_ds))['input'].permute(1, 2, 0).numpy()
         #     functions.save_tensors_by_indexes([query_img], tr_ds, pred_index_of_labels, pred_dist, save_path)
 
+        output_path = os.path.join(args.model_path, args.experiment_name, 'visualizations_while_train',
+                                   str(self.current_epoch))
+
+        if os.path.exists(output_path):
+            shutil.rmtree(output_path)
+
+        # print('scaling...')
+        # f = StandardScaler()
+        # f.fit(np.concatenate([outputs_test["embeddings"]], axis=0))
+        # outputs_train["embeddings"] = f.transform(outputs_train["embeddings"])
+        # outputs_test["embeddings"] = f.transform(outputs_test["embeddings"], )
+
+        os.makedirs(output_path, exist_ok=True)
+        pred_dist, pred_index_of_labels = get_topk_cossim(out_val["embeddings"], out_tr_filter["embeddings"], k=8,
+                                                          device=device)
+
+        pred_dist = [list(curr_row) for curr_row in list(pred_dist.data.cpu().numpy())][:30]
+        pred_index_of_labels = [list(curr_row) for curr_row in list(pred_index_of_labels.data.cpu().numpy())][:30]
+
+        query_images = []
+        for index, val_image_index_in_ds in enumerate(out_val['idx'][:30]):
+            # pred_index_of_labels, pred_dist = functions.calculate_top_n_cosine_sim(outputs_train['embeddings'],
+            #                                                                        [outputs_test['embeddings'][index]],
+            #                                                                        top_n=8)
+            query_img = val_ds.get_original_item(int(val_image_index_in_ds))['input'].permute(1, 2, 0).numpy()
+            query_images.append(query_img)
+
+        functions.save_tensors_by_indexes(query_images, tr_ds, pred_index_of_labels, pred_dist, output_path)
+
         ## HERE MUST BE END OF SLY CODE
 
         if rank == 0:
@@ -338,6 +367,9 @@ class Model(pl.LightningModule):
         val_loss_mean = np.sum(out_val["val_loss"])
 
         vals, inds = get_topk_cossim(out_val["embeddings"], out_tr_filter["embeddings"], k=1, device=device)
+
+        print(f'{vals} cossim vals array')
+
         vals = vals.data.cpu().numpy().reshape(-1)
         inds = inds.data.cpu().numpy().reshape(-1)
         labels = pd.Series(out_tr_filter["targets"][inds])
@@ -453,7 +485,10 @@ if __name__ == '__main__':
                       # fast_dev_run=True
                       )
 
-    model = Model(args, tr_dl, val_dl, tr_filter_dl, train_filter=train_filter, metric_crit=metric_crit,
+    # model = Model(args, tr_dl, val_dl, tr_filter_dl, train_filter=train_filter, metric_crit=metric_crit,
+    #               metric_crit_val=metric_crit_val, allowed_classes=allowed_classes)
+
+    model = Model(args, tr_dl, val_dl, tr_dl, train_filter=tr_ds, metric_crit=metric_crit,
                   metric_crit_val=metric_crit_val, allowed_classes=allowed_classes)
 
     trainer.fit(model)

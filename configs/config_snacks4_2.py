@@ -5,8 +5,8 @@ abs_path = os.path.dirname(__file__)
 
 args = {
     'model_path': '/root/gld_pd/models/',
-    'data_path': '/root/snacks_data/2/',
-    'data_path_2019': '/root/snacks_data/2/',
+    'data_path': '/root/snacks_data/4/',
+    'data_path_2019': '/root/snacks_data/4/',
     'valid_csv_fn': 'test_filtered.csv',
     'train_csv_fn': 'train_filtered.csv',
 
@@ -55,7 +55,7 @@ args = {
     'batch_size': 32,
     'test_batch_size': 240,
 
-    'max_epochs': 6,
+    'max_epochs': 1,
     'scheduler': {"method": "cosine", "warmup_epochs": 1},
 
     'n_classes': 83,
@@ -82,5 +82,3 @@ args['test_aug'] = A.Compose([
     # A.SmallestMaxSize(512),
     # A.CenterCrop(height=args['crop_size'], width=args['crop_size'], p=1.)
 ])
-
-

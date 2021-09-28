@@ -77,7 +77,7 @@ def img_is_color(img):
 
 
 def save_tensors_by_indexes(query_images, train_dataset, pred_index_of_labels, pred_dist, output_path):
-    for query_index in range(len(query_images)):
+    for query_index in tqdm(range(len(query_images)), total=len(query_images), desc='writing visualizations'):
         curr_tensors_list = []
 
         curr_pred_index_of_labels = pred_index_of_labels[query_index]

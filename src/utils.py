@@ -57,6 +57,7 @@ def cos_similarity_matrix(a, b, eps=1e-8):
     sim_mt = torch.mm(a_norm, b_norm.transpose(0, 1))
     return sim_mt
 
+
 def get_topk_cossim(test_emb, tr_emb, batchsize = 64, k=10, device='cuda:0',verbose=True):
     tr_emb = torch.tensor(tr_emb, dtype = torch.float32, device=torch.device(device))
     test_emb = torch.tensor(test_emb, dtype = torch.float32, device=torch.device(device))

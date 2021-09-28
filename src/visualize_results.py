@@ -33,6 +33,7 @@ import functions
 import functools
 
 from tqdm import tqdm
+import subprocess
 
 
 def fix_row(row):
@@ -131,15 +132,37 @@ def get_embeddings(model, dataloader):
     return outputs
 
 
+def pack_to_zip_and_copy(source_folder):
+    import shutil
+
+
+
+    # shutil.make_archive(output_filename, 'zip', source_folder)
+
+
 def process_visualization(outputs_train, outputs_test, current_epoch):
-    output_path = os.path.join(args.model_path, args.experiment_name, 'visualizations', str(current_epoch))
+    output_path = os.path.join(os.path.dirname(args.model_path), 'visualizations',
+                               args.experiment_name, str(current_epoch - 1))
 
     if os.path.exists(output_path):
         shutil.rmtree(output_path)
 
+    # print('scaling...')
+    # f = StandardScaler()
+    # f.fit(np.concatenate([outputs_test["embeddings"]], axis=0))
+    # outputs_train["embeddings"] = f.transform(outputs_train["embeddings"])
+    # outputs_test["embeddings"] = f.transform(outputs_test["embeddings"], )
+
     os.makedirs(output_path, exist_ok=True)
-    pred_dist, pred_index_of_labels = get_topk_cossim(outputs_test["embeddings"], outputs_train["embeddings"], k=8,
+
+    outputs_test["embeddings"] = outputs_test["embeddings"].detach().cpu().numpy().astype(np.float32)
+    outputs_train["embeddings"] = outputs_train["embeddings"].detach().cpu().numpy().astype(np.float32)
+
+
+    pred_dist, pred_index_of_labels = get_topk_cossim(outputs_test["embeddings"],
+                                                      outputs_train["embeddings"], k=8,
                                                       device=device)
+
 
     pred_dist = [list(curr_row) for curr_row in list(pred_dist.data.cpu().numpy())][:30]
     pred_index_of_labels = [list(curr_row) for curr_row in list(pred_index_of_labels.data.cpu().numpy())][:30]
@@ -155,11 +178,17 @@ def process_visualization(outputs_train, outputs_test, current_epoch):
 
     functions.save_tensors_by_indexes(query_images, tr_ds, pred_index_of_labels, pred_dist, output_path)
 
+    # pack_to_zip_and_copy()
+
+
+def preprocess_weights(model_weights):
+    return OrderedDict([(k.replace('model.', ''), v) for k, v in model_weights.items()])
+
 
 if __name__ == '__main__':
     train, valid, train_filter, landmark_ids, landmark_id2class, landmark_id2class_val, class_weights, allowed_classes = setup()
 
-    tr_ds = GLRDataset(train, normalization=args.normalization, aug=args.test_aug)
+    tr_ds = GLRDataset(train, normalization=args.normalization, aug=args.test_aug, suffix='.png')
     test_ds = GLRDataset(valid, normalization=args.normalization, aug=args.test_aug)
 
     tr_dl = DataLoader(dataset=tr_ds, batch_size=args.test_batch_size, sampler=SequentialSampler(tr_ds),
@@ -186,16 +215,25 @@ if __name__ == '__main__':
         model_epoch = current_checkpoint['epoch']
 
         model_weights = current_checkpoint['state_dict']
+        model_weights = preprocess_weights(model_weights)
 
-        model.load_state_dict(model_weights, strict=False)
+        model.load_state_dict(model_weights, strict=True)
         model.eval()
 
         model_with_embeddings = functools.partial(model, get_embeddings=True)
 
         outputs_train = get_embeddings(model_with_embeddings, tr_dl)
+        # outputs_train = None
+        # outputs_test = None
         outputs_test = get_embeddings(model_with_embeddings, test_dl)
 
         process_visualization(outputs_train, outputs_test, model_epoch)
+
+    # visualizations_folder_path = os.path.join(os.path.dirname(args.model_path), 'visualizations')
+    # output_archive_name = os.path.join(os.path.dirname(args.model_path), 'visualizations.zip')
+
+    # zip -r visualizations.zip visualizations
+    # subprocess.call(['zip', '-r', f'{output_archive_name}', f'{visualizations_folder_path}'])
 
 
 
