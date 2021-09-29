@@ -152,13 +152,12 @@ def save_tensors_unique(query_images, train_dataset, pred_index_of_labels, pred_
     fig.subplots_adjust(top=0.95)
     TP = 0
     TP_in_top = 0
-    for query_index, query_image in tqdm(enumerate(query_images), total=len(query_images), desc="Calc metrics & plot"):
+    for query_index, q in tqdm(enumerate(query_images), total=len(query_images), desc="Calc metrics & plot"):
+        query_image, target_label = q['image'], q['target']
         pred_labels = np.array([
             int(train_dataset.get_original_item(int(x))["target"]) for x in pred_index_of_labels[query_index]
         ])
-
         pred_distances = pred_dist[query_index]
-        target_label = query_labels[query_index]
         pred_labels_unique, pred_distances_unique = sort_sum_dist_labels(pred_labels, pred_distances)
 
         if target_label == pred_labels_unique[0]:
@@ -183,7 +182,6 @@ def save_tensors_unique(query_images, train_dataset, pred_index_of_labels, pred_
                           imgs[:num_cols],
                           pred_distances_unique[:num_cols],
                           pred_labels_unique[:num_cols])
-
 
         h = axes[query_index][0].get_position(True).y0 - 0.005
         line = plt.Line2D((0, 1), (h, h), color="k", linewidth=1)
