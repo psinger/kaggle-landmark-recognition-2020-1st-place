@@ -87,17 +87,17 @@ def show_stats(table_data):
     )
 
 
-flag = 'train'
+flag = 'test'
 
 
 for seq_num in range(1, 6):
     print(f'processing: {seq_num}')
 
-    dataset_root_path = '/root/snacks_data/'
-    input_data_path = os.path.join(dataset_root_path, f'{seq_num}', f'train_image_folder')
+    dataset_root_path = '/root/pictures_data/'
+    input_data_path = os.path.join(dataset_root_path, f'{seq_num}', f'{flag}_image_folder')
     output_data_path = os.path.join(dataset_root_path, f'{seq_num}', f'{flag}')
 
-    csv_output_file_path = f'/root/snacks_data/{seq_num}/{flag}_filtered.csv'
+    csv_output_file_path = f'/root/pictures_data/{seq_num}/{flag}_filtered.csv'
 
     classes_labels = os.listdir(input_data_path)
 

@@ -53,6 +53,7 @@ args = {
     'weight_decay': 1e-4,
     'lr': 0.05,
     'batch_size': 32,
+    'test_batch_size': 240,
     'max_epochs': 10,
     'scheduler': {"method": "cosine", "warmup_epochs": 1},
 
@@ -72,4 +73,10 @@ args['tr_aug'] = A.Compose([
 args['val_aug'] = A.Compose([
     A.SmallestMaxSize(512),
     A.CenterCrop(height=args['crop_size'], width=args['crop_size'], p=1.)
+])
+
+args['test_aug'] = A.Compose([
+    A.Resize(height=448, width=448),
+    # A.SmallestMaxSize(512),
+    # A.CenterCrop(height=args['crop_size'], width=args['crop_size'], p=1.)
 ])

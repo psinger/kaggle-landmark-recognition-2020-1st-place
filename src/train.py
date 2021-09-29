@@ -342,8 +342,10 @@ class Model(pl.LightningModule):
             # pred_index_of_labels, pred_dist = functions.calculate_top_n_cosine_sim(outputs_train['embeddings'],
             #                                                                        [outputs_test['embeddings'][index]],
             #                                                                        top_n=8)
-            query_img = val_ds.get_original_item(int(val_image_index_in_ds))['input'].permute(1, 2, 0).numpy()
-            query_images.append(query_img)
+            original_item = val_ds.get_original_item(int(val_image_index_in_ds))
+            query_img = original_item['input'].permute(1, 2, 0).numpy()
+            query_images.append({'image': query_img,
+                                 'target': int(original_item['target'])})
 
         functions.save_tensors_by_indexes(query_images, tr_ds, pred_index_of_labels, pred_dist, output_path)
 
@@ -359,6 +361,8 @@ class Model(pl.LightningModule):
         val_score = comp_metric(out_val["targets"], [out_val["preds"], out_val["preds_conf"]])
         val_score_landmarks = comp_metric(out_val["targets"], [out_val["preds"], out_val["preds_conf"]],
                                           ignore_non_landmarks=True)
+
+        val_f1, val_precision, val_recall, val_accuracy = functions.calc_metrics(predict=out_val["preds"], gt=out_val["targets"])
 
         val_score_pp = comp_metric(out_val["targets"], [out_val["preds_pp"], out_val["preds_conf_pp"]])
         val_score_landmarks_pp = comp_metric(out_val["targets"], [out_val["preds_pp"], out_val["preds_conf_pp"]],
@@ -399,6 +403,10 @@ class Model(pl.LightningModule):
                      'val_gap_landmarks_cosine': val_score_landmarks_cosine,
                      'val_gap_sc_cosine': val_score_sc_cosine,
                      'val_gap_landmarks_sc_cosine': val_score_landmarks_sc_cosine,
+                     'val_f1': val_f1,
+                     'val_precision': val_precision,
+                     'val_recall': val_recall,
+                     'val_accuracy': val_accuracy,
                      'step': self.current_epoch
                      }
 

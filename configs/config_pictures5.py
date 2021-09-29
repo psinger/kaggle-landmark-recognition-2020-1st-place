@@ -5,8 +5,8 @@ abs_path = os.path.dirname(__file__)
 
 args = {
     'model_path': '/root/gld_pd/models/',
-    'data_path': '/root/gld_data/',
-    'data_path_2019': '/root/gld_data/',
+    'data_path': '/root/pictures_data/5/',
+    'data_path_2019': '/root/pictures_data/5/',
     'valid_csv_fn': 'test_filtered.csv',
     'train_csv_fn': 'train_filtered.csv',
 
@@ -23,7 +23,7 @@ args = {
     'sync_batchnorm': False,
 
     'seed': 1138,
-    'num_workers': 4,
+    'num_workers': 0,
     'save_weights_only': True,
 
     'p_trainable': True,
@@ -51,26 +51,28 @@ args = {
 
     'optimizer': "sgd",
     'weight_decay': 1e-4,
-    'lr': 0.05,
+    'lr': 0.001,
     'batch_size': 32,
     'test_batch_size': 240,
-    'max_epochs': 10,
+
+    'max_epochs': 6,
     'scheduler': {"method": "cosine", "warmup_epochs": 1},
 
-    'n_classes': 10752,
+    'n_classes': 83,
     'data_frac': 1.,
 
     'neptune_project': 'xx/kaggle-landmark',
 }
 
-
 args['tr_aug'] = A.Compose([
+    # A.Resize(height=448, width=448),
     A.SmallestMaxSize(512),
     A.RandomCrop(height=args['crop_size'], width=args['crop_size'], p=1.),
     A.HorizontalFlip(p=0.5),
 ])
 
 args['val_aug'] = A.Compose([
+    # A.Resize(height=448, width=448),
     A.SmallestMaxSize(512),
     A.CenterCrop(height=args['crop_size'], width=args['crop_size'], p=1.)
 ])

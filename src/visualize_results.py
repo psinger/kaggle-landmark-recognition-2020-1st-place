@@ -35,7 +35,6 @@ import functools
 from tqdm import tqdm
 import subprocess
 
-
 def fix_row(row):
     if len(str(row).split()) > 1:
         row = int(str(row).split()[0])
@@ -116,7 +115,6 @@ def get_embeddings(model, dataloader):
         # 'targets': []
     }
 
-
     with torch.no_grad():
         for (input_tensors, target_ids) in tqdm(dataloader, desc='calculating embeddings'):
             input_tensors['input'] = input_tensors['input'].to(device)
@@ -132,12 +130,7 @@ def get_embeddings(model, dataloader):
     return outputs
 
 
-def pack_to_zip_and_copy(source_folder):
-    import shutil
 
-
-
-    # shutil.make_archive(output_filename, 'zip', source_folder)
 
 
 def process_visualization(outputs_train, outputs_test, current_epoch):
@@ -158,23 +151,22 @@ def process_visualization(outputs_train, outputs_test, current_epoch):
     outputs_test["embeddings"] = outputs_test["embeddings"].detach().cpu().numpy().astype(np.float32)
     outputs_train["embeddings"] = outputs_train["embeddings"].detach().cpu().numpy().astype(np.float32)
 
-
     pred_dist, pred_index_of_labels = get_topk_cossim(outputs_test["embeddings"],
                                                       outputs_train["embeddings"], k=8,
                                                       device=device)
-
 
     pred_dist = [list(curr_row) for curr_row in list(pred_dist.data.cpu().numpy())][:30]
     pred_index_of_labels = [list(curr_row) for curr_row in list(pred_index_of_labels.data.cpu().numpy())][:30]
 
     query_images = []
     for index, val_image_index_in_ds in enumerate(outputs_test['idx'][:30]):
-
         # pred_index_of_labels, pred_dist = functions.calculate_top_n_cosine_sim(outputs_train['embeddings'],
         #                                                                        [outputs_test['embeddings'][index]],
         #                                                                        top_n=8)
-        query_img = test_ds.get_original_item(int(val_image_index_in_ds))['input'].permute(1, 2, 0).numpy()
-        query_images.append(query_img)
+        original_item = test_ds.get_original_item(int(val_image_index_in_ds))
+        query_img = original_item['input'].permute(1, 2, 0).numpy()
+        query_images.append({'image': query_img,
+                             'target': int(original_item['target'])})
 
     functions.save_tensors_by_indexes(query_images, tr_ds, pred_index_of_labels, pred_dist, output_path)
 
@@ -193,10 +185,10 @@ if __name__ == '__main__':
 
     tr_dl = DataLoader(dataset=tr_ds, batch_size=args.test_batch_size, sampler=SequentialSampler(tr_ds),
                        collate_fn=collate_fn,
-                       num_workers=args.num_workers, drop_last=True, pin_memory=True)
+                       num_workers=args.num_workers, drop_last=True, pin_memory=False)
 
     test_dl = DataLoader(dataset=test_ds, batch_size=args.test_batch_size, sampler=SequentialSampler(test_ds),
-                         collate_fn=collate_fn, num_workers=args.num_workers, pin_memory=True)
+                         collate_fn=collate_fn, num_workers=args.num_workers, pin_memory=False)
     #
     # tr_filter_ds = GLRDataset(train_filter, normalization=args.normalization, aug=args.val_aug)
     # tr_filter_dl = DataLoader(dataset=tr_filter_ds, batch_size=args.batch_size, sampler=SequentialSampler(tr_filter_ds),
@@ -234,7 +226,3 @@ if __name__ == '__main__':
 
     # zip -r visualizations.zip visualizations
     # subprocess.call(['zip', '-r', f'{output_archive_name}', f'{visualizations_folder_path}'])
-
-
-
-

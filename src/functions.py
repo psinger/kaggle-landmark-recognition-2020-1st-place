@@ -15,6 +15,12 @@ from PIL import Image
 from tqdm import tqdm
 
 
+from sklearn.metrics import precision_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import accuracy_score
+
+
 @lru_cache(maxsize=5)
 def get_all_embeddings(dataset, model, epoch):
     print(f'calc emb for epoch {epoch}')
@@ -90,8 +96,8 @@ def save_tensors_by_indexes(query_images, train_dataset, pred_index_of_labels, p
             curr_tensors_list.append(
                 train_dataset.get_original_item(int(current_index))['input'].permute(1, 2, 0).numpy())
 
-        curr_tensors_list.insert(0, query_images[query_index])
-        curr_pred_dist.insert(0, 'query image')
+        curr_tensors_list.insert(0, query_images[query_index]['image'])
+        curr_pred_dist.insert(0, f'query image, t: {query_images[query_index]["target"]}')
 
         save_path = os.path.join(output_path, str(query_index))
 
@@ -171,4 +177,14 @@ def save_image_list(list_images, list_titles=None, list_cmaps=None, grid=True, n
     plt.savefig(save_path)
     fig.clf()
     plt.close(fig)
+
+
+def calc_metrics(predict, gt):
+    f1 = f1_score(gt, predict, average='macro')
+    precision = precision_score(gt, predict, average='macro')
+    recall = recall_score(gt, predict, average='macro')
+    #     roc_auc = roc_auc_score(gt, predict, average='macro')
+    accuracy = accuracy_score(gt, predict)
+
+    return f1, precision, recall, accuracy
 
