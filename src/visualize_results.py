@@ -168,6 +168,7 @@ def process_visualization(outputs_train, outputs_test, current_epoch):
         query_images.append({'image': query_img,
                              'target': int(original_item['target'])})
 
+    functions.save_tensors_unique(query_images, tr_ds, pred_index_of_labels, pred_dist, query_labels, output_path, 5)
     functions.save_tensors_by_indexes(query_images, tr_ds, pred_index_of_labels, pred_dist, output_path)
 
     # pack_to_zip_and_copy()

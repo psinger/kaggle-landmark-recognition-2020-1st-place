@@ -82,6 +82,22 @@ def img_is_color(img):
     return False
 
 
+def frame_image(img, frame_width, color='green'):
+    b = frame_width  # border size in pixel
+    ny, nx = img.shape[0], img.shape[1]  # resolution / number of pixels in x and y
+    if img.ndim == 3:  # rgb or rgba array
+        framed_img = np.ones((b + ny + b, b + nx + b, img.shape[2]))
+    if color == 'green':
+        framed_img = framed_img * np.array([1, 255, 1])
+    elif color == 'red':
+        framed_img = framed_img * np.array([255, 1, 1])
+    elif color == 'yellow':
+        framed_img = framed_img * np.array([255, 255, 1])
+
+    framed_img[b:-b, b:-b] = img
+    return framed_img
+
+
 def save_tensors_by_indexes(query_images, train_dataset, pred_index_of_labels, pred_dist, output_path):
     for query_index in tqdm(range(len(query_images)), total=len(query_images), desc='writing visualizations'):
         curr_tensors_list = []
@@ -108,6 +124,103 @@ def save_tensors_by_indexes(query_images, train_dataset, pred_index_of_labels, p
                         grid=False,
                         title_fontsize=20,
                         save_path=save_path)
+
+
+def sort_sum_dist_labels(pred_labels, pred_distances):
+    """
+        returns labels sorted by sum of dists
+        e.g:
+            # pred_labels = np.array([0,0,1,1,3,3,4,1])
+            # pred_distances = np.array([0.5,0.4,0.9,0.9,0.1,0.1,0.5,0.9])
+            # unique_labels == [0, 1, 3, 4]
+            # sorted_confs == [0.9, 2.7, 0.2, 0.5] # sum for class 0, sum for class 1, et.c.
+            # returns array([1, 0, 4, 3]), array([2.7, 0.9, 0.5, 0.2])
+
+    """
+    unique_labels = list(set(pred_labels))
+    confs = [sum(np.array(pred_distances)[np.array(pred_labels) == x]) for x in unique_labels]
+    sort_ind = np.argsort(confs)[::-1]
+    sorted_confs = np.array(confs)[sort_ind]
+    sorted_labels = np.array(unique_labels)[sort_ind]
+    return sorted_labels, sorted_confs.tolist()
+
+
+def save_tensors_unique(query_images, train_dataset, pred_index_of_labels, pred_dist, query_labels, output_path, num_cols=5):
+    num_rows = len(query_images)
+    fig, axes = plt.subplots(num_rows, num_cols, figsize=(3 * num_cols, 4.5 * num_rows))
+    fig.tight_layout(h_pad=10)
+    fig.subplots_adjust(top=0.95)
+    TP = 0
+    TP_in_top = 0
+    for query_index, query_image in tqdm(enumerate(query_images), total=len(query_images), desc="Calc metrics & plot"):
+        pred_labels = np.array([
+            int(train_dataset.get_original_item(int(x))["target"]) for x in pred_index_of_labels[query_index]
+        ])
+
+        pred_distances = pred_dist[query_index]
+        target_label = query_labels[query_index]
+        pred_labels_unique, pred_distances_unique = sort_sum_dist_labels(pred_labels, pred_distances)
+
+        if target_label == pred_labels_unique[0]:
+            TP += 1
+            TP_in_top += 1
+        elif target_label in pred_labels_unique:
+            TP_in_top += 1
+
+        imgs = []
+        for l in pred_labels_unique:  # TODO: Map to reference, not train!
+            train_img_index = np.array(pred_index_of_labels)[query_index][
+                np.argwhere(pred_labels == l)[0]]  # just first match in train
+            imgs.append(train_dataset.get_original_item(int(train_img_index))['input'].permute(1, 2, 0).numpy())
+
+        # setup query image with target label class and "query image" string as distance
+        imgs.insert(0, query_image)
+
+        pred_distances_unique.insert(0, 1)
+        pred_labels_unique = np.insert(pred_labels_unique.astype("object"), 0, target_label)
+        plot_query_result(query_index,
+                          axes,
+                          imgs[:num_cols],
+                          pred_distances_unique[:num_cols],
+                          pred_labels_unique[:num_cols])
+
+
+        h = axes[query_index][0].get_position(True).y0 - 0.005
+        line = plt.Line2D((0, 1), (h, h), color="k", linewidth=1)
+        fig.add_artist(line)
+
+    plot_title = f"Acc: {TP/num_rows:.2f}, Top {num_cols} Acc: {TP_in_top/num_rows:.2f}"
+    fig.suptitle(plot_title, fontsize=20)
+    save_path = os.path.join(output_path, "resplot.png")
+    print(f"{plot_title}, Plot saved to {save_path}")
+    plt.savefig(save_path, bbox_inches = 'tight')
+    plt.close(fig)
+
+
+def plot_query_result(query_index, axes, list_images, list_confs, list_classes, title_fontsize=10,  border_width=10):
+    list_axes = axes[query_index]
+    for i in range(len(list_axes)):
+        list_axes[i].axis('off')
+        list_axes[i].grid(False)
+
+        try:
+            img = list_images[i]
+        except IndexError:
+            continue
+
+        title = f"ID:{list_classes[i]} CONF:{list_confs[i]:.1f}" if i > 0 else f"Target ID:{list_classes[i]}"
+        if i == 1:
+            if list_classes[i] == list_classes[0]:
+                img = frame_image(img, border_width, color='green')
+            else:
+                img = frame_image(img, border_width, color='red')
+        elif i > 1 and not list_classes[1] == list_classes[0]:
+            if list_classes[i] == list_classes[0]:
+                img = frame_image(img, border_width, color='yellow')
+
+        list_axes[i].imshow(img.astype(np.uint8))
+        list_axes[i].set_title(title, fontsize=title_fontsize)
+
 
 
 def save_image_list(list_images, list_titles=None, list_cmaps=None, grid=True, num_cols=2, figsize=(20, 10),
@@ -173,9 +286,7 @@ def save_image_list(list_images, list_titles=None, list_cmaps=None, grid=True, n
         list_axes[i].set_visible(False)
 
     fig.tight_layout()
-    #     _ = plt.show()
     plt.savefig(save_path)
-    fig.clf()
     plt.close(fig)
 
 
