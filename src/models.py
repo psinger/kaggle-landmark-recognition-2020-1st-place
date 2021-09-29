@@ -119,6 +119,8 @@ class Net(nn.Module):
     def forward(self, input_dict, get_embeddings=False, get_attentions=False):
 
         x = input_dict['input']
+
+
         x = self.backbone(x)
         
         x = self.global_pool(x)
