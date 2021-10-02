@@ -1,10 +1,8 @@
-
-import supervisely_lib as sly
-import sly_globals as g
 import os
-import tqdm
-import numpy as np
-from collections import namedtuple
+
+import sly_globals as g
+import supervisely_lib as sly
+
 
 def download_model_and_config():
     remote_model_dir, remote_model_weights_name = os.path.split(g.remote_weights_path)
@@ -19,21 +17,23 @@ def download_model_and_config():
     g.api.file.download(g.team_id, remote_config_file, g.local_config_path)
 
 
-
 def list_related_datasets():
-    workspaces = [g.api.workspace.get_info_by_id(int(g.workspace_id))] if g.only_current_workspace else g.api.workspace.get_list(g.team_id)
+    workspaces = [
+        g.api.workspace.get_info_by_id(int(g.workspace_id))] if g.only_current_workspace else g.api.workspace.get_list(
+        g.team_id)
     datasets = []
     for ws in workspaces:
         for pr in g.api.project.get_list(ws.id):
             for ds in g.api.dataset.get_list(pr.id):
                 embedding_path = os.path.join(g.remote_embeddings_dir,
-                                    sly.fs.get_file_name(g.remote_weights_path),
-                                    ws.name,
-                                    pr.name,
-                                    ds.name + '.pkl')
-                if g.api.file.exists(g.team_id, embedding_path):
+                                              sly.fs.get_file_name(g.remote_weights_path),
+                                              ws.name,
+                                              pr.name,
+                                              ds.name + '.pkl')
+                if not g.api.file.exists(g.team_id, embedding_path):
                     datasets.append([ws, pr, ds, embedding_path])
     return datasets
+
 
 def calc_embeddings(ds):
     ws, pr, ds, embedding_path = ds
@@ -71,7 +71,6 @@ def main():
     for ds in related_datasets:
         embs = calc_embeddings(ds)
         save_embeddings(embs, ds)
-
 
 
 if __name__ == "__main__":
