@@ -9,8 +9,12 @@ team_id = os.environ["context.teamId"]
 workspace_id = os.environ["context.workspaceId"]
 device = os.environ['context.deviceId']
 
+local_dataset_path = os.path.join(my_app.data_dir, 'sly_dataset')
 remote_weights_path = os.environ['modal.state.slyFile']
 remote_embeddings_dir = os.environ['modal.state.slyEmbeddingsDir']
+download_batch_size = os.environ['modal.state.downloadBatchSize']
+calc_batch_size = os.environ['modal.state.batchSize']
 only_current_workspace = int(os.environ['modal.state.OnlyCurrentWorkspace'])  # 0 or 1
+
 # DEBUG
 sly.fs.clean_dir(my_app.data_dir, ignore_errors=True)
