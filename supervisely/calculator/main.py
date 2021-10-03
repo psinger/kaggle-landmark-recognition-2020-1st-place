@@ -1,10 +1,10 @@
 import os
-
-import sly_globals as g
-import supervisely_lib as sly
-import numpy as np
 import pickle
 import tempfile
+
+import numpy as np
+import sly_globals as g
+import supervisely_lib as sly
 
 
 def download_model_and_config():
@@ -173,9 +173,10 @@ def upload_embedding_dict(ds, pkl_data):
         g.api.file.upload(g.team_id, tmp_file.name, remote_pkl_path)
     sly.logger.info(f"Upload pkl: {remote_pkl_path}")
 
+
 def get_img_urls(ids):
     # TODO: Fix it! double image info downloading
-    img_infos = g.api.image.get_info_by_id_batch(list(map(int,ids)))
+    img_infos = g.api.image.get_info_by_id_batch(list(map(int, ids)))
     return [x.full_storage_url for x in img_infos]
 
 
@@ -199,10 +200,11 @@ def main():
     related_datasets = list_related_datasets()  # only datasets without calculated_embeddings
 
     for ds in related_datasets:
-        embeddings, gt, parent_img_ids = process_dataset(ds) # HERE IS GT!
+        embeddings, gt, parent_img_ids = process_dataset(ds)  # HERE IS GT!
         urls = get_img_urls(parent_img_ids)
         emb_dict = create_embeddings_dict(embeddings, gt, urls)
         upload_embedding_dict(ds, emb_dict)
+
 
 if __name__ == "__main__":
     sly.main_wrapper("main", main)
