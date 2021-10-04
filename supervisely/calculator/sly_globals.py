@@ -1,13 +1,20 @@
 import os
 import supervisely_lib as sly
 
+
+logger = sly.logger
+
 my_app = sly.AppService()
 api = my_app.public_api
+
+
+model = None
 
 task_id = my_app.task_id
 team_id = os.environ["context.teamId"]
 workspace_id = os.environ["context.workspaceId"]
 device = os.environ['context.deviceId']
+
 
 local_dataset_path = os.path.join(my_app.data_dir, 'sly_dataset')
 remote_weights_path = os.environ['modal.state.slyFile']

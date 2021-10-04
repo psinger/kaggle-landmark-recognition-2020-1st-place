@@ -173,8 +173,6 @@ def process_visualization(outputs_train, outputs_test, current_epoch):
     # pack_to_zip_and_copy()
 
 
-def preprocess_weights(model_weights):
-    return OrderedDict([(k.replace('model.', ''), v) for k, v in model_weights.items() if k != 'model.head.weight'])
 
 
 if __name__ == '__main__':
@@ -207,7 +205,7 @@ if __name__ == '__main__':
         model_epoch = current_checkpoint['epoch']
 
         model_weights = current_checkpoint['state_dict']
-        model_weights = preprocess_weights(model_weights)
+        model_weights = functions.preprocess_weights(model_weights)
 
         model.load_state_dict(model_weights, strict=False)
         model.eval()

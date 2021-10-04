@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict
 
 from pytorch_metric_learning import losses, miners, distances, reducers, testers
 from sklearn.metrics import precision_recall_fscore_support
@@ -296,4 +297,8 @@ def calc_metrics(predict, gt):
     accuracy = accuracy_score(gt, predict)
 
     return f1, precision, recall, accuracy
+
+
+def preprocess_weights(model_weights):
+    return OrderedDict([(k.replace('model.', ''), v) for k, v in model_weights.items() if k != 'model.head.weight'])
 
