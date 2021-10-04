@@ -145,7 +145,7 @@ def sort_sum_dist_labels(pred_labels, pred_distances):
     return sorted_labels, sorted_confs.tolist()
 
 
-def save_tensors_unique(query_images, train_dataset, pred_index_of_labels, pred_dist, query_labels, output_path, num_cols=5):
+def save_tensors_unique(query_images, train_dataset, pred_index_of_labels, pred_dist, output_path, num_cols=5):
     num_rows = len(query_images)
     fig, axes = plt.subplots(num_rows, num_cols, figsize=(3 * num_cols, 4.5 * num_rows))
     fig.tight_layout(h_pad=10)

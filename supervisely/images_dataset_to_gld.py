@@ -87,10 +87,10 @@ def show_stats(table_data):
     )
 
 
-flag = 'test'
+flag = 'train'
 
 
-for seq_num in range(1, 6):
+for seq_num in [6]:
     print(f'processing: {seq_num}')
 
     dataset_root_path = '/root/pictures_data/'

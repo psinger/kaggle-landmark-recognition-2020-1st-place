@@ -1,6 +1,6 @@
-python train.py --config config_pictures1
-python train.py --config config_pictures2
-python train.py --config config_pictures3
-python train.py --config config_pictures4
-python train.py --config config_pictures5
+python train.py --config config_pictures6
+python train.py --config config_pictures7
+python train.py --config config_pictures8
+python train.py --config config_pictures9
+python train.py --config config_pictures10
 

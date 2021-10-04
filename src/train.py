@@ -493,11 +493,11 @@ if __name__ == '__main__':
                       # fast_dev_run=True
                       )
 
-    # model = Model(args, tr_dl, val_dl, tr_filter_dl, train_filter=train_filter, metric_crit=metric_crit,
-    #               metric_crit_val=metric_crit_val, allowed_classes=allowed_classes)
-
-    model = Model(args, tr_dl, val_dl, tr_dl, train_filter=tr_ds, metric_crit=metric_crit,
+    model = Model(args, tr_dl, val_dl, tr_filter_dl, train_filter=train_filter, metric_crit=metric_crit,
                   metric_crit_val=metric_crit_val, allowed_classes=allowed_classes)
+
+    # model = Model(args, tr_dl, val_dl, tr_dl, train_filter=tr_ds, metric_crit=metric_crit,
+    #               metric_crit_val=metric_crit_val, allowed_classes=allowed_classes)
 
     trainer.fit(model)
 

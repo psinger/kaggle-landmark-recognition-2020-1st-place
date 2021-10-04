@@ -5,8 +5,8 @@ abs_path = os.path.dirname(__file__)
 
 args = {
     'model_path': '/root/gld_pd/models/',
-    'data_path': '/root/gld_data/',
-    'data_path_2019': '/root/gld_data/',
+    'data_path': '/root/pictures_data/inference/',
+    'data_path_2019': '/root/pictures_data/inference/',
     'valid_csv_fn': 'test_filtered.csv',
     'train_csv_fn': 'train_filtered.csv',
 
@@ -53,7 +53,7 @@ args = {
     'weight_decay': 1e-4,
     'lr': 0.05,
     'batch_size': 32,
-    'test_batch_size': 240,
+    'test_batch_size': 40,
     'max_epochs': 10,
     'scheduler': {"method": "cosine", "warmup_epochs": 1},
 

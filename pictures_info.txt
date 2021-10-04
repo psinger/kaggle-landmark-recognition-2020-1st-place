@@ -1,0 +1,27 @@
+# comment aug to disable it
+
+target:
+  # background: "random_color"
+  # or
+  #background: "keep_original"
+  # or
+  background: "random_image"
+
+  # e.g. 0.1 - 10% padding around bbox
+  padCrop: 0.1
+
+  # height of the result image (pixels)
+  height: 480
+  
+  # spacial:
+    # Rotate: (-10, 10)
+    
+
+noise:
+  # to aug noise object
+  aug_probability: 0.5
+  # put noise object to corner
+  corner_probability: 0.9
+  # how to cover target object
+  max_occlusion_height: 0.40
+  max_occlusion_width: 0.40

@@ -76,7 +76,7 @@ args['val_aug'] = A.Compose([
 ])
 
 args['test_aug'] = A.Compose([
-    A.Resize(height=448, width=448),
+    A.Resize(height=224, width=224),
     # A.SmallestMaxSize(512),
     # A.CenterCrop(height=args['crop_size'], width=args['crop_size'], p=1.)
 ])

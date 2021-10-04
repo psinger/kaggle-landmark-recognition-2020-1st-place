@@ -6,6 +6,8 @@ import cv2
 
 import sly_globals as g
 
+import pandas as pd
+
 
 def get_files_paths(src_dir, extensions):
     files_paths = []
@@ -74,3 +76,23 @@ def dump_meta(project_meta):
     # meta_json = json.dumps(project_meta.to_json(), indent=4)
     with open(output_meta_path, 'w') as file:
         json.dump(project_meta.to_json(), file)
+
+
+def read_gld_table(gld_table_path, delimiter):
+    landmarks_class_data = {}
+
+    gld_table = pd.read_csv(gld_table_path, sep=delimiter)
+
+    landmark_ids = list(gld_table['landmarks'])
+    images_ids = list(gld_table['id'])
+
+    for row_landmark_ids, image_id in zip(landmark_ids, images_ids):
+
+        row_landmarks_ids_list = [curr_id for curr_id in row_landmark_ids.split() if len(curr_id.strip()) > 0]
+
+        for landmark_id in row_landmarks_ids_list:
+            temp_array = landmarks_class_data.get(landmark_id, [])
+            temp_array.append(image_id)
+            landmarks_class_data[landmark_id] = temp_array
+
+    return landmarks_class_data
