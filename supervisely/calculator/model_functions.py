@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import numpy as np
 
 import sly_globals as g
-import models
+import src.models as models
 
 import src.functions as source_functions
 
