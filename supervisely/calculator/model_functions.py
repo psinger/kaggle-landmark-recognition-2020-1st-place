@@ -25,7 +25,10 @@ def initialize_network():
 
 
 def load_weights(weights_path):
-    model_weights = source_functions.preprocess_weights(weights_path)
+    current_checkpoint = torch.load(weights_path, map_location=g.device)
+    model_weights = current_checkpoint['state_dict']
+    model_weights = source_functions.preprocess_weights(model_weights)
+
     g.model.load_state_dict(model_weights, strict=False)
 
 
@@ -76,16 +79,21 @@ def normalize_img(img, normalization):
     return img
 
 
+def augment(aug, img):
+    img_aug = aug(image=img)['image']
+    return img_aug.astype(np.float32)
+
+
 def numpy_to_torch_tensors(nps_batch):
     args = get_default_args()
-    augmentation = args['test_aug']
+    augmentation = args.test_aug
 
-    nps_batch = [augmentation(curr_image) for curr_image in nps_batch]
-    nps_batch = [curr_image.astype(np.float32) for curr_image in nps_batch]
+    nps_batch = [augment(augmentation, curr_image) for curr_image in nps_batch]
+
     nps_batch = [normalize_img(curr_image, args.normalization) for curr_image in nps_batch]
     tensors_batch = [to_torch_tensor(curr_image) for curr_image in nps_batch]
 
-    return torch.from_numpy(tensors_batch)
+    return torch.stack(tensors_batch)
 
 
 def calculate_embeddings_for_nps_batch(nps_batch):
@@ -94,6 +102,6 @@ def calculate_embeddings_for_nps_batch(nps_batch):
 
     output = g.model(input_tensors, get_embeddings=True)
 
-    return output['embeddings'].detach().cpu()
+    return output['embeddings'].detach().cpu().numpy()
 
-initialize_network()
+

@@ -6,6 +6,8 @@ import numpy as np
 import sly_globals as g
 import supervisely_lib as sly
 
+import model_functions
+
 
 def download_model_and_config():
     remote_model_dir, remote_model_weights_name = os.path.split(g.remote_weights_path)
@@ -14,10 +16,10 @@ def download_model_and_config():
     remote_config_file = os.path.join(remote_model_dir, remote_model_config_name)
 
     g.local_weights_path = os.path.join(g.my_app.data_dir, remote_model_weights_name)
-    g.local_config_path = os.path.join(g.my_app.data_dir, remote_model_config_name)
+    # g.local_config_path = os.path.join(g.my_app.data_dir, remote_model_config_name)  # if different configs
 
     g.api.file.download(g.team_id, g.remote_weights_path, g.local_weights_path)
-    g.api.file.download(g.team_id, remote_config_file, g.local_config_path)
+    # g.api.file.download(g.team_id, remote_config_file, g.local_config_path)
 
 
 def list_related_datasets():
@@ -70,7 +72,8 @@ def download_images_and_infos_batch(ds, img_ids):
 
 
 def inference(data):
-    return [["im super embedding"] for x in data]
+    return model_functions.calculate_embeddings_for_nps_batch(data)
+
 
 
 def batch_inference(data_batches):
@@ -188,12 +191,15 @@ def main():
         "device": g.device
     })
 
+    model_functions.initialize_network()
     download_model_and_config()
+    model_functions.load_weights(g.local_weights_path)
+
+
     sly.logger.info("Model has been successfully downloaded")
     sly.logger.debug("Script arguments", extra={
         "Remote weights": g.remote_weights_path,
         "Local weights": g.local_weights_path,
-        "Local config path": g.local_config_path,
         "device": g.device
     })
 
