@@ -34,6 +34,7 @@ import functools
 
 from tqdm import tqdm
 import subprocess
+import clip
 
 def fix_row(row):
     if len(str(row).split()) > 1:
@@ -107,6 +108,27 @@ class EmbeddingVisualizer:
     def __init__(self, model_with_embeddings):
         pass
 
+
+def get_clip_embeddings(model, dataloader):
+    outputs = {
+        'idx': [],
+        'embeddings': [],
+        # 'targets': []
+    }
+
+    with torch.no_grad():
+        for (input_tensors, target_ids) in tqdm(dataloader, desc='calculating embeddings'):
+            input_tensors['input'] = input_tensors['input'].to(device)
+
+            output = model.encode_image(input_tensors['input'])
+
+            outputs['idx'].append(input_tensors['idx'])
+            outputs['embeddings'].append(output.detach().cpu())
+
+    for key in outputs.keys():
+        outputs[key] = torch.cat(outputs[key])
+
+    return outputs
 
 def get_embeddings(model, dataloader):
     outputs = {
@@ -194,35 +216,22 @@ if __name__ == '__main__':
     # tr_filter_dl = DataLoader(dataset=tr_filter_ds, batch_size=args.batch_size, sampler=SequentialSampler(tr_filter_ds),
     #                           collate_fn=collate_fn, num_workers=args.num_workers, pin_memory=False)
 
-    checkpoints_dir = os.path.join(args.model_path, args.experiment_name, 'ckpt')
 
-    checkpoints_paths = glob.glob(os.path.join(checkpoints_dir, '*.ckpt'))
 
     device = 'cuda:0'
 
-    model = Net(args).to(device)
+    # model = Net(args).to(device)
 
-    for checkpoint_path in checkpoints_paths:
-        current_checkpoint = torch.load(checkpoint_path, map_location=device)
-        model_epoch = current_checkpoint['epoch']
 
-        model_weights = current_checkpoint['state_dict']
-        model_weights = preprocess_weights(model_weights)
+    model_filename = "ViT-B/32"  # initialize deep sort
+    model, transform = clip.load(model_filename, device=device)
+    # model.eval()
 
-        model.load_state_dict(model_weights, strict=False)
-        model.eval()
 
-        model_with_embeddings = functools.partial(model, get_embeddings=True)
 
-        outputs_train = get_embeddings(model_with_embeddings, tr_dl)
-        # outputs_train = None
-        # outputs_test = None
-        outputs_test = get_embeddings(model_with_embeddings, test_dl)
+    outputs_train = get_clip_embeddings(model, tr_dl)
+    # outputs_train = None
+    # outputs_test = None
+    outputs_test = get_clip_embeddings(model, test_dl)
 
-        process_visualization(outputs_train, outputs_test, model_epoch)
-
-    # visualizations_folder_path = os.path.join(os.path.dirname(args.model_path), 'visualizations')
-    # output_archive_name = os.path.join(os.path.dirname(args.model_path), 'visualizations.zip')
-
-    # zip -r visualizations.zip visualizations
-    # subprocess.call(['zip', '-r', f'{output_archive_name}', f'{visualizations_folder_path}'])
+    process_visualization(outputs_train, outputs_test, 0)

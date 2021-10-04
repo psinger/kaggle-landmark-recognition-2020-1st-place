@@ -9,7 +9,7 @@ from tqdm import tqdm
 import sly_globals as g
 import sly_functions as f
 
-for seq_num in range(5, 6):
+for seq_num in [6]:
     print(f'curr seq: {seq_num}')
 
     input_data_dir = f'/root/pictures_data/{seq_num}/art_{seq_num}'
@@ -32,6 +32,7 @@ for seq_num in range(5, 6):
             with open(ann_path, 'r') as file:
                 ann_data = dict(json.load(file))
 
+            # tag_name = ann_data['objects'][0]['tags'][0]['name']
             tag_name = ann_data['tags'][0]['name']
 
             class_label_output_path = os.path.join(output_data_dir, f'{tag_name}')

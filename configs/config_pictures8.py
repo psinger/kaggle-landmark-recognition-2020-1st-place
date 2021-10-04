@@ -23,7 +23,7 @@ args = {
     'sync_batchnorm': False,
 
     'seed': 1138,
-    'num_workers': 4,
+    'num_workers': 0,
     'save_weights_only': True,
 
     'p_trainable': True,
@@ -51,26 +51,29 @@ args = {
 
     'optimizer': "sgd",
     'weight_decay': 1e-4,
-    'lr': 0.05,
+    'lr': 0.004,
     'batch_size': 32,
     'test_batch_size': 40,
-    'max_epochs': 10,
+
+    'max_epochs': 6,
     'scheduler': {"method": "cosine", "warmup_epochs": 1},
 
-    'n_classes': 10752,
+    'n_classes': 83,
     'data_frac': 1.,
 
     'neptune_project': 'xx/kaggle-landmark',
 }
 
-
 args['tr_aug'] = A.Compose([
+    # A.Resize(height=448, width=448),
     A.SmallestMaxSize(512),
     A.RandomCrop(height=args['crop_size'], width=args['crop_size'], p=1.),
+    A.RandomScale(scale_limit=(0.7, 1.3), interpolation=1, always_apply=False, p=1.),
+    A.Resize(height=448, width=448),
     A.HorizontalFlip(p=0.5),
 ])
-
 args['val_aug'] = A.Compose([
+    # A.Resize(height=448, width=448),
     A.SmallestMaxSize(512),
     A.CenterCrop(height=args['crop_size'], width=args['crop_size'], p=1.)
 ])
