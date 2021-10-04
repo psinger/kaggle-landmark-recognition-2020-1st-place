@@ -30,6 +30,7 @@ def load_weights(weights_path):
     model_weights = source_functions.preprocess_weights(model_weights)
 
     g.model.load_state_dict(model_weights, strict=False)
+    g.model.eval()
 
 
 def to_torch_tensor(img):
@@ -100,7 +101,8 @@ def calculate_embeddings_for_nps_batch(nps_batch):
     tensors_batch = numpy_to_torch_tensors(nps_batch).to(g.device)
     input_tensors = {'input': tensors_batch}
 
-    output = g.model(input_tensors, get_embeddings=True)
+    with torch.no_grad():
+        output = g.model(input_tensors, get_embeddings=True)
 
     return output['embeddings'].detach().cpu().numpy()
 
