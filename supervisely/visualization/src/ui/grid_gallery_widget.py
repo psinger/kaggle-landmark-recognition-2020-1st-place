@@ -57,25 +57,56 @@ class CompareGallery:
                 res_ann = ann.clone()
         setattr(self, f"_{name}_ann", res_ann)
 
-    def set_col_data(self, row_idx, image_urls: list, annotations: list = None):
+    def set_col_data(self, row_idx, image_urls: list, pred_labels=None, confidences=None,
+                     annotations: list = None, orig_cls=None):
+        matched = False
         for col_idx, url in enumerate(image_urls):
+            color = "gray"
+            if col_idx == 0:
+                if pred_labels[col_idx] == orig_cls:
+                    color = "success"
+                    matched = True
+                else:
+                    color = "danger"
+            else:
+                if pred_labels[col_idx] == orig_cls and not matched:
+                    color = "warning"
+                    matched = True
+
+            title = {
+                "label": pred_labels[col_idx],
+                "confidence": str(round(confidences[col_idx], 2)),
+                'color': color
+            }
             ann = annotations[col_idx] if annotations else None
-            self._set_item(f"top_{row_idx}_{col_idx}", None, url, ann)
+            self._set_item(f"top_{row_idx}_{col_idx}", title, url, ann)
 
-    def set_data(self, title, image_url, ann: Union[Annotation, dict] = None):
-        o = image_url[:, 0]
-        p = image_url[:, 1:]
-        if p.shape[0] < self.rows:
-            num_rows = p.shape[0]
-        else:
-            num_rows = self.rows
+    def set_data(self, title, image_url, ann: Union[Annotation, dict] = None, additional_data=None):
+        orig_labels = None
+        pred_labels = None
+        confidences = None
+        if additional_data:
+            if 'labels' in additional_data:
+                labels = additional_data['labels']
+                orig_labels = labels[:, 0]
+                pred_labels = labels[:, 1:]
+            if 'confidences' in additional_data:
+                confidences = additional_data['confidences']
 
+        orig_urls = image_url[:, 0]
+        pred_urls = image_url[:, 1:]
+        num_rows = pred_urls.shape[0] if pred_urls.shape[0] < self.rows else self.rows
         for row in range(num_rows):
-            self._set_item(f"original_{row}", title, o[row], ann)
+            title = {
+                'label': orig_labels[row] if orig_labels is not None else '',
+                'confidence': None,
+                'color': "primary"
+            }
+            self._set_item(f"original_{row}", title, orig_urls[row], ann)
             # image_urls = [p for i in range(self.cols)]
-            image_urls = p[row]
+            image_urls = pred_urls[row]
             annotations = None
-            self.set_col_data(row, image_urls, annotations)
+            self.set_col_data(row, image_urls, pred_labels[row], confidences[row], annotations, orig_labels[row])
 
     def _get_item_annotation(self, name):
         if hasattr(self, f"_{name}_ann"):
@@ -83,7 +114,6 @@ class CompareGallery:
                 figures = [label.to_json() for label in getattr(self, f"_{name}_ann").labels]
             else:
                 figures = None
-
         return {
             "url": g.api.image.preview_url(getattr(self, f"_{name}_image_url"), height=150),
             "figures": figures,
