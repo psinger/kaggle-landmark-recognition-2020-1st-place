@@ -195,7 +195,6 @@ def main():
     download_model_and_config()
     model_functions.load_weights(g.local_weights_path)
 
-
     sly.logger.info("Model has been successfully downloaded")
     sly.logger.debug("Script arguments", extra={
         "Remote weights": g.remote_weights_path,

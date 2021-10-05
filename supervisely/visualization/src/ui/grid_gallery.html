@@ -42,21 +42,29 @@
             </div>
             <sly-grid-gallery
                     :content="data.Gallery.content"
-                    style="align-self: center"
                     :options="data.Gallery.options"
                     :active-figure="state.activeFigure">
-                <template style="align-self: center"
-                          v-slot:card-footer="{ annotation }">
+                <template v-slot:card-footer="{ annotation }"
+                style="display: flex; justify-content: center">
                     <el-tag v-if="annotation.title.label"
-                            style="align-self: center"
-                            :type="annotation.title.color">
-                        LABEL: {{annotation.title.label }}
+                            style="justify-content: center"
+                            :type="annotation.title.color"
+                    v-if="annotation.title.confidence">
+                        CONF: {{ annotation.title.confidence }}, T: {{annotation.title.label }}
+
                     </el-tag>
-                    <el-tag v-if="annotation.title.confidence"
-                            style="align-self: center"
-                            :type="annotation.title.color">
-                        CONFIDENCE: {{ annotation.title.confidence }}
+                    <el-tag v-if="annotation.title.label"
+                            style="justify-content: center"
+                            :type="annotation.title.color"
+                    v-if="!annotation.title.confidence">
+                        QUERY IMAGE, T: {{annotation.title.label }}
+
                     </el-tag>
+<!--                    <el-tag v-if="annotation.title.confidence"-->
+<!--                            style="align-self: center"-->
+<!--                            :type="annotation.title.color">-->
+
+<!--                    </el-tag>-->
                     </br v-if="!annotation.title.confidence">
                 </template>
             </sly-grid-gallery>

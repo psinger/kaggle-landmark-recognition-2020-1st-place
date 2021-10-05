@@ -6,9 +6,9 @@ from types import SimpleNamespace
 import numpy as np
 
 import sly_globals as g
-from src import models
+import models
 
-import src.functions as source_functions
+import functions as source_functions
 
 
 def get_default_args():

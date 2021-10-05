@@ -50,8 +50,11 @@ info_dir = os.path.join(artifacts_dir, "info")
 sly.fs.mkdir(info_dir)
 checkpoints_dir = os.path.join(artifacts_dir, "checkpoints")
 sly.fs.mkdir(checkpoints_dir)
+
+
 embeddings_dir = os.path.join(artifacts_dir, "embeddings")
 sly.fs.mkdir(embeddings_dir)
+sly.fs.clean_dir(embeddings_dir)
 
 root_source_dir = str(Path(sys.argv[0]).parents[1])
 sly.logger.info(f"Root source directory: {root_source_dir}")
@@ -60,6 +63,7 @@ sys.path.append(root_source_dir)
 
 sys.path.append(os.path.join(root_source_dir, 'src'))
 sys.path.append(os.path.join(str(Path(sys.argv[0]).parents[2]), 'calculator'))
+sys.path.append(os.path.join(str(Path(sys.argv[0]).parents[3]), 'src'))
 
 source_path = str(Path(sys.argv[0]).parents[0])
 sly.logger.info(f"App source directory: {source_path}")
