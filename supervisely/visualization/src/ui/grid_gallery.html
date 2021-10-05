@@ -1,0 +1,53 @@
+<sly-card title="Visualizations"
+          subtitle="Grid gallery for samples"
+          :options="{collapsable: true}"
+          :collapsed.sync="state.collapsed5"
+          ref="step5"
+>
+    <!--:disabled="{disabled: state.disabled5, message: 'complete stage 4'}"-->
+    <!--    <div class="fflex">-->
+
+    <sly-field title="Query image count" description="Set number of query images to display">
+        <el-input-number v-model="state.rows" :min="1" :max="100"></el-input-number>
+    </sly-field>
+    <sly-field title="Set topN image count" description="Set number of topN proposals for each query image">
+        <el-input-number v-model="state.cols" :min="1" :max="5"></el-input-number>
+    </sly-field>
+    <el-button type="primary" class="regular"
+               @click="command('set_grid_size');"
+    >update grid size
+    </el-button>
+
+    <!--    </div>-->
+
+    <div v-if="state.galleryInitialized">
+        </br>
+        <!--        description="Set number of rows and columns to display"-->
+        <sly-field title="Grid gallery for query image and its proposals">
+            <div slot="description">
+                current grid gallery shape  is {{data.rows}}x{{data.cols+1}}
+            </div>
+            </br>
+            <div class="fflex">
+                <el-button type="primary"
+                           icon="arrow-left"
+                           class="regular"
+                           @click="command('previous_page');"
+                           :disabled="state.galleryIsFirstPage"
+                >previous_page
+                </el-button>
+                <el-button type="primary" class="regular"
+                           @click="command('next_page');"
+                           :disabled="state.galleryIsLastPage"
+                >next_page<i class="el-icon-arrow-right el-icon-right"></i>
+                </el-button>
+                <div>{{ state.galleryPage }}/{{ state.galleryMaxPage }}</div>
+            </div>
+            <sly-grid-gallery
+                    :content="data.Gallery.content"
+                    :options="data.Gallery.options"
+                    :active-figure="state.activeFigure">
+            </sly-grid-gallery>
+        </sly-field>
+    </div>
+</sly-card>

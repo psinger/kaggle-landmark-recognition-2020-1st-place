@@ -1,0 +1,16 @@
+{
+  "name": "Visualise app",
+  "type": "app",
+  "categories": [
+    "metric learning"
+  ],
+  "description": "Description",
+  "docker_image": "supervisely/base-py-sdk:6.1.97",
+  "main_script": "src/sly_train.py",
+  "gui_template": "src/gui.html",
+  "task_location": "workspace_tasks",
+  "need_gpu": true,
+  "icon": "",
+  "icon_cover": true,
+  "instance_version": "6.4.21"
+}

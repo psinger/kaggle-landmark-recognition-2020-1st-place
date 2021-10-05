@@ -1,0 +1,15 @@
+<sly-card
+        title="Infer project"
+        subtitle="Apply model to project images"
+        :options="{collapsable: true}"
+        :collapsed.sync="state.collapsed4"
+        :disabled="{disabled: state.disabled4, message: 'complete stage 3'}"
+        ref="step4"
+>
+    <el-button type="primary" class="regular"
+               @click="state.modelLoading=true; command('infer_project');"
+               :loading="state.inferProject"
+               v-if="data.done3">
+        infer project
+    </el-button>
+</sly-card>

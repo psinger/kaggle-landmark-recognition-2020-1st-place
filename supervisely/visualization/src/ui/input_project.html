@@ -1,0 +1,30 @@
+<sly-card
+        title="Input Project"
+        subtitle="Download images and annotations from server to local app directory"
+        :options="{collapsable: true}"
+        :collapsed.sync="state.collapsed1"
+        ref="step1"
+>
+    <sly-field title="" description="Project">
+        <a slot="title" target="_blank"
+           :href="`/projects/${data.projectId}/datasets`">{{data.projectName}} ({{data.projectImagesCount}}
+            images)</a>
+        <sly-icon slot="icon" :options="{ imageUrl: `${data.projectPreviewUrl}` }"/>
+    </sly-field>
+    <el-button
+            type="primary"
+            class="regular"
+            :loading="!!data.progress1"
+            @click="command('download_project')"
+            v-if="!data.done1">
+        Download
+    </el-button>
+    <div v-if="data.progress1" class="mt10">
+        <div style="color: #20a0ff">{{data.progress1}}: {{data.progressCurrent1}} / {{data.progressTotal1}}</div>
+        <el-progress :percentage="data.progressPercent1"></el-progress>
+    </div>
+    <div v-if="data.done1">
+        <i class="zmdi zmdi-check-circle mr5" style="color: #13ce66"></i>
+        <span style="color: #5a6772;">Project has been successfully downloaded</span>
+    </div>
+</sly-card>
