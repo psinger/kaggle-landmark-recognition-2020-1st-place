@@ -10,6 +10,10 @@ from supervisely.calculator import main
 from pathlib import Path
 import pickle
 
+from urllib.parse import urlparse
+
+
+
 local_weights_path = None
 
 
@@ -34,6 +38,15 @@ def cos_similarity_matrix(a, b, eps=1e-8):
     b_norm = b / torch.max(b_n, eps * torch.ones_like(b_n))
     sim_mt = torch.mm(a_norm, b_norm.transpose(0, 1))
     return sim_mt
+
+
+def get_resized_image(image_storage_url, height):
+    parsed_link = urlparse(image_storage_url)
+
+    return f'{parsed_link.scheme}://{parsed_link.netloc}' \
+           f'/previews/q/ext:jpeg/resize:fill:0:{height}:0/q:0/plain{parsed_link.path}'
+
+
 
 
 def get_topk_cossim(test_emb, tr_emb, batchsize = 64, k=10, device='cuda:0',verbose=True):
@@ -95,15 +108,20 @@ def infer_project_(state, context):
     pred_index_of_labels = get_topk_cossim(
         predicted_embedding_list, precalculated_embedding_list, k=5, device=g.device)
 
-    filtered_urls = []
+    filtered_data = []
+
+    # {'url': None, 'label': None, 'conf': None, color: 'blue'}
+
     for line_idx, line in enumerate(pred_index_of_labels):
-        query_image = g.api.image.preview_url(predicted_url_list[line_idx], height=300)
+        query_image = get_resized_image(predicted_url_list[line_idx], height=250)
+        # query_image = g.api.image.preview_url(predicted_url_list[line_idx], height=300)
         line_encoder = [query_image]
         for col in line:
-            top_n = g.api.image.preview_url(precalculated_url_list[col], height=300)
+            top_n = get_resized_image(precalculated_url_list[col], height=250)
+            # top_n = g.api.image.preview_url(precalculated_url_list[col], height=300)
             line_encoder.append(top_n)
-        filtered_urls.append(line_encoder)
-    g.gallery_urls = filtered_urls
+        filtered_data.append(line_encoder)
+    g.gallery_data = filtered_data
 
 
 @g.my_app.callback("infer_project")
@@ -116,6 +134,7 @@ def infer_project(api: sly.Api, task_id, context, state, app_logger):
     g.api.app.set_fields(g.task_id, fields)
     infer_project_(state, context)
     fields = [
+        {"field": "data.done4", "payload": True},
         {"field": "state.modelLoading", "payload": False},
         {"field": "state.inferProject", "payload": False},
         {"field": "state.collapsed5", "payload": False},

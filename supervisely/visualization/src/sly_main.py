@@ -2,8 +2,8 @@ import supervisely_lib as sly
 import sly_globals as g
 import ui as ui
 import sys
-sys.path.append('./supervisely/visualization/src')
-sys.path.append('./supervisely/calculator')
+
+
 
 # /MetricLearningTasks/checkpoints/config_pictures_6_2.ckpt
 # /MetricLearningTasks/checkpoints/

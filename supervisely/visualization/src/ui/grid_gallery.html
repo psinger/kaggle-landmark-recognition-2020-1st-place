@@ -22,32 +22,45 @@
 
     <div v-if="state.galleryInitialized">
         </br>
+        <hr>
         <!--        description="Set number of rows and columns to display"-->
-        <sly-field title="Grid gallery for query image and its proposals">
-            <div slot="description">
-                current grid gallery shape  is {{data.rows}}x{{data.cols+1}}
-            </div>
+        <sly-field title="" class="mt10">
+            <!--            <div slot="description">-->
+            <!--                current grid gallery shape is {{data.rows}}x{{data.cols+1}}-->
+            <!--            </div>-->
+
             </br>
-            <div class="fflex">
+            <div class="fflex mb15">
                 <el-button type="primary"
-                           icon="arrow-left"
                            class="regular"
                            @click="command('previous_page');"
                            :disabled="state.galleryIsFirstPage"
-                >previous_page
+                           style="width: 200px">
+                    <i class="el-icon-arrow-left el-icon-left mr10"></i> previous
                 </el-button>
+
                 <el-button type="primary" class="regular"
                            @click="command('next_page');"
                            :disabled="state.galleryIsLastPage"
-                >next_page<i class="el-icon-arrow-right el-icon-right"></i>
+                           style="width: 200px">
+                    next <i class="el-icon-arrow-right el-icon-right ml10"></i>
                 </el-button>
-                <div>{{ state.galleryPage }}/{{ state.galleryMaxPage }}</div>
+
+                <el-tag type="gray" class="ml15"
+                        style="font-size: 17px;">current page: {{ state.galleryPage }}/{{ state.galleryMaxPage }}
+                </el-tag>
+
             </div>
             <sly-grid-gallery
                     :content="data.Gallery.content"
                     :options="data.Gallery.options"
                     :active-figure="state.activeFigure">
+                <template v-slot:card-footer="{ annotation }">
+                    <p>annotation.conf</p>
+                    <p>test conf</p>
+                </template>
             </sly-grid-gallery>
+
         </sly-field>
     </div>
 </sly-card>

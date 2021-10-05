@@ -14,10 +14,11 @@
     <el-button
             type="primary"
             class="regular"
-            :loading="!!data.progress1"
+            :loading="state.downloadingInputProject"
             @click="command('download_project')"
             v-if="!data.done1">
         Download
+
     </el-button>
     <div v-if="data.progress1" class="mt10">
         <div style="color: #20a0ff">{{data.progress1}}: {{data.progressCurrent1}} / {{data.progressTotal1}}</div>

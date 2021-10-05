@@ -18,6 +18,7 @@ def init(data, state):
     grid_gallery.init(data, state)
 
 
+
 @g.my_app.callback("show_info")
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()

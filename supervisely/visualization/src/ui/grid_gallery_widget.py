@@ -30,13 +30,13 @@ class CompareGallery:
         self._project_meta = project_meta.clone()
 
         self._options = {
-            "enableZoom": True,
-            "syncViews": True,
+            "enableZoom": False,
+            "syncViews": False,
             "showPreview": False,
             "selectable": False,
             "opacity": 0.5,
             "showOpacityInHeader": True,
-            # "viewHeight": 450,
+            "viewHeight": 250,
         }
 
     def update_project_meta(self, project_meta: ProjectMeta):
