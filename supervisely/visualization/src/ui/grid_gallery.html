@@ -4,31 +4,20 @@
           :collapsed.sync="state.collapsed5"
           ref="step5"
 >
-    <!--:disabled="{disabled: state.disabled5, message: 'complete stage 4'}"-->
-    <!--    <div class="fflex">-->
-
     <sly-field title="Query image count" description="Set number of query images to display">
         <el-input-number v-model="state.rows" :min="1" :max="100"></el-input-number>
     </sly-field>
     <sly-field title="Set topN image count" description="Set number of topN proposals for each query image">
-        <el-input-number v-model="state.cols" :min="1" :max="5"></el-input-number>
+        <el-input-number v-model="state.cols" :min="1" :max="10"></el-input-number>
     </sly-field>
     <el-button type="primary" class="regular"
                @click="command('set_grid_size');"
     >update grid size
     </el-button>
-
-    <!--    </div>-->
-
     <div v-if="state.galleryInitialized">
         </br>
         <hr>
-        <!--        description="Set number of rows and columns to display"-->
         <sly-field title="" class="mt10">
-            <!--            <div slot="description">-->
-            <!--                current grid gallery shape is {{data.rows}}x{{data.cols+1}}-->
-            <!--            </div>-->
-
             </br>
             <div class="fflex mb15">
                 <el-button type="primary"
@@ -53,14 +42,24 @@
             </div>
             <sly-grid-gallery
                     :content="data.Gallery.content"
+                    style="align-self: center"
                     :options="data.Gallery.options"
                     :active-figure="state.activeFigure">
-                <template v-slot:card-footer="{ annotation }">
-                    <p>annotation.conf</p>
-                    <p>test conf</p>
+                <template style="align-self: center"
+                          v-slot:card-footer="{ annotation }">
+                    <el-tag v-if="annotation.title.label"
+                            style="align-self: center"
+                            :type="annotation.title.color">
+                        LABEL: {{annotation.title.label }}
+                    </el-tag>
+                    <el-tag v-if="annotation.title.confidence"
+                            style="align-self: center"
+                            :type="annotation.title.color">
+                        CONFIDENCE: {{ annotation.title.confidence }}
+                    </el-tag>
+                    </br v-if="!annotation.title.confidence">
                 </template>
             </sly-grid-gallery>
-
         </sly-field>
     </div>
 </sly-card>
