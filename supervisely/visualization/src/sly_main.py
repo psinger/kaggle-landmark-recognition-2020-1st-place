@@ -2,9 +2,6 @@ import supervisely_lib as sly
 import sly_globals as g
 import ui as ui
 import sys
-
-
-
 # /MetricLearningTasks/checkpoints/config_pictures_6_2.ckpt
 # /MetricLearningTasks/checkpoints/
 
