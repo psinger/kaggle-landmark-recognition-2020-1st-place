@@ -56,13 +56,21 @@ def download_checkpoint(sly_fs_checkpoints_path):
     reset_progress(2)
 
 
-def get_embedding_list(state):
+def get_embedding_list(state, by_file=True):
     root_path = str(Path(state['weightsPath']).parents[0])
     selected_checkpoint = sly.io.fs.get_file_name(state['selectedCheckpoint'])
     embeddings_folder = os.path.join(root_path, 'embeddings', selected_checkpoint)
     embedding_dict = {}
     for file in g.api.file.list2(g.team_id, embeddings_folder):
-        embedding_dict[file.name] = file.path
+        if by_file:
+            entity = file.name
+            embedding_dict[entity] = file.path
+        else:
+            entity = Path(file.path).parents[1].name
+            if entity not in embedding_dict:
+                embedding_dict[entity] = []
+            embedding_dict[entity].append(file.path)
+
     return embedding_dict
 
 
@@ -89,8 +97,9 @@ def download_selected_checkpoint(api: sly.Api, task_id, context, state, app_logg
     print(available_checkpoints)
     selected_checkpoint = state['selectedCheckpoint']
     download_checkpoint(available_checkpoints[selected_checkpoint])
-    embedding_dict = get_embedding_list(state)
+    embedding_dict = get_embedding_list(state, by_file=False)
     fields = [
+        # {"field": "data.Embeddings", "payload": embedding_dict},
         {"field": "data.Embeddings", "payload": embedding_dict},
         {"field": "data.done2", "payload": True},
         {"field": "state.collapsed3", "payload": False},

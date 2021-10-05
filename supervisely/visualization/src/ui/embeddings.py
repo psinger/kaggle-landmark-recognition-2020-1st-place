@@ -77,8 +77,14 @@ def download_selected_embeddings(api: sly.api, task_id, context, state, app_logg
     if selected_count == 0:
         raise ValueError('No embedding files selected. Please select files.')
 
-    for file in state['selectedEmbeddings']:
-        download_file(file)
+    sly.fs.clean_dir(g.embeddings_dir, ignore_errors=True)
+
+    for item in state['selectedEmbeddings']:
+        if isinstance(item, list):
+            for list_element in item:
+                download_file(list_element)
+        else:
+            download_file(item)
 
     fields = [
         {"field": "data.done3", "payload": True},

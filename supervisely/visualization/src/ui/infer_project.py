@@ -95,14 +95,31 @@ def infer_project_(state, context):
     precalculated_embedding_list = []
     precalculated_url_list = []
     for embedding_file in state['selectedEmbeddings']:
-        local_path = os.path.join(g.embeddings_dir, Path(embedding_file).name)
-        with open(local_path, 'rb') as pkl_file:
-            file_content = pickle.load(pkl_file)
+        if isinstance(embedding_file, list):
+            for element in embedding_file:
+                local_path = os.path.join(g.embeddings_dir, Path(element).name)
+                try:
+                    with open(local_path, 'rb') as pkl_file:
+                        file_content = pickle.load(pkl_file)
 
-        for k, v in file_content.items():
-            precalculated_embedding_data[k] = v
-            precalculated_url_list.extend(list(v.keys()))
-            precalculated_embedding_list.extend(list(v.values()))
+                    for k, v in file_content.items():
+                        precalculated_embedding_data[k] = v
+                        precalculated_url_list.extend(list(v.keys()))
+                        precalculated_embedding_list.extend(list(v.values()))
+                except:
+                    pass
+        else:
+            local_path = os.path.join(g.embeddings_dir, Path(embedding_file).name)
+            try:
+                with open(local_path, 'rb') as pkl_file:
+                    file_content = pickle.load(pkl_file)
+
+                for k, v in file_content.items():
+                    precalculated_embedding_data[k] = v
+                    precalculated_url_list.extend(list(v.keys()))
+                    precalculated_embedding_list.extend(list(v.values()))
+            except:
+                pass
 
     pred_dist, \
     pred_index_of_labels = get_topk_cossim(
