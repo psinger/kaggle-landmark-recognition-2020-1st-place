@@ -77,7 +77,7 @@ def download_selected_embeddings(api: sly.api, task_id, context, state, app_logg
     if selected_count == 0:
         raise ValueError('No embedding files selected. Please select files.')
 
-    sly.fs.clean_dir(g.embeddings_dir, ignore_errors=True)
+    # sly.fs.clean_dir(g.embeddings_dir, ignore_errors=True)
 
     for item in state['selectedEmbeddings']:
         if isinstance(item, list):
