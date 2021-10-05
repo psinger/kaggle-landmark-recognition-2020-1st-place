@@ -22,21 +22,37 @@ def download_model_and_config():
     # g.api.file.download(g.team_id, remote_config_file, g.local_config_path)
 
 
+def list_dirs(paths):
+    all_paths = []
+    for path in paths:
+        new_paths = g.api.file.list(g.team_id, path)
+        for p in new_paths:
+            all_paths.append(p['path'])
+    return all_paths if all_paths == paths else list_dirs(all_paths)
+
+
 def list_related_datasets():
+    existing_embeddings = list_dirs([g.remote_embeddings_dir])
+    ckpt_name = sly.fs.get_file_name(g.remote_weights_path)
     workspaces = [
         g.api.workspace.get_info_by_id(int(g.workspace_id))] if g.only_current_workspace else g.api.workspace.get_list(
         g.team_id)
+
     datasets = []
+
     for ws in workspaces:
+        progress = sly.Progress(f"Check embeddings for workspace: {ws.name}", len(workspaces))
         for pr in g.api.project.get_list(ws.id):
             for ds in g.api.dataset.get_list(pr.id):
                 embedding_path = os.path.join(g.remote_embeddings_dir,
-                                              sly.fs.get_file_name(g.remote_weights_path),
+                                              ckpt_name,
                                               ws.name,
                                               pr.name,
                                               ds.name + '.pkl')
-                if not g.api.file.exists(g.team_id, embedding_path):
+                if embedding_path not in existing_embeddings:
                     datasets.append([ws, pr, ds, embedding_path])
+        progress.iters_done_report(1)
+
     return datasets
 
 
@@ -53,11 +69,21 @@ def get_image_info_batch(ds):
 
 
 def get_batches(data, bs):
+    # TODO: fix it! separate batches for images and infos.
+    # Probably works only section under second except:  data_batches = np.array([e])
+    # Value error raises due different shapes of data elements, not only because len_data < bs!
+    # i.e. now - inference batch size not fixed
     try:
         data_batches = np.array_split(data, len(data) // int(bs))
-    except ValueError:
+    except ValueError:  # if bs > data
         if len(data) > 0:
-            data_batches = np.array_split(data, 1)
+            try:
+                data_batches = np.array_split(data, 1)  # ok for image-info
+            except ValueError:  # if data contains arrays of different sizes
+                e = np.empty(len(data), dtype=object)
+                for i, v in enumerate(data):
+                    e[i] = v
+                data_batches = np.array([e])
         else:
             return None
     return data_batches
