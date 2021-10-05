@@ -1,7 +1,7 @@
 import os
 from collections import OrderedDict
 
-from pytorch_metric_learning import losses, miners, distances, reducers, testers
+# from pytorch_metric_learning import losses, miners, distances, reducers, testers
 from sklearn.metrics import precision_recall_fscore_support
 
 from functools import lru_cache
@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from sklearn.metrics.pairwise import cosine_similarity
-from pytorch_metric_learning.utils import common_functions as c_f
+# from pytorch_metric_learning.utils import common_functions as c_f
 
 from PIL import Image
 from tqdm import tqdm
