@@ -47,8 +47,6 @@ def get_resized_image(image_storage_url, height):
            f'/previews/q/ext:jpeg/resize:fill:0:{height}:0/q:0/plain{parsed_link.path}'
 
 
-
-
 def get_topk_cossim(test_emb, tr_emb, batchsize = 64, k=10, device='cuda:0',verbose=True):
     tr_emb = torch.tensor(tr_emb, dtype=torch.float32, device=torch.device(device))
     test_emb = torch.tensor(test_emb, dtype=torch.float32, device=torch.device(device))
@@ -85,15 +83,20 @@ def infer_project_(state, context):
 
     predicted_embedding_list = []
     predicted_url_list = []
+    predicted_gt_list = []
+    predicted_parent_img_ids_list = []
     for ds in datasets_list:
         embeddings, gt, parent_img_ids = main.process_dataset(ds)  # HERE IS GT!
         urls = main.get_img_urls(parent_img_ids)
         predicted_embedding_list.extend(embeddings)
         predicted_url_list.extend(urls)
+        predicted_gt_list.extend(gt)
+        predicted_parent_img_ids_list.extend(parent_img_ids)
 
     precalculated_embedding_data = {}
     precalculated_embedding_list = []
     precalculated_url_list = []
+    precalculated_labels_list = []
     for embedding_file in state['selectedEmbeddings']:
         if isinstance(embedding_file, list):
             for element in embedding_file:
@@ -104,6 +107,7 @@ def infer_project_(state, context):
 
                     for k, v in file_content.items():
                         precalculated_embedding_data[k] = v
+                        precalculated_labels_list.extend([k for i in range(v.__len__())])
                         precalculated_url_list.extend(list(v.keys()))
                         precalculated_embedding_list.extend(list(v.values()))
                 except:
@@ -116,6 +120,7 @@ def infer_project_(state, context):
 
                 for k, v in file_content.items():
                     precalculated_embedding_data[k] = v
+                    precalculated_labels_list.append(k)
                     precalculated_url_list.extend(list(v.keys()))
                     precalculated_embedding_list.extend(list(v.values()))
             except:
@@ -123,22 +128,27 @@ def infer_project_(state, context):
 
     pred_dist, \
     pred_index_of_labels = get_topk_cossim(
-        predicted_embedding_list, precalculated_embedding_list, k=5, device=g.device)
+        predicted_embedding_list, precalculated_embedding_list, k=10, device=g.device)
 
-    filtered_data = []
-
+    filtered_urls = []
+    filtered_labels = []
     # {'url': None, 'label': None, 'conf': None, color: 'blue'}
-
     for line_idx, line in enumerate(pred_index_of_labels):
         query_image = get_resized_image(predicted_url_list[line_idx], height=250)
-        # query_image = g.api.image.preview_url(predicted_url_list[line_idx], height=300)
-        line_encoder = [query_image]
+        line_urls_encoder = [query_image]
+        line_labels_encoder = [predicted_gt_list[line_idx]]
         for col in line:
             top_n = get_resized_image(precalculated_url_list[col], height=250)
-            # top_n = g.api.image.preview_url(precalculated_url_list[col], height=300)
-            line_encoder.append(top_n)
-        filtered_data.append(line_encoder)
-    g.gallery_data = filtered_data
+            line_urls_encoder.append(top_n)
+            line_labels_encoder.append(precalculated_labels_list[col])
+        filtered_labels.append(line_labels_encoder)
+        filtered_urls.append(line_urls_encoder)
+
+    g.gallery_data = {
+        "labels": filtered_labels,
+        "urls": filtered_urls,
+        "confidences": pred_dist
+    }
 
 
 @g.my_app.callback("infer_project")
