@@ -4,15 +4,15 @@
           :collapsed.sync="state.collapsed5"
           ref="step5"
 >
-    <sly-field title="Query image count" description="Set number of query images to display">
+    <sly-field title="Query images on one page" description="number of rows">
         <el-input-number v-model="state.rows" :min="1" :max="100"></el-input-number>
     </sly-field>
-    <sly-field title="Set topN image count" description="Set number of topN proposals for each query image">
+    <sly-field title="TOPN predictions count" description="number of columns">
         <el-input-number v-model="state.cols" :min="1" :max="10"></el-input-number>
     </sly-field>
     <el-button type="primary" class="regular"
                @click="command('set_grid_size');"
-    >update grid size
+    >update parameters
     </el-button>
     <div v-if="state.galleryInitialized">
         </br>
@@ -24,15 +24,15 @@
                            class="regular"
                            @click="command('previous_page');"
                            :disabled="state.galleryIsFirstPage"
-                           style="width: 200px">
-                    <i class="el-icon-arrow-left el-icon-left mr10"></i> previous
+                           style="width: 160px">
+                    <i class="el-icon-arrow-left el-icon-left"></i>
                 </el-button>
 
                 <el-button type="primary" class="regular"
                            @click="command('next_page');"
                            :disabled="state.galleryIsLastPage"
-                           style="width: 200px">
-                    next <i class="el-icon-arrow-right el-icon-right ml10"></i>
+                           style="width: 160px">
+                    <i class="el-icon-arrow-right el-icon-right ml10"></i>
                 </el-button>
 
                 <el-tag type="gray" class="ml15"
