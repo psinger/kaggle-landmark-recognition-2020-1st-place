@@ -28,7 +28,7 @@
 
         <sly-field title="Select available checkpoints from directory"
                    description="Here checkpoint files from Team files"
-                   style="padding-top: 15px">
+                   style="padding-top: 15px; margin-bottom: 5px">
             <el-select v-model="state.selectedCheckpoint" placeholder="Select">
                 <el-option
                         v-for="chkpnt_path, chkpnt_name in data.Checkpoints"
@@ -51,7 +51,7 @@
             <el-progress :percentage="data.progressPercent2"></el-progress>
         </div>
         <div v-if="data.done2">
-            <i class="zmdi zmdi-check-circle mr5 mb5" style="color: #13ce66"></i>
+            <i class="zmdi zmdi-check-circle mr5 mb5 mt10" style="color: #13ce66"></i>
             <span style="color: #5a6772;">Checkpoints successfully downloaded</span>
         </div>
         <el-button type="warning" class="regular mt10" :plain="true"
