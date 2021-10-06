@@ -90,19 +90,18 @@ def show_stats(table_data):
 flag = 'train'
 
 
-for seq_num in [6]:
+for seq_num in [3]:
     print(f'processing: {seq_num}')
 
-    dataset_root_path = '/root/pictures_data/'
+    dataset_root_path = '/root/snacks_data/'
     input_data_path = os.path.join(dataset_root_path, f'{seq_num}', f'{flag}_image_folder')
     output_data_path = os.path.join(dataset_root_path, f'{seq_num}', f'{flag}')
 
-    csv_output_file_path = f'/root/pictures_data/{seq_num}/{flag}_filtered.csv'
+    csv_output_file_path = f'/root/snacks_data/{seq_num}/{flag}_filtered.csv'
 
     classes_labels = os.listdir(input_data_path)
 
     out_data_dict = {}
-
 
     for class_label in tqdm(classes_labels):  # by every class in image folder ds
         input_data_label_path = os.path.join(input_data_path, class_label)

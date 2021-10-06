@@ -5,8 +5,8 @@ abs_path = os.path.dirname(__file__)
 
 args = {
     'model_path': '/root/gld_pd/models/',
-    'data_path': '/root/snacks_data/3/',
-    'data_path_2019': '/root/snacks_data/3/',
+    'data_path': '/root/pictures_data/inference/',
+    'data_path_2019': '/root/pictures_data/inference/',
     'valid_csv_fn': 'test_filtered.csv',
     'train_csv_fn': 'train_filtered.csv',
 
@@ -51,9 +51,9 @@ args = {
 
     'optimizer': "sgd",
     'weight_decay': 1e-4,
-    'lr': 0.007,
+    'lr': 0.01,
     'batch_size': 32,
-    'test_batch_size': 240,
+    'test_batch_size': 40,
 
     'max_epochs': 6,
     'scheduler': {"method": "cosine", "warmup_epochs": 1},
@@ -66,12 +66,12 @@ args = {
 
 args['tr_aug'] = A.Compose([
     # A.Resize(height=448, width=448),
-
     A.SmallestMaxSize(512),
-    # A.ColorJitter(brightness=(0., 0.1), contrast=(0., 0.1), saturation=(0., 0.1), hue=0.2, always_apply=False, p=0.5),
-    A.RandomScale(scale_limit=(0.9, 1.1), interpolation=1, always_apply=False, p=1.),
+    A.ColorJitter(brightness=(0., 0.5), contrast=(0., 0.5), saturation=(0., 0.5), hue=0.2, always_apply=False, p=0.5),
+    A.Rotate((-10, 10)),
     A.RandomCrop(height=args['crop_size'], width=args['crop_size'], p=1.),
-    A.MotionBlur(blur_limit=(3, 7), p=0.5),
+    A.RandomScale(scale_limit=(0.5, 1.5), interpolation=1, always_apply=False, p=1.),
+    A.Perspective(scale=(0.05, 0.1), keep_size=False, p=0.7),
     A.Resize(height=448, width=448),
     A.HorizontalFlip(p=0.5),
 ])

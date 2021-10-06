@@ -9,11 +9,11 @@ from tqdm import tqdm
 import sly_globals as g
 import sly_functions as f
 
-for seq_num in [6]:
+for seq_num in [3]:
     print(f'curr seq: {seq_num}')
 
-    input_data_dir = f'/root/pictures_data/{seq_num}/art_{seq_num}'
-    output_data_dir = f'/root/pictures_data/{seq_num}/train_image_folder'
+    input_data_dir = f'/root/snacks_data/{seq_num}/snacks_{seq_num}'
+    output_data_dir = f'/root/snacks_data/{seq_num}/train_image_folder'
 
     os.makedirs(output_data_dir, exist_ok=True)
     sly.fs.clean_dir(output_data_dir)

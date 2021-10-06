@@ -16,7 +16,7 @@ args = importlib.import_module(parser_args.config).args
 
 args["experiment_name"] = parser_args.config
 
-args =  SimpleNamespace(**args)
+args = SimpleNamespace(**args)
 
 args.img_path_train = args.data_path + 'train/'
 args.img_path_val = args.data_path_2019 + 'test/'

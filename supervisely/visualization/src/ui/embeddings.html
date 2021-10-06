@@ -1,0 +1,93 @@
+<sly-card title="Select reference embeddings"
+          subtitle="select the files you want to use"
+          :options="{collapsable: true}"
+          :collapsed.sync="state.collapsed3"
+          :disabled="{disabled: state.disabled3, message: 'complete stage 2'}"
+          ref="step3">
+
+    <sly-field title="Select available embedding files from directory"
+               description="Here embedding files from Team files">
+        <el-select v-model="state.selectedEmbeddings" multiple placeholder="Select">
+            <el-option
+                    v-for="emb_path, emb_name in data.Embeddings"
+                    :key="emb_name"
+                    :label="emb_name"
+                    :value="emb_path">
+            </el-option>
+        </el-select>
+        <el-button type="primary" class="regular"
+                   @click="state.modelLoading=true; command('download_selected_embeddings');"
+                   :loading="state.modelLoading"
+                   :disabled="state.selectedEmbeddings.length===0"
+                   v-if="!data.done3">
+            load selected embeddings
+        </el-button>
+    </sly-field>
+
+    <div v-if="data.done3">
+        <i class="zmdi zmdi-check-circle mr5" style="color: #13ce66"></i>
+        <span style="color: #5a6772;">Embeddings successfully loaded</span>
+    </div>
+</sly-card>
+
+<!--<div v-if="state.statsLoaded && !state.selectedClass" class="fflex mt5 mb10"-->
+<!--     style="flex-direction: column; align-items: flex-start">-->
+
+<!--    <sly-field title="WARNING: Objects that can be used not found"-->
+<!--               description="please reselect input project">-->
+<!--        <sly-icon slot="icon" :options="{ color: '#fba607', bgColor: '#ffe9da', rounded: false }">-->
+<!--            <i class="zmdi zmdi-alert-triangle"></i>-->
+<!--        </sly-icon>-->
+<!--    </sly-field>-->
+
+<!--</div>-->
+<!--    <el-table v-if="data.modelsTable"-->
+<!--          :data="data.modelsTable"-->
+<!--          class="ultra-table"-->
+<!--          @selection-change="-->
+<!--            (val) => {-->
+<!--                state.selectedModels = val.map(x => x.name);-->
+<!--            }-->
+<!--            ">-->
+<!--    <el-table-column type="selection" width="55" :selectable="r => !r.isDisabled && !data.done3"></el-table-column>-->
+<!--    <el-table-column label="NAME" align="center">-->
+<!--        <template scope="scope">-->
+<!--            <div>-->
+<!--                {{scope.row.name}}-->
+<!--            </div>-->
+<!--        </template>-->
+<!--    </el-table-column>-->
+<!--    <el-table-column label="architecture" align="center">-->
+<!--        <template scope="scope">-->
+<!--            {{scope.row.arch}}-->
+<!--        </template>-->
+<!--    </el-table-column>-->
+<!--    <el-table-column label="epoch" align="center">-->
+<!--        <template scope="scope">-->
+<!--            {{scope.row.epoch}}-->
+<!--        </template>-->
+<!--    </el-table-column>-->
+<!--</el-table>-->
+<!--<el-button-->
+<!--        type="primary"-->
+<!--        style="margin-top: 20px"-->
+<!--        class="regular"-->
+
+<!--        v-if="!data.done3"-->
+<!--        @click="command('apply_models')">-->
+<!--    APPLY-->
+<!--</el-button>-->
+<!--<div v-if="data.done3 && !state.splitInProgress" class="mt10">-->
+<!--    <div>-->
+<!--        <i class="zmdi zmdi-check-circle mr5 mb5" style="color: #13ce66"></i>-->
+<!--        <span style="color: #5a6772;">-->
+<!--            Checkpoints successfully selected-->
+<!--        </span>-->
+<!--    </div>-->
+<!--    <el-button type="warning" class="regular mt10" :plain="true"-->
+<!--               @click="state.restartFrom = 3;"-->
+<!--               v-if="data.done3 && !state.started"-->
+<!--               :disabled="state.visualizingStarted">-->
+<!--        <i class="zmdi zmdi-rotate-left mr5"></i> reselect-->
+<!--    </el-button>-->
+<!--</div>-->
