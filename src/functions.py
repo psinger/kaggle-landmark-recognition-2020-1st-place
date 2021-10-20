@@ -164,7 +164,7 @@ def save_tensors_unique(query_images, train_dataset, pred_index_of_labels, pred_
         if target_label == pred_labels_unique[0]:
             TP += 1
             TP_in_top += 1
-        elif target_label in pred_labels_unique:
+        elif target_label in pred_labels_unique[:num_cols - 1]:
             TP_in_top += 1
 
         imgs = []
@@ -188,12 +188,15 @@ def save_tensors_unique(query_images, train_dataset, pred_index_of_labels, pred_
         line = plt.Line2D((0, 1), (h, h), color="k", linewidth=1)
         fig.add_artist(line)
 
-    plot_title = f"Acc: {TP/num_rows:.2f}, Top {num_cols} Acc: {TP_in_top/num_rows:.2f}"
+    plot_title = f"Acc: {TP/num_rows:.2f}, Top {num_cols - 1} Acc: {TP_in_top/num_rows:.2f}"
     fig.suptitle(plot_title, fontsize=20)
     save_path = os.path.join(output_path, "resplot.png")
-    print(f"{plot_title}, Plot saved to {save_path}")
+    # print(f"{plot_title}, Plot saved to {save_path}")
     plt.savefig(save_path, bbox_inches = 'tight')
     plt.close(fig)
+
+    with open('/root/retail_model_metrics.txt', 'a') as file:
+        file.write(f"{output_path.split('/')[-1]}, acc: {TP/num_rows:.2f}, top {num_cols - 1} acc: {TP_in_top/num_rows:.2f}\n")
 
 
 def plot_query_result(query_index, axes, list_images, list_confs, list_classes, title_fontsize=10,  border_width=10):

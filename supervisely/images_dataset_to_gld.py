@@ -87,29 +87,52 @@ def show_stats(table_data):
     )
 
 
-flag = 'train'
+def convert_png_to_jpg(path_to_png):
+    from PIL import Image
+
+    im = Image.open(path_to_png)
+    rgb_im = im.convert('RGB')
+    new_image_path = path_to_png.replace('.png', '.jpg')
+    rgb_im.save(new_image_path)
+
+    return new_image_path
 
 
-for seq_num in [3]:
+
+flag = 'test'
+
+
+for seq_num in [0]:
     print(f'processing: {seq_num}')
 
-    dataset_root_path = '/root/snacks_data/'
+    dataset_root_path = '/root/gld_data/rp2k'
     input_data_path = os.path.join(dataset_root_path, f'{seq_num}', f'{flag}_image_folder')
     output_data_path = os.path.join(dataset_root_path, f'{seq_num}', f'{flag}')
 
-    csv_output_file_path = f'/root/snacks_data/{seq_num}/{flag}_filtered.csv'
+    csv_output_file_path = f'/root/gld_data/rp2k/{seq_num}/{flag}_filtered.csv'
 
-    classes_labels = os.listdir(input_data_path)
+    classes_labels = sorted(os.listdir(input_data_path))
 
     out_data_dict = {}
 
-    for class_label in tqdm(classes_labels):  # by every class in image folder ds
+    for index_class_label, class_label in tqdm(enumerate(classes_labels), total=len(classes_labels)):  # by every class in image folder ds
+
         input_data_label_path = os.path.join(input_data_path, class_label)
-        images_paths = get_files_paths(input_data_label_path, ['.jpg', '.png'])
+        images_paths = sorted(get_files_paths(input_data_label_path, ['.jpg', '.png']))
+
+        class_label = f"{index_class_label:06d}"  # FOR CHINIZE DS
 
         for image_path in images_paths:   # by every image in current class
             img_name = str(image_path.split('/')[-1]).split('.')[0]
             img_extension = str(image_path.split('/')[-1]).split('.')[-1]
+
+            if img_extension == 'png':
+                old_image_path = image_path
+                image_path = convert_png_to_jpg(image_path)
+                os.remove(old_image_path)
+                img_extension = 'jpg'
+            elif img_extension == 'jpeg':
+                img_extension = 'jpg'
 
             img_uuid = get_uuid_by_string(img_name + class_label + flag)  # generate unique image name
 

@@ -440,7 +440,7 @@ if __name__ == '__main__':
         metric_crit = ArcFaceLoss(args.arcface_s, args.arcface_m, crit=args.crit, weight=class_weights)
         metric_crit_val = ArcFaceLoss(args.arcface_s, args.arcface_m, crit="bce", weight=None, reduction="sum")
 
-    tr_ds = GLRDataset(train, normalization=args.normalization, aug=args.tr_aug, suffix='.png')
+    tr_ds = GLRDataset(train, normalization=args.normalization, aug=args.tr_aug, suffix='.jpg')
 
     print("ds len", len(tr_ds))
 
@@ -452,7 +452,7 @@ if __name__ == '__main__':
     val_dl = DataLoader(dataset=val_ds, batch_size=args.batch_size, sampler=SequentialSampler(val_ds),
                         collate_fn=collate_fn, num_workers=args.num_workers, pin_memory=False)
 
-    tr_filter_ds = GLRDataset(train_filter, normalization=args.normalization, aug=args.val_aug, suffix='.png')
+    tr_filter_ds = GLRDataset(train_filter, normalization=args.normalization, aug=args.val_aug, suffix='.jpg')
     tr_filter_dl = DataLoader(dataset=tr_filter_ds, batch_size=args.batch_size, sampler=SequentialSampler(tr_filter_ds),
                               collate_fn=collate_fn, num_workers=args.num_workers, pin_memory=False)
 
