@@ -99,17 +99,16 @@ def convert_png_to_jpg(path_to_png):
 
 
 
-flag = 'test'
-
+flag = 'train'
 
 for seq_num in [0]:
     print(f'processing: {seq_num}')
 
-    dataset_root_path = '/root/gld_data/rp2k'
+    dataset_root_path = '/root/data/products_10k'
     input_data_path = os.path.join(dataset_root_path, f'{seq_num}', f'{flag}_image_folder')
     output_data_path = os.path.join(dataset_root_path, f'{seq_num}', f'{flag}')
 
-    csv_output_file_path = f'/root/gld_data/rp2k/{seq_num}/{flag}_filtered.csv'
+    csv_output_file_path = f'/root/data/products_10k/{seq_num}/{flag}_filtered.csv'
 
     classes_labels = sorted(os.listdir(input_data_path))
 
@@ -120,7 +119,7 @@ for seq_num in [0]:
         input_data_label_path = os.path.join(input_data_path, class_label)
         images_paths = sorted(get_files_paths(input_data_label_path, ['.jpg', '.png']))
 
-        class_label = f"{index_class_label:06d}"  # FOR CHINIZE DS
+        class_label = f"{index_class_label + 3000:06d}"  # FOR CHINIZE DS
 
         for image_path in images_paths:   # by every image in current class
             img_name = str(image_path.split('/')[-1]).split('.')[0]
