@@ -26,6 +26,9 @@ device = os.environ['modal.state.device']
 
 selected_weights_type = str(os.environ['modal.state.modelWeightsOptions'])
 pretrained_models_table = list(os.environ['modal.state.models'])
+
+logger.info(os.environ['modal.state.models'])
+logger.info(list(os.environ['modal.state.models']))
 # pretrained_models_table = list(json.loads(str(os.environ['modal.state.models'])))  # debug
 
 if selected_weights_type == 'pretrained':
