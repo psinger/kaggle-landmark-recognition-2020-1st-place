@@ -1,0 +1,28 @@
+train
+
+
+classes count: 9691
+images in train: 141931
+avg img in class: 14.645650603652873
+
++
+
+classes count: 2384
+images in train: 344755
+avg img in class: 144.6119966442953
+
+=
+
+classes count: 12075
+images in train: 486686
+
+
+
+---
+
+test
+
+classes count: 2388
+images in test: 39448
+avg img in class: 16.51926298157454
+
