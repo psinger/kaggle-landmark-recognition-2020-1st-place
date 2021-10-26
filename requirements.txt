@@ -1,4 +1,4 @@
-albumentations==0.4.6
+albumentations==1.1.0
 timm==0.2.1
 numpy==1.19.1
 opencv_python_headless==4.4.0.44
