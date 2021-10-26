@@ -33,6 +33,7 @@ if selected_weights_type == 'pretrained':
     selected_model = os.environ['modal.state.selectedModel']
     model_info = None
     for row in pretrained_models_table:
+        logger.info(row)
         if row['Model'] == selected_model:
             model_info = row
             break
