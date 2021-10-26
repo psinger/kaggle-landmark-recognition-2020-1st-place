@@ -13,6 +13,7 @@
     "modelWeightsOptions": "pretrained",
     "selectedModel": "landmarks",
     "device": "cuda:0",
+    "batchSize": 128,
     "weightsPath": "",
     "models": [
       {
