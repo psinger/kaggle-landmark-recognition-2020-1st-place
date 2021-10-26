@@ -1,0 +1,192 @@
+snacks_1
+
+
+# comment aug to disable it
+
+target:
+  # background: "random_color"
+  # or
+  #background: "keep_original"
+  # or
+  background: "random_image"
+
+  # e.g. 0.1 - 10% padding around bbox
+  padCrop: 0.1
+
+  # height of the result image (pixels)
+  height: 350
+  color:
+    RandomBrightnessContrast: true
+    CLAHE: true
+    Blur:
+      p: 0.3 # probability
+      blur_limit: 6
+  spacial:
+    Rotate: (-30, 30)
+    ElasticTransformation:
+      alpha: (50, 200)
+      sigma: (10, 20)
+
+noise:
+  # to aug noise object
+  aug_probability: 0.5
+  # put noise object to corner
+  corner_probability: 0.9
+  # how to cover target object
+  max_occlusion_height: 0.35
+  max_occlusion_width: 0.35
+
+
+snacks_2
+
+# comment aug to disable it
+
+target:
+  # background: "random_color"
+  # or
+  #background: "keep_original"
+  # or
+  background: "random_image"
+
+  # e.g. 0.1 - 10% padding around bbox
+  padCrop: 0.1
+
+  # height of the result image (pixels)
+  height: 350
+  color:
+    RandomBrightnessContrast: true
+    CLAHE: true
+    Blur:
+      p: 0.3 # probability
+      blur_limit: 6
+  spacial:
+    Rotate: (-30, 30)
+    ElasticTransformation:
+      alpha: (50, 200)
+      sigma: (10, 20)
+
+noise:
+  # to aug noise object
+  aug_probability: 0.5
+  # put noise object to corner
+  corner_probability: 0.9
+  # how to cover target object
+  max_occlusion_height: 0.40
+  max_occlusion_width: 0.40
+
+
+snacks_3
+
+# comment aug to disable it
+
+target:
+  # background: "random_color"
+  # or
+  #background: "keep_original"
+  # or
+  background: "random_image"
+
+  # e.g. 0.1 - 10% padding around bbox
+  padCrop: 0.1
+
+  # height of the result image (pixels)
+  height: 350
+  color:
+    RandomBrightnessContrast: true
+    CLAHE: true
+    Blur:
+      p: 0.3 # probability
+      blur_limit: 6
+  spacial:
+    Rotate: (-30, 30)
+    ElasticTransformation:
+      alpha: (50, 200)
+      sigma: (10, 20)
+
+noise:
+  # to aug noise object
+  aug_probability: 0.5
+  # put noise object to corner
+  corner_probability: 0.9
+  # how to cover target object
+  max_occlusion_height: 0.45
+  max_occlusion_width: 0.45
+
+
+snacks_4
+
+# comment aug to disable it
+
+target:
+  # background: "random_color"
+  # or
+  #background: "keep_original"
+  # or
+  background: "random_image"
+
+  # e.g. 0.1 - 10% padding around bbox
+  padCrop: 0.1
+
+  # height of the result image (pixels)
+  height: 350
+  color:
+    RandomBrightnessContrast: true
+    CLAHE: true
+    Blur:
+      p: 0.3 # probability
+      blur_limit: 6
+  spacial:
+    Rotate: (-30, 30)
+    ElasticTransformation:
+      alpha: (50, 200)
+      sigma: (10, 20)
+
+noise:
+  # to aug noise object
+  aug_probability: 0.5
+  # put noise object to corner
+  corner_probability: 0.9
+  # how to cover target object
+  max_occlusion_height: 0.5
+  max_occlusion_width: 0.5
+
+
+snacks_5
+
+# comment aug to disable it
+
+target:
+  # background: "random_color"
+  # or
+  #background: "keep_original"
+  # or
+  background: "random_image"
+
+  # e.g. 0.1 - 10% padding around bbox
+  padCrop: 0.1
+
+  # height of the result image (pixels)
+  height: 350
+  color:
+    RandomBrightnessContrast: true
+    CLAHE: true
+    Blur:
+      p: 0.3 # probability
+      blur_limit: 6
+  spacial:
+    Rotate: (-30, 30)
+    ElasticTransformation:
+      alpha: (50, 200)
+      sigma: (10, 20)
+
+noise:
+  # to aug noise object
+  aug_probability: 0.5
+  # put noise object to corner
+  corner_probability: 0.9
+  # how to cover target object
+  max_occlusion_height: 0.6
+  max_occlusion_width: 0.6
+
+
+

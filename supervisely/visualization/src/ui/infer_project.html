@@ -1,0 +1,19 @@
+<sly-card
+        title="Infer project"
+        subtitle="Apply model to project images"
+        :options="{collapsable: true}"
+        :collapsed.sync="state.collapsed4"
+        :disabled="{disabled: state.disabled4, message: 'complete stage 3'}"
+        ref="step4"
+>
+    <el-button type="primary" class="regular"
+               @click="state.modelLoading=true; command('infer_project');"
+               :loading="state.inferProject"
+               :disabled="data.done4">
+        Calculate embeddings for test project
+    </el-button>
+    <div v-if="data.done4">
+            <i class="zmdi zmdi-check-circle mr5 mt15" style="color: #13ce66"></i>
+            <span style="color: #5a6772;">Embeddings are calculated</span>
+        </div>
+</sly-card>

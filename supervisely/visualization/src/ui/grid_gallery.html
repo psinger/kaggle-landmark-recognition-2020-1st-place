@@ -1,0 +1,73 @@
+<sly-card title="Visualizations"
+          subtitle="Grid gallery for samples"
+          :options="{collapsable: true}"
+          :collapsed.sync="state.collapsed5"
+          ref="step5"
+>
+    <sly-field title="Query images on one page" description="number of rows">
+        <el-input-number v-model="state.rows" :min="1" :max="100"></el-input-number>
+    </sly-field>
+    <sly-field title="TOPN predictions count" description="number of columns">
+        <el-input-number v-model="state.cols" :min="1" :max="10"></el-input-number>
+    </sly-field>
+    <el-button type="primary" class="regular"
+               @click="command('set_grid_size');"
+    >update parameters
+    </el-button>
+    <div v-if="state.galleryInitialized">
+        </br>
+        <hr>
+        <sly-field title="" class="mt10">
+            </br>
+            <div class="fflex mb15">
+                <el-button type="primary"
+                           class="regular"
+                           @click="command('previous_page');"
+                           :disabled="state.galleryIsFirstPage"
+                           style="width: 160px">
+                    <i class="el-icon-arrow-left el-icon-left"></i>
+                </el-button>
+
+                <el-button type="primary" class="regular"
+                           @click="command('next_page');"
+                           :disabled="state.galleryIsLastPage"
+                           style="width: 160px">
+                    <i class="el-icon-arrow-right el-icon-right ml10"></i>
+                </el-button>
+
+                <el-tag type="gray" class="ml15"
+                        style="font-size: 17px;">current page: {{ state.galleryPage }}/{{ state.galleryMaxPage }}
+                </el-tag>
+
+            </div>
+            <sly-grid-gallery
+                    :content="data.Gallery.content"
+                    :options="data.Gallery.options"
+                    :active-figure="state.activeFigure">
+                <template v-slot:card-footer="{ annotation }"
+                style="display: flex; justify-content: center">
+                    <el-tag v-if="annotation.title.label"
+                            style="justify-content: center"
+                            :type="annotation.title.color"
+                    v-if="annotation.title.confidence">
+                        CONF: {{ annotation.title.confidence }}, T: {{annotation.title.label }}
+
+                    </el-tag>
+                    <el-tag v-if="annotation.title.label"
+                            style="justify-content: center"
+                            :type="annotation.title.color"
+                    v-if="!annotation.title.confidence">
+                        QUERY IMAGE, T: {{annotation.title.label }}
+
+                    </el-tag>
+<!--                    <el-tag v-if="annotation.title.confidence"-->
+<!--                            style="align-self: center"-->
+<!--                            :type="annotation.title.color">-->
+
+<!--                    </el-tag>-->
+                    </br v-if="!annotation.title.confidence">
+                </template>
+            </sly-grid-gallery>
+        </sly-field>
+    </div>
+</sly-card>

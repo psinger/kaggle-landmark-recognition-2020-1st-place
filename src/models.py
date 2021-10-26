@@ -1,5 +1,3 @@
-from conf import *
-from utils import *
 
 #from pytorchcv.model_provider import get_model as ptcv_get_model
 import timm
@@ -119,6 +117,8 @@ class Net(nn.Module):
     def forward(self, input_dict, get_embeddings=False, get_attentions=False):
 
         x = input_dict['input']
+
+
         x = self.backbone(x)
         
         x = self.global_pool(x)
