@@ -1,6 +1,6 @@
-<div id="yolov5-train">
+<div id="gl-metric-learning">
     <sly-style>
-        #yolov5-train .el-tabs.el-tabs-cards .el-radio {
+        #gl-metric-learning .el-tabs.el-tabs-cards .el-radio {
         display: flex;
         align-items: start;
         /*margin-bottom: 10px;*/
@@ -8,7 +8,7 @@
         white-space: normal;
         }
 
-        #yolov5-train .el-tabs.el-tabs-cards .el-radio__label div {
+        #gl-metric-learning .el-tabs.el-tabs-cards .el-radio__label div {
         color: #7f858e;
         font-size: 13px;
         }
@@ -16,17 +16,18 @@
         .beautiful-table { border-collapse: collapse; }
         .beautiful-table tr:nth-child(2n) { background-color: #f6f8fa; }
         .beautiful-table td, .beautiful-table th {
-            border: 1px solid #dfe2e5;
-            padding: 6px 13px;
-            text-align: center;
-            line-height: 20px;
+        border: 1px solid #dfe2e5;
+        padding: 6px 13px;
+        text-align: center;
+        line-height: 20px;
         }
 
-        #yolov5-train .el-tabs.el-tabs-cards { border-radius: 4px; box-shadow: none; }
-        #yolov5-train .el-tabs.el-tabs-cards .el-tabs__header { background-color: #f6fafd; }
-        #yolov5-train .el-tabs.el-tabs-cards .el-tabs__nav { float: none; display: flex; justify-content:
+        #gl-metric-learning .el-tabs.el-tabs-cards { border-radius: 4px; box-shadow: none; }
+        #gl-metric-learning .el-tabs.el-tabs-cards .el-tabs__header { background-color: #f6fafd; }
+        #gl-metric-learning .el-tabs.el-tabs-cards .el-tabs__nav { float: none; display: flex; justify-content:
         space-between; }
-        #yolov5-train .el-tabs.el-tabs-cards .el-tabs__item { flex: 1; margin-bottom: -3px; padding: 9px 16px 13px;
+        #gl-metric-learning .el-tabs.el-tabs-cards .el-tabs__item { flex: 1; margin-bottom: -3px; padding: 9px 16px
+        13px;
         height: auto; line-height: normal; border-radius: 4px; }
     </sly-style>
 
@@ -34,7 +35,7 @@
         <el-tabs type="border-card" class="el-tabs-cards" v-model="state.modelWeightsOptions">
             <el-tab-pane name="pretrained">
                 <el-radio slot="label" v-model="state.modelWeightsOptions" label="pretrained">
-                    Pretrained on COCO
+                    Pretrained
                 </el-radio>
                 <table class="beautiful-table">
                     <thead>
@@ -63,8 +64,8 @@
                     </tbody>
                 </table>
             </el-tab-pane>
-            <el-tab-pane name="custom">
-                <el-radio slot="label" v-model="state.modelWeightsOptions" label="custom">
+            <el-tab-pane name="custom" :disabled="True">
+                <el-radio slot="label" v-model="state.modelWeightsOptions" label="custom" :disabled="True">
                     Custom
                 </el-radio>
                 <sly-field title="Weights path" description="Copy path in Team Files">
@@ -73,7 +74,12 @@
             </el-tab-pane>
         </el-tabs>
     </sly-field>
-    <sly-field title="Choose Device" description="Cuda device number (i.e. 0, 1, 2 or 3) or cpu">
+    <sly-field title="Batch size">
+
+        <el-input-number v-model="state.batchSize" :min="1" :max="2048"></el-input-number>
+    </sly-field>
+
+    <sly-field title="Choose Device" description="CUDA device or CPU">
         <el-input v-model="state.device" style="width:250px;"></el-input>
     </sly-field>
 </div>
