@@ -1,16 +1,16 @@
 {
-  "name": "Visualise app",
+  "name": "Visualize Embeddings",
   "type": "app",
   "categories": [
     "metric learning"
   ],
-  "description": "Description",
+  "description": "",
   "docker_image": "supervisely/base-py-sdk:6.1.97",
   "main_script": "src/sly_train.py",
   "gui_template": "src/gui.html",
   "task_location": "workspace_tasks",
   "need_gpu": true,
-  "icon": "",
+  "icon": "https://img.icons8.com/color/100/000000/tesseract.png",
   "icon_cover": true,
   "instance_version": "6.4.21"
 }
