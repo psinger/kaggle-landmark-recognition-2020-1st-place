@@ -5,6 +5,7 @@ from pathlib import Path
 
 import supervisely_lib as sly
 import dotenv
+import ast
 
 dotenv.load_dotenv('./debug.env')
 dotenv.load_dotenv('./secret_debug.env')
@@ -25,7 +26,7 @@ device = os.environ['modal.state.device']
 
 
 selected_weights_type = str(os.environ['modal.state.modelWeightsOptions'])
-pretrained_models_table = os.environ['modal.state.models']
+pretrained_models_table = ast.literal_eval(os.environ['modal.state.models'])
 
 logger.info(pretrained_models_table)
 logger.info(type(pretrained_models_table))
