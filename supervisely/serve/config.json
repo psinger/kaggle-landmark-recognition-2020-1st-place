@@ -1,10 +1,10 @@
 {
-  "name": "Serve GL Metric Learning",
+  "name": "Serve Metric Learning",
   "type": "app",
   "categories": [
     "metric learning"
   ],
-  "description": "Deploy model as REST API service",
+  "description": "",
   "docker_image": "supervisely/base-py-sdk:6.1.97",
   "main_script": "supervisely/serve/src/main.py",
   "modal_template": "supervisely/serve/src/modal.html",
