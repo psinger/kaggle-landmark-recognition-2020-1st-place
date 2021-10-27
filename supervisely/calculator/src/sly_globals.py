@@ -21,15 +21,20 @@ session_id = os.environ["modal.state.sessionId"]
 task_id = my_app.task_id
 team_id = os.environ["context.teamId"]
 workspace_id = os.environ["context.workspaceId"]
+project_id = int(os.environ["context.projectId"])
 
+project_info = api.project.get_info_by_id(project_id)
+project_meta = sly.ProjectMeta.from_json(api.project.get_meta(project_id))
 
 remote_embeddings_dir = '/GL-MetricLearning/embeddings/'
 
 local_project_path = os.path.join(my_app.data_dir, 'project')
 
-calc_batch_size = 512
+# batch_size = 256
+batch_size = 10
 
 root_source_dir = str(Path(sys.argv[0]).parents[3])
+
 sys.path.append(os.path.join(root_source_dir, 'src'))
 
 # DEBUG

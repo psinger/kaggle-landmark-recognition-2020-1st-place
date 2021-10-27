@@ -1,10 +1,16 @@
+import ast
+
+import supervisely_lib as sly
+
+import json
 import os
 import pickle
 import tempfile
 
 import numpy as np
+
 import sly_globals as g
-import supervisely_lib as sly
+import functions as f
 
 import model_functions
 
@@ -29,7 +35,6 @@ def list_dirs(paths):
         for p in new_paths:
             all_paths.append(p['path'])
     return all_paths if all_paths == paths else list_dirs(all_paths)
-
 
 
 def get_image_info_batch(ds):
@@ -75,7 +80,6 @@ def download_images_and_infos_batch(ds, img_ids):
 
 def inference(data):
     return model_functions.calculate_embeddings_for_nps_batch(data)
-
 
 
 def batch_inference(data_batches):
@@ -185,17 +189,130 @@ def get_img_urls(ids):
     return [x.full_storage_url for x in img_infos]
 
 
+def check_model_connection():
+    try:
+        response = g.api.task.send_request(g.session_id, "get_info", data={}, timeout=5)
+        response = json.loads(response)
+        sly.logger.info("🟩 Model has been successfully connected")
+        sly.logger.info(f"⚙️ Model info:\n"
+                        f"{response}")
+    except Exception as ex:
+        sly.logger.info("🟥 Сan not connect to the model!\n"
+                        f"{ex}")
+        exit()
+
+
+def split_list_to_batches(input_list):
+    batches = np.array_split(input_list, g.batch_size, axis=0)
+    return [batch for batch in batches if batch.size > 0]
+
+
+def jsons_to_annotations(annotations_info):
+    return [sly.Annotation.from_json(current_annotation.annotation, g.project_meta)
+            for current_annotation in annotations_info]
+
+
+def get_data_for_each_image(images_annotations):
+    data_for_each_image = []  # [{'bbox': [[TOP, LEFT, HEIGHT, WIDTH], [..]], ..],
+                              # 'tags': [[[tag1, tag2], ..], ..]}, ..]
+
+    for image_annotation in images_annotations:
+        image_bounding_boxes = []
+        image_tags = []
+        for current_label in image_annotation.labels:
+            sly_rectangle = current_label.geometry.to_bbox()
+            image_bounding_boxes.append([sly_rectangle.top,
+                                         sly_rectangle.left,
+                                         sly_rectangle.bottom - sly_rectangle.top,
+                                         sly_rectangle.right - sly_rectangle.left])
+
+            image_tags.append(current_label.tags.keys() if len(current_label.tags) > 0 else [None])
+        data_for_each_image.append({'bbox': image_bounding_boxes,
+                                    'tags': image_tags})
+
+    return data_for_each_image
+
+
+def generate_batch_for_inference(images_urls, data_for_each_image):
+    batch_for_inference = []
+    current_index = 0
+    for image_url, data_for_each_image in zip(images_urls, data_for_each_image):
+        if len(data_for_each_image['bbox']) == 0:
+            batch_for_inference.append({
+                'index': current_index,
+                'url': image_url,
+                'bbox': None,
+                'tags': data_for_each_image['tags'][0]
+            })
+            current_index += 1
+
+        for current_patch_index, bounding_box in enumerate(data_for_each_image['bbox']):
+            batch_for_inference.append({
+                'index': current_index,
+                'url': image_url,
+                'bbox': bounding_box,
+                'tags': data_for_each_image['tags'][current_patch_index]
+            })
+            current_index += 1
+
+    return batch_for_inference
+
+
+def pack_data(tag_to_data, batch, embeddings_by_indexes):
+    original_indexes = [current_item['index'] for current_item in batch]
+    indexes_to_embeddings = {current_item['index']: current_item['embedding'] for current_item in embeddings_by_indexes}
+
+    general_indexes = sorted(list(set(original_indexes) & set(indexes_to_embeddings.keys())))
+
+    for general_index in general_indexes:
+        image_data = batch[general_index]
+
+        current_tags = batch[general_index]['tags']
+        for current_tag in current_tags:
+            data_by_tag = tag_to_data.get(current_tag, [])
+
+            data_by_tag.append({
+                'url': image_data['url'],
+                'embedding': indexes_to_embeddings[general_index],
+                'bbox': image_data['bbox']
+            })
+
+            tag_to_data[current_tag] = data_by_tag
+
+
+def inference_batch(batch):
+    response = g.api.task.send_request(g.session_id, "inference", data={'input_data': batch}, timeout=99999)
+    embeddings_by_indexes = ast.literal_eval(json.loads(response))
+
+    return embeddings_by_indexes
+
+
 @g.my_app.callback("calculate_embeddings_for_project")
 @sly.timeit
 def calculate_embeddings_for_project(api: sly.Api, task_id, context, state, app_logger):
+    datasets_list = g.api.dataset.get_list(g.project_id)
+    for current_dataset in datasets_list:
+        packed_data = {}
 
+        images_info = api.image.get_list(current_dataset.id)
 
-    sly.fs.mkdir(g.project_dir)
-    download_progress = get_progress_cb(progress_index, "Downloading project", 1)
-    sly.download_project(g.api, g.project_id, g.project_dir,
-                         cache=g.my_app.cache, progress_cb=download_progress,
-                         save_image_info=True)  # only_image_tags=True,
+        progress = sly.Progress("processing dataset:", len(images_info))
 
+        images_ids = split_list_to_batches([current_image_info.id for current_image_info in images_info])
+        images_urls = split_list_to_batches([current_image_info.full_storage_url for current_image_info in images_info])
+
+        for ids_batch, urls_batch in zip(images_ids, images_urls):
+            ann_infos = api.annotation.download_batch(current_dataset.id, json.loads(str(ids_batch.tolist())))
+            ann_objects = jsons_to_annotations(ann_infos)
+
+            data_for_each_image = get_data_for_each_image(ann_objects)
+            batch_for_inference = generate_batch_for_inference(urls_batch, data_for_each_image)
+            embeddings_by_indexes = inference_batch(batch_for_inference)
+
+            pack_data(packed_data, batch_for_inference, embeddings_by_indexes)
+
+            progress.iters_done_report(g.batch_size if len(ids_batch) % g.batch_size == 0
+                                       else len(ids_batch) % g.batch_size)
 
 
 def main():
@@ -205,17 +322,8 @@ def main():
         "context.sessionId": g.session_id
     })
 
-
-
-    sly.logger.info("🟩 Model has been successfully connected")
-    sly.logger.debug("Script arguments", extra={
-        "Remote weights": g.remote_weights_path,
-        "Local weights": g.local_weights_path,
-        "device": g.device
-    })
-
+    check_model_connection()
     g.my_app.run(initial_events=[{"command": "calculate_embeddings_for_project"}])
-
 
 
 if __name__ == "__main__":
