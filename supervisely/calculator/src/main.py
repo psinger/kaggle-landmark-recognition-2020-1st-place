@@ -31,30 +31,6 @@ def list_dirs(paths):
     return all_paths if all_paths == paths else list_dirs(all_paths)
 
 
-def list_related_datasets():
-    existing_embeddings = list_dirs([g.remote_embeddings_dir])
-    ckpt_name = sly.fs.get_file_name(g.remote_weights_path)
-    workspaces = [
-        g.api.workspace.get_info_by_id(int(g.workspace_id))] if g.only_current_workspace else g.api.workspace.get_list(
-        g.team_id)
-
-    datasets = []
-
-    for ws in workspaces:
-        progress = sly.Progress(f"Check embeddings for workspace: {ws.name}", len(workspaces))
-        for pr in g.api.project.get_list(ws.id):
-            for ds in g.api.dataset.get_list(pr.id):
-                embedding_path = os.path.join(g.remote_embeddings_dir,
-                                              ckpt_name,
-                                              ws.name,
-                                              pr.name,
-                                              ds.name + '.pkl')
-                if embedding_path not in existing_embeddings:
-                    datasets.append([ws, pr, ds, embedding_path])
-        progress.iters_done_report(1)
-
-    return datasets
-
 
 def get_image_info_batch(ds):
     image_info_list = g.api.image.get_list(ds.id)
@@ -209,32 +185,37 @@ def get_img_urls(ids):
     return [x.full_storage_url for x in img_infos]
 
 
+@g.my_app.callback("calculate_embeddings_for_project")
+@sly.timeit
+def calculate_embeddings_for_project(api: sly.Api, task_id, context, state, app_logger):
+
+
+    sly.fs.mkdir(g.project_dir)
+    download_progress = get_progress_cb(progress_index, "Downloading project", 1)
+    sly.download_project(g.api, g.project_id, g.project_dir,
+                         cache=g.my_app.cache, progress_cb=download_progress,
+                         save_image_info=True)  # only_image_tags=True,
+
+
+
 def main():
     sly.logger.info("Script arguments", extra={
         "context.teamId": g.team_id,
         "context.workspaceId": g.workspace_id,
-        "modal.state.slyFile": g.remote_weights_path,
-        "device": g.device
+        "context.sessionId": g.session_id
     })
 
-    model_functions.initialize_network()
-    download_model_and_config()
-    model_functions.load_weights(g.local_weights_path)
 
-    sly.logger.info("Model has been successfully downloaded")
+
+    sly.logger.info("🟩 Model has been successfully connected")
     sly.logger.debug("Script arguments", extra={
         "Remote weights": g.remote_weights_path,
         "Local weights": g.local_weights_path,
         "device": g.device
     })
 
-    related_datasets = list_related_datasets()  # only datasets without calculated_embeddings
+    g.my_app.run(initial_events=[{"command": "calculate_embeddings_for_project"}])
 
-    for ds in related_datasets:
-        embeddings, gt, parent_img_ids = process_dataset(ds)  # HERE IS GT!
-        urls = get_img_urls(parent_img_ids)
-        emb_dict = create_embeddings_dict(embeddings, gt, urls)
-        upload_embedding_dict(ds, emb_dict)
 
 
 if __name__ == "__main__":
