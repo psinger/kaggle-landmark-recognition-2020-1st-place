@@ -1,0 +1,8 @@
+<div id="embeddings-calculator">
+    <sly-field title="Select Served session" description="select ">
+        <sly-select-app-session :group-id="context.teamId"
+                                :app-session-id.sync="state.sessionId"
+                                :options="state.ssOptions">
+        </sly-select-app-session>
+    </sly-field>
+</div>

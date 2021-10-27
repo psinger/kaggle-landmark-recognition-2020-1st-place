@@ -101,7 +101,7 @@ def cache_images(data):
 
 @g.my_app.callback("inference")
 @sly.timeit
-def inference_image_url(api: sly.Api, task_id, context, state, app_logger):
+def inference(api: sly.Api, task_id, context, state, app_logger):
     data_to_process = list(state['input_data'])
 
     cache_images(data_to_process)
@@ -114,6 +114,25 @@ def inference_image_url(api: sly.Api, task_id, context, state, app_logger):
 
     output_data = json.dumps(str([{'index': row['index'],
                                    'embedding': list(embeddings[index])} for index, row in enumerate(filtered_data)]))
+
+    request_id = context["request_id"]
+    g.my_app.send_response(request_id, data=output_data)
+
+
+@g.my_app.callback("get_info")
+@sly.timeit
+def get_info(api: sly.Api, task_id, context, state, app_logger):
+    if g.selected_weights_type == 'pretrained':
+        output_data = {'modelType': g.selected_weights_type}
+        output_data.update(g.model_info)
+
+    else:
+        output_data = {
+            'modelType': g.selected_weights_type,
+            'modelName': g.remote_weights_path.split('/')[-1]
+        }
+
+    output_data = json.dumps(str(output_data))
 
     request_id = context["request_id"]
     g.my_app.send_response(request_id, data=output_data)
