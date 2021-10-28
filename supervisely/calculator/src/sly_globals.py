@@ -21,7 +21,7 @@ session_id = os.environ["modal.state.sessionId"]
 task_id = my_app.task_id
 team_id = int(os.environ["context.teamId"])
 workspace_id = int(os.environ["context.workspaceId"])
-project_id = int(os.environ["context.projectId"])
+project_id = int(os.environ["modal.state.slyProjectId"])
 
 workspace_info = api.workspace.get_info_by_id(workspace_id)
 project_info = api.project.get_info_by_id(project_id)
