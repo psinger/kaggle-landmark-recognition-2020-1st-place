@@ -218,7 +218,9 @@ def update_table(dataset_id, packed_data):
     # Uploading to Team Files
     if g.api.file.exists(g.team_id, remote_table_path):
         g.api.file.remove(g.team_id, remote_table_path)
-    g.api.file.upload(g.team_id, local_table_path_filtered, remote_table_path)
+    file_info = g.api.file.upload(g.team_id, local_table_path_filtered, remote_table_path)
+
+    g.api.task.set_output_directory(g.task_id, file_info.id, remote_table_path)
 
 
 def write_packed_data(dataset_id, packed_data):
