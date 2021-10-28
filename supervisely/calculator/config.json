@@ -23,5 +23,10 @@
   "isolate": true,
   "need_gpu": true,
   "headless": true,
-  "instance_version": "6.4.21"
+  "instance_version": "6.4.21",
+  "context_menu": {
+    "target": ["images_project"],
+    "context_root": "Neural Networks",
+    "context_category": "Metric Learning"
+  }
 }
