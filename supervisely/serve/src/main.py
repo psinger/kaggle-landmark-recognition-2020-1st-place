@@ -6,7 +6,7 @@ import numpy as np
 import model_functions
 
 import sly_globals as g
-import functions as f
+import sly_functions as f
 
 
 @g.my_app.callback("inference")
