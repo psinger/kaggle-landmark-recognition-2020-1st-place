@@ -5,7 +5,7 @@
     "metric learning"
   ],
   "description": "store embeddings in pickle files",
-  "docker_image": "supervisely/base-pytorch:6.0.22",
+  "docker_image": "supervisely/base-py-sdk:6.1.102",
   "main_script": "supervisely/calculator/src/main.py",
   "modal_template": "supervisely/calculator/src/modal.html",
   "modal_width": 700,
