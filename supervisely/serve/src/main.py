@@ -46,7 +46,8 @@ def batch_inference(data):
     :param data: np.arrays: [[img, img, img, img]]
     :return: embedding for every image [[emb1, emb2, emb3, emb4]]
     """
-    batches = np.array_split(data, g.batch_size, axis=0)
+    splits_num = int(len(data) / g.batch_size) > 0 if int(len(data) / g.batch_size) > 0 else 1
+    batches = np.array_split(data, splits_num, axis=0)
     batches = [batch for batch in batches if batch.size > 0]
 
     embeddings = []
@@ -123,13 +124,13 @@ def inference(api: sly.Api, task_id, context, state, app_logger):
 @sly.timeit
 def get_info(api: sly.Api, task_id, context, state, app_logger):
     if g.selected_weights_type == 'pretrained':
-        output_data = {'modelType': g.selected_weights_type}
+        output_data = {'weightsType': g.selected_weights_type}
         output_data.update(g.model_info)
 
     else:
         output_data = {
-            'modelType': g.selected_weights_type,
-            'modelName': g.remote_weights_path.split('/')[-1]
+            'weightsType': g.selected_weights_type,
+            'Model': g.remote_weights_path.split('/')[-1]
         }
 
     output_data = json.dumps(str(output_data))
