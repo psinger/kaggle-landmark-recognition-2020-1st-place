@@ -1,3 +1,6 @@
+
+import torch
+
 import os
 import pickle
 import tempfile
@@ -6,7 +9,6 @@ import urllib.request
 import cv2
 import requests
 import numpy as np
-from distributed.protocol.tests.test_torch import torch
 from tqdm import tqdm
 from functools import lru_cache
 
