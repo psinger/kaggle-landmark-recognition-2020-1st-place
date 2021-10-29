@@ -15,7 +15,6 @@
   "task_location": "workspace_tasks",
   "icon": "https://imgur.com/a9u0M3Y.png",
   "icon_cover": true,
-  "headless": true,
   "instance_version": "6.4.21",
   "session_tags": [
     "deployed_nn"
