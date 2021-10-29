@@ -27,7 +27,7 @@ workspace_id = int(os.environ['context.workspaceId'])
 
 task_id = my_app.task_id
 
-batch_size = int(os.environ['modal.state.batchSize'])
+batch_size = 64
 
 
 entry_point_path = Path(sys.argv[0])
