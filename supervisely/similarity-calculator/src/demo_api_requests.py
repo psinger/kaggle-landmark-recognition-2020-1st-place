@@ -24,6 +24,9 @@ def main():
     print("APP returns data:")
     print(json.loads(response))
 
+    response = api.task.send_request(task_id, "get_info", data={}, timeout=60)
+    print("APP returns data:")
+    print(json.loads(response))
 
 if __name__ == "__main__":
     main()
