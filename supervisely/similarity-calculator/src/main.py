@@ -75,7 +75,7 @@ def clear_fields(api: sly.Api, task_id, context, state, app_logger):
 def select_checkpoint(api: sly.Api, task_id, context, state, app_logger):
     g.selected_weights_type = state['modelWeightsOptions']
     g.selected_model = state['selectedModel']
-    if selected_weights_type == 'pretrained':
+    if g.selected_weights_type == 'pretrained':
         listed_path = os.path.join(g.remote_embeddings_dir, g.selected_model)
         projects_list_for_checkpoint = g.api.file.list(g.team_id, listed_path)
         files_paths = [current_checkpoint['path'] for current_checkpoint in projects_list_for_checkpoint]
