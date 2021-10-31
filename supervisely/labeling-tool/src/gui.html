@@ -1,0 +1,119 @@
+<div>
+    <div v-if="context.userId !== data.ownerId" style="color: red;">
+        You don't have permissions to open this application session.
+    </div>
+
+    <div v-if="context.userId === data.ownerId">
+        <sly-style>
+            #ai-assisted-tagging {
+            }
+            #small_table.tiny-table table thead th {
+            font-size: 10px;
+            }
+            #small_table.tiny-table table {
+            font-size: 11px;
+            }
+            #small_tabs .el-tabs__item {
+            font-size: 12px;
+            font-weight: 500;
+            height: 30px;
+            line-height: 30px;
+            }
+            #small_tabs .el-tabs__header {
+            background: white;
+            }
+            #ai-assisted-tagging .app-header {
+            background: white;
+            }
+            #ai-assisted-tagging .grid-gallery-views-scene.img-grid-gallery {
+            z-index: 0;
+            }
+            #ai-assisted-tagging {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            }
+            #ai-assisted-tagging .el-tabs {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 60px);
+            }
+            #ai-assisted-tagging .el-tabs__content {
+            overflow: scroll;
+            }
+            #ai-assisted-tagging .el-tabs__header {
+            margin-bottom: 0
+            }
+            #ai-assisted-tagging .xxx .el-collapse-item__header {
+            height: 30px;
+            line-height: 30px;
+            background: #f8f9fc;
+            }
+
+        </sly-style>
+
+
+        <sly-stepper :active="state.activeStep"
+                     class="ml15 mt5"
+        v-if="context.userId === data.ownerId && !state.done2">
+            <sly-stepper-item>
+                {% include 'src/ui/connector_first_step.html' %}
+            </sly-stepper-item>
+            <sly-stepper-item>
+                {% include 'src/ui/connector_second_step.html' %}
+            </sly-stepper-item>
+        </sly-stepper>
+
+
+        <div id="ai-assisted-tagging"
+             v-if="context.userId === data.ownerId && state.done2"
+             class="ml5 mr10"
+             style="margin-left: 2px; margin-right: 2px;"
+        >
+            <div class="app-header">
+                <div class="fflex" style="justify-content: space-between">
+                    <div class="fflex">
+                        <el-button size="small" type="primary"
+                                   class="mt5 ml5 mb5"
+                                   v-if="state.applyTo === 'object'"
+                                   @click="state.loading = true; command('prev_object');"
+                                   :loading="state.loading"
+                        >
+                            <i class="zmdi zmdi-arrow-left ml5"></i> Prev {{state.applyTo}}
+                        </el-button>
+                        <el-button size="small" type="primary"
+                                   class="mt5 ml5 mb5"
+                                   v-if="state.applyTo === 'object'"
+                                   @click="state.loading = true; command('next_object');"
+                                   :loading="state.loading"
+                        >
+                            Next {{state.applyTo}} <i class="zmdi zmdi-arrow-right ml5"></i>
+                        </el-button>
+                    </div>
+                </div>
+            </div>
+            <hr style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>
+            <el-tabs id="small_tabs" v-model="state.tabName">
+                <el-tab-pane label="INFO" name="info">
+                    <span slot="label"><i class="zmdi zmdi-info mr5"></i></i>INFO</span>
+                    {% include 'src/ui/info_tab.html' %}
+                </el-tab-pane>
+                <el-tab-pane label="PREDICTIONS" name="predictions">
+                    <span slot="label"><i class="zmdi zmdi-fire mr5"></i>PREDICTIONS</span>
+                    {% include 'src/ui/predictions_tab.html' %}
+                </el-tab-pane>
+                <el-tab-pane label="REVIEW" name="review">
+                    <span slot="label"><i class="zmdi zmdi-view-dashboard mr5"></i>REVIEW</span>
+                    {% include 'src/ui/review_tab.html' %}
+                </el-tab-pane>
+                <el-tab-pane label="SETTINGS" name="settings">
+                    <span slot="label"><i class="zmdi zmdi-settings mr5"></i>SETTINGS</span>
+                    {% include 'src/ui/settings_tab.html' %}
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+
+    </div>
+</div>

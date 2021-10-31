@@ -1,0 +1,44 @@
+<sly-card>
+    <sly-field title="Connect to Model"
+               description="select served Metric Learning model"
+               style="margin-left: 5px;"
+    >
+        <sly-icon
+                v-if="!state.done1"
+                slot="icon" :options="{ color: '#ffffff', bgColor: '#fe5a1d', rounded: false }">
+            <i class="zmdi zmdi-memory"></i>
+        </sly-icon>
+        <sly-icon
+                v-if="state.done1"
+                slot="icon" :options="{ color: '#ffffff', bgColor: '#51c21d', rounded: false }">
+                <i class="zmdi zmdi-memory"></i>
+        </sly-icon>
+
+
+
+    </sly-field>
+    <div class="fflex">
+        <sly-select-app-session :group-id="data.teamId"
+                                :app-session-id.sync="state.nnId"
+                                :options="data.ssOptions"
+                                :disabled="state.done1">
+        </sly-select-app-session>
+        <el-button class="ml10"
+                   style="width: 120px"
+                   type="primary"
+                   size="small"
+                   :disabled="!state.nnId || state.done1"
+                   :loading="state.connectingToNN"
+                   @click="state.connectingToNN = true; command('connect_to_model');"
+        >
+            connect
+        </el-button>
+
+    </div>
+<!--    <div class="mt5"-->
+<!--         v-if="state.done1">-->
+<!--        <i class="zmdi zmdi-check-circle mr5 mt15 mb10" style="color: #14ce66"></i>-->
+<!--        <span style="color: #5a6772;">successfully connected</span>-->
+<!--    </div>-->
+
+</sly-card>

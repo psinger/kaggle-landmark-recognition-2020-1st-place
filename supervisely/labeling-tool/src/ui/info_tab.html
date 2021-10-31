@@ -1,0 +1,37 @@
+<div>
+    <sly-card class="mt5 mb5">
+        <sly-field title="Model"
+                   description="below stats"
+                   style="padding-top: 4px; padding-bottom: 6px">
+            <sly-icon
+                    slot="icon" :options="{ color: '#ffffff', bgColor: '#51c21d', rounded: false }">
+                <i class="zmdi zmdi-memory"></i>
+            </sly-icon>
+        </sly-field>
+        <div v-for="v,k in data.modelStats" class="mb10" style="word-break: break-all;">
+            <div style="margin-bottom: 4px">
+                <b>{{k}}</b>: <span>{{v}}</span>
+            </div>
+        </div>
+        </sly-field>
+    </sly-card>
+
+
+    <sly-card class="mt5 mb5">
+        <sly-field title="Reference Embeddings"
+                   description="below stats"
+                   style="padding-top: 4px; padding-bottom: 6px">
+            <sly-icon
+                slot="icon" :options="{ color: '#ffffff', bgColor: '#51c21d', rounded: false }">
+                <i class="zmdi zmdi-blur"></i>
+        </sly-icon>
+        </sly-field>
+        <div v-for="v,k in data.calculatorStats" class="mb10" style="word-break: break-all;">
+            <div style="margin-bottom: 4px">
+                <b>{{k}}</b>: <span>{{v}}</span>
+            </div>
+        </div>
+        </sly-field>
+    </sly-card>
+
+</div>
