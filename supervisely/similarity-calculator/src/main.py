@@ -12,13 +12,13 @@ import sly_functions as f
 @g.my_app.callback("get_info")
 @sly.timeit
 def get_info(api: sly.Api, task_id, context, state, app_logger):
-    selected_weights_type = state['modelWeightsOptions']
-    if selected_weights_type == 'pretrained':
-        output_data = {'weightsType': selected_weights_type,
-                       'Model': state['selectedModel']}
+
+    if g.selected_weights_type == 'pretrained':
+        output_data = {'weightsType': g.selected_weights_type,
+                       'Model': g.selected_model}
 
     else:
-        output_data = {'weightsType': selected_weights_type}
+        output_data = {'weightsType': g.selected_weights_type}
 
     output_data = json.dumps(str(output_data))
 
@@ -73,9 +73,10 @@ def clear_fields(api: sly.Api, task_id, context, state, app_logger):
 @g.my_app.callback("select_checkpoint")
 @sly.timeit
 def select_checkpoint(api: sly.Api, task_id, context, state, app_logger):
-    selected_weights_type = state['modelWeightsOptions']
+    g.selected_weights_type = state['modelWeightsOptions']
+    g.selected_model = state['selectedModel']
     if selected_weights_type == 'pretrained':
-        listed_path = os.path.join(g.remote_embeddings_dir, state['selectedModel'])
+        listed_path = os.path.join(g.remote_embeddings_dir, g.selected_model)
         projects_list_for_checkpoint = g.api.file.list(g.team_id, listed_path)
         files_paths = [current_checkpoint['path'] for current_checkpoint in projects_list_for_checkpoint]
 
