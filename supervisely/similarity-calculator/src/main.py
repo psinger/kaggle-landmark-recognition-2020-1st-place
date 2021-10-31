@@ -9,6 +9,23 @@ import sly_globals as g
 import sly_functions as f
 
 
+@g.my_app.callback("get_info")
+@sly.timeit
+def get_info(api: sly.Api, task_id, context, state, app_logger):
+    selected_weights_type = state['modelWeightsOptions']
+    if selected_weights_type == 'pretrained':
+        output_data = {'weightsType': selected_weights_type,
+                       'Model': state['selectedModel']}
+
+    else:
+        output_data = {'weightsType': selected_weights_type}
+
+    output_data = json.dumps(str(output_data))
+
+    request_id = context["request_id"]
+    g.my_app.send_response(request_id, data=output_data)
+
+
 @g.my_app.callback("load_embeddings_to_memory")
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()

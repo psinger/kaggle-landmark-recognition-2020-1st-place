@@ -6,7 +6,7 @@ def main():
     api = sly.Api.from_env()
 
     # task id of the deployed model
-    task_id = 10495
+    task_id = 10692
 
     # get embedding for test image
     response = api.task.send_request(task_id, "calculate_similarity", data={
