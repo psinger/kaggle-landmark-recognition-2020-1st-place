@@ -7,10 +7,13 @@ import info_tab
 import ui
 import cache
 
+import sly_functions as f
+
 
 def init_fields(state, data):
     state['done1'] = False
     state['connectingToNN'] = False
+    data['modelStats'] = {}
 
 
 def handle_model_errors(data):
@@ -27,9 +30,14 @@ def connect_to_model(api: sly.Api, task_id, context, state, app_logger):
         task_id = state['nnId']
 
         response = api.task.send_request(task_id, "get_info", data={}, timeout=3)
-        g.model_info = ast.literal_eval(json.loads(response))
+        model_info = ast.literal_eval(json.loads(response))
+        model_info.pop('weightsUrl', None)
+        g.model_info = model_info
+
+
 
         fields = [
+            {"field": f"data.modelStats", "payload": f.process_info_for_showing(g.model_info.copy())},
             {"field": f"state.connectingToNN", "payload": False},
             {"field": f"state.done1", "payload": True},
             {"field": f"state.activeStep", "payload": 2},

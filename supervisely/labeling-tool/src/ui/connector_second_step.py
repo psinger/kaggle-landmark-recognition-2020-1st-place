@@ -3,6 +3,9 @@ import json
 
 import supervisely_lib as sly
 import globals as g
+import sly_functions as f
+
+
 import info_tab
 import ui
 import cache
@@ -11,6 +14,7 @@ import cache
 def init_fields(state, data):
     state['done2'] = False
     state['connectingToCalculator'] = False
+    data['calculatorStats'] = {}
 
 
 def handle_model_errors(data):
@@ -33,6 +37,7 @@ def connect_to_calculator(api: sly.Api, task_id, context, state, app_logger):
             raise ValueError('Metric Learning model and Similarity Calculator model must be the same!')
 
         fields = [
+            {"field": f"data.calculatorStats", "payload": f.process_info_for_showing(g.calculator_info.copy())},
             {"field": f"state.connectingToCalculator", "payload": False},
             {"field": f"state.done2", "payload": True},
             {"field": f"state.activeStep", "payload": 2},

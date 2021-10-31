@@ -20,6 +20,8 @@ def get_info(api: sly.Api, task_id, context, state, app_logger):
     else:
         output_data = {'weightsType': g.selected_weights_type}
 
+    output_data.update(g.embeddings_stats)
+
     output_data = json.dumps(str(output_data))
 
     request_id = context["request_id"]
@@ -47,7 +49,7 @@ def load_embeddings_to_memory(api: sly.Api, task_id, context, state, app_logger)
     local_pickles_paths = f.download_embeddings(embeddings_paths)
     g.embeddings_in_memory = f.load_embeddings_to_memory(local_pickles_paths)
 
-    embeddings_stats = {
+    g.embeddings_stats = {
         'Embeddings Count': len(g.embeddings_in_memory['embedding']),
         'Labels Num': len(set(g.embeddings_in_memory['label']))
     }
@@ -55,7 +57,7 @@ def load_embeddings_to_memory(api: sly.Api, task_id, context, state, app_logger)
     fields = [
         {"field": f"state.embeddingsLoaded", "payload": True},
         {"field": f"state.loadingEmbeddings", "payload": False},
-        {"field": f"data.embeddingsStats", "payload": embeddings_stats}
+        {"field": f"data.embeddingsStats", "payload": g.embeddings_stats}
     ]
     g.api.task.set_fields(g.task_id, fields)
 
