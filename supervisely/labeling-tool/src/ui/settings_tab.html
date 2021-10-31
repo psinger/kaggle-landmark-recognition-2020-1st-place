@@ -1,0 +1,34 @@
+<div class="mt5 ml5 mr5">
+    <sly-field title="Apply to" description="Apply model to images or to objects">
+        <el-select v-model="state.applyTo" size="small">
+            <el-option key="image" label="image" value="image"></el-option>
+            <el-option key="object" label="object" value="object"></el-option>
+        </el-select>
+    </sly-field>
+    <sly-field title="Assign mode"
+               description="Tag will be appended to existing ones (duplicates are allowed). Or if object
+                                   or image has some of the model tags, they will be replaced"
+    >
+        <el-select v-model="state.assignMode" size="small" :disabled="true">
+            <el-option key="append" label="append" value="append"></el-option>
+            <el-option key="replace" label="replace" value="replace"></el-option>
+        </el-select>
+    </sly-field>
+    <sly-field title="Top N" description="Show only top N predictions">
+        <el-input-number size="small" v-model="state.topn" :min="1"></el-input-number>
+    </sly-field>
+    <sly-field title="Object padding"
+               description="Crop object with padding for prediction (applicable only when model is applied to objects)">
+        <div class="fflex">
+            <el-input-number size="small" v-model="state.pad" :min="0"></el-input-number>
+            <div class="ml5">percent</div>
+        </div>
+    </sly-field>
+    <sly-field title="Cache"
+               description="App caches metadata, images and annotations. Clear cache if you get
+                                   special notifications from the app">
+        <el-button size="small"
+                   :loading="state.loading"
+                   @click="state.loading = true; command('clear_cache')">Clear cache</el-button>
+    </sly-field>
+</div>

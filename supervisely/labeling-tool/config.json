@@ -1,0 +1,23 @@
+{
+  "name": "ML labeling tool",
+  "type": "app",
+  "categories": [
+    "labeling"
+  ],
+  "description": "use metric learning models to classify images",
+  "docker_image": "supervisely/base-py-sdk:6.1.102",
+  "main_script": "src/main.py",
+  "gui_template": "src/gui.html",
+
+  "task_location": "application_sessions",
+  "isolate": true,
+  "headless": false,
+  "integrated_into": ["image_annotation_tool"],
+
+  "icon": "https://imgur.com/a9u0M3Y.png",
+  "icon_background": "#FFFFFF",
+  "hotkeys": [
+      {"hotkey": "ctrl+m", "command": "inference"}
+  ],
+  "instance_version": "6.4.21"
+}

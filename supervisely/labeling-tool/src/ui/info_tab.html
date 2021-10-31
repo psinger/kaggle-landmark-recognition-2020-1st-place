@@ -1,0 +1,42 @@
+<div class="mt5 ml5 mr5" v-loading="state.loading" element-loading-text="Loading...">
+    <div><b>CONNECTED MODEL</b></div>
+    <div v-for="v,k in data.info" style="word-break: break-all;">
+        <b style="color: #777777;">{{k}}</b>: {{v}}
+    </div>
+
+    <div class="mt10"><b>MODEL CLASSES</b></div>
+    <div class="fflex" v-if="data.tags">
+        <el-button type="text" size="mini"
+                   :disabled="data.tags.length === state.activeNames.length"
+                   @click="state.activeNames = data.modelTagNames"
+        >
+            <i class="zmdi zmdi-unfold-more mr5"></i>Expand all
+        </el-button>
+        <el-button type="text" size="mini"
+                   :disabled="state.activeNames.length == 0"
+                   @click="state.activeNames = []"
+        >
+            <i class="zmdi zmdi-unfold-less mr5"></i>Collapse all
+        </el-button>
+    </div>
+    <el-collapse class="xxx" v-model="state.activeNames" v-if="data.tags">
+        <el-collapse-item v-for="tag in data.tags" :name="tag.name">
+            <template slot="title">
+                    <span>
+                        <i class="zmdi zmdi-label mr5" :style="{color: tag.color}"></i>{{tag.name}}
+                    </span>
+            </template>
+            <el-button v-if="state.applyTo === 'object'"
+                       size="small" type="primary" class="mt5 ml5 mb5"
+                       @click="state.loading = true;
+                               state.assignName = tag.name;
+                               command('assign_to_object');"
+                       :loading="state.loading"
+                       :disabled="!context.figureId"
+            >
+                Assign tag "{{tag.name}}" to selected object
+            </el-button>
+            <sly-image-slider v-if="data.tagsExamples.hasOwnProperty(tag.name)" :data="data.tagsExamples[tag.name]"/>
+        </el-collapse-item>
+    </el-collapse>
+</div>
