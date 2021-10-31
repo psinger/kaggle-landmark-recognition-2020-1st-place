@@ -8,6 +8,7 @@ def main():
     # task id of the deployed model
     task_id = 10709
 
+
     # get embedding for test image
     # response = api.task.send_request(task_id, "calculate_similarity", data={
     #     'input_data': {

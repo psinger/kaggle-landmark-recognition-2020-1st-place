@@ -19,6 +19,7 @@ selected_weights_type = None
 selected_model = None
 embeddings_stats = None
 
+
 remote_embeddings_dir = '/GL-MetricLearning/embeddings/'
 local_embeddings_dir = os.path.join(my_app.data_dir, 'local_embeddings')
 
