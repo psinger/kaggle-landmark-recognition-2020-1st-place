@@ -1,5 +1,5 @@
 {
-  "name": "Serialize Embeddings",
+  "name": "Embeddings Calculator",
   "type": "app",
   "categories": [
     "metric learning"

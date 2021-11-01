@@ -2,7 +2,7 @@ import ast
 import json
 
 import supervisely_lib as sly
-import globals as g
+import sly_globals as g
 import sly_functions as f
 
 
@@ -48,6 +48,8 @@ def connect_to_calculator(api: sly.Api, task_id, context, state, app_logger):
             {"field": f"state.activeStep", "payload": 2},
         ]
         g.api.task.set_fields(g.task_id, fields)
+
+        g.calculator_session_id = task_id
 
     except Exception as ex:
         fields = [

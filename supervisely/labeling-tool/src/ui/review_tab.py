@@ -1,5 +1,5 @@
 import supervisely_lib as sly
-import globals as g
+import sly_globals as g
 import cache
 import review_tab
 import tag_utils

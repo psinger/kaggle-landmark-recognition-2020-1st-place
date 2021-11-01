@@ -1,5 +1,5 @@
 import supervisely_lib as sly
-import globals as g
+import sly_globals as g
 
 
 def init(data, state):
