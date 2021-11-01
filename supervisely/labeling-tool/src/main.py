@@ -55,19 +55,17 @@ def figure_changed(api: sly.Api, task_id, context, state, app_logger):
         sly.logger.debug("Context", extra={"context": context})
 
         project_id = context["projectId"]
-        nn_session = state["nnId"]
-        similarity_session = state["similarityId"]
-
-        figure_id = context["figureId"]
 
         image_id = context["imageId"]
         figure_id = context["figureId"]
 
         ann = cache.get_annotation(project_id, image_id)
 
-        results = f.calculate_nearest_images(nn_session, image_id, state["topn"], ann, figure_id, state["pad"])
+        nearest_labels = f.calculate_nearest_labels(images_ids=[image_id],
+                                                    annotations=[ann],
+                                                    figures_ids=[figure_id], top_n=5, padding=0)
 
-        prediction.show(results, fields)
+        prediction.show(nearest_labels, fields)
         review_tab.refresh_figure(project_id, figure_id, fields)
         api.task.set_fields_from_dict(task_id, fields)
 

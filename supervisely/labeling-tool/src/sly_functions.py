@@ -43,7 +43,7 @@ def generate_data_for_nn_app(images_ids, figures_ids, annotations, padding):
                 f"Label with id={figure_id} not found. Maybe cached annotation differs from the actual one. "
                 f"Please clear cache on settings tab")
 
-        image_url = image_info
+        image_url = image_info.full_storage_url
         bbox = sly_annotation_to_bbox(label)
 
         data_for_inference.append(
@@ -66,9 +66,13 @@ def generate_data_for_calculator_app(embeddings_by_indexes, top_n):
     return data_for_calculator
 
 
-def calculate_nearest_labels(images_ids, annotations: sly.Annotation, figures_ids, top_n=5, padding=0):
+def calculate_nearest_labels(images_ids, annotations, figures_ids, top_n=5, padding=0):
+    output_data = {}
+
     data_for_nn = generate_data_for_nn_app(images_ids=images_ids, annotations=annotations,
                                            figures_ids=figures_ids, padding=padding)
+
+
 
     response = g.api.task.send_request(g.nn_session_id, "inference", data={
         'input_data': data_for_nn
@@ -83,4 +87,4 @@ def calculate_nearest_labels(images_ids, annotations: sly.Annotation, figures_id
 
     nearest_labels = ast.literal_eval(json.loads(response))  # {'pred_dist': [1.0, ..], 'pred_labels': ['', ..]}
 
-    return nearest_labels
+    return output_data
