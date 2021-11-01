@@ -8,7 +8,7 @@ import numpy as np
 import sly_globals as g
 import models
 
-import sly_functions as source_functions
+import functions as source_functions
 
 
 def get_default_args():
