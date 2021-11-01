@@ -1,4 +1,4 @@
-import globals as g
+import sly_globals as g
 import supervisely_lib as sly
 
 

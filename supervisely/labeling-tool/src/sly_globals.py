@@ -28,6 +28,9 @@ model_meta: sly.ProjectMeta = None
 model_info = None
 calculator_info = None
 
+nn_session_id = None
+calculator_session_id = None
+
 
 tags_examples = None
 examples_data = None

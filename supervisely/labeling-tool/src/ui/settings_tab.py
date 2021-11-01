@@ -1,5 +1,5 @@
 import supervisely_lib as sly
-import globals as g
+import sly_globals as g
 import cache
 
 
@@ -8,6 +8,7 @@ def init(data, state):
     state["assignMode"] = "append"
     state["topn"] = 5
     state["pad"] = 10
+    state["addEveryPatchToReference"] = None
 
 
 @g.my_app.callback("clear_cache")

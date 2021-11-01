@@ -1,7 +1,7 @@
 from collections import defaultdict
 import supervisely_lib as sly
 
-import globals as g
+import sly_globals as g
 import info_tab
 import predictions_tab
 import review_tab

@@ -12,7 +12,6 @@ import sly_functions as f
 @g.my_app.callback("get_info")
 @sly.timeit
 def get_info(api: sly.Api, task_id, context, state, app_logger):
-
     if g.selected_weights_type == 'pretrained':
         output_data = {'weightsType': g.selected_weights_type,
                        'Model': g.selected_model}
@@ -118,13 +117,17 @@ def calculate_similarity(api: sly.Api, task_id, context, state, app_logger):
                                                         device='cpu')
 
     indexes_to_labels = np.asarray(g.embeddings_in_memory['label'])
+    indexes_to_urls = np.asarray(g.embeddings_in_memory['url'])
 
     pred_dist = [list(curr_row) for curr_row in list(pred_dist.data.cpu().numpy())]
     pred_labels = [list(indexes_to_labels[list(curr_row)]) for curr_row in
                    list(pred_index_of_labels.data.cpu().numpy())]
+    pred_urls = [list(indexes_to_urls[list(curr_row)]) for curr_row in
+                 list(pred_index_of_labels.data.cpu().numpy())]
 
     output_data = json.dumps(str({'pred_dist': pred_dist,
-                                  'pred_labels': pred_labels}))
+                                  'pred_labels': pred_labels,
+                                  'pred_urls': pred_urls}))
 
     request_id = context["request_id"]
     g.my_app.send_response(request_id, data=output_data)

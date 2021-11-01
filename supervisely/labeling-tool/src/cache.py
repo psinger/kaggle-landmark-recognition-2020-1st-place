@@ -1,6 +1,6 @@
 import os
 import supervisely_lib as sly
-import globals as g
+import sly_globals as g
 
 project2meta = {}  # project_id -> project_meta
 image2info = {}

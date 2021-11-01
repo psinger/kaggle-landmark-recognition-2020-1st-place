@@ -1,5 +1,5 @@
 import supervisely_lib as sly
-import globals as g
+import sly_globals as g
 import cache
 import prediction
 import ui
@@ -10,8 +10,10 @@ import connector_first_step
 import connector_second_step
 
 # to register callbacks
-import connection
+
 import iterate_objects
+
+import sly_functions as f
 
 
 @g.my_app.callback("manual_selected_image_changed")
@@ -47,36 +49,26 @@ def image_changed(api: sly.Api, task_id, context, state, app_logger):
 @g.my_app.ignore_errors_and_show_dialog_window()
 def figure_changed(api: sly.Api, task_id, context, state, app_logger):
     fields = {}
+    api.task.set_field(task_id, "state.loading", True)
+
     try:
         sly.logger.debug("Context", extra={"context": context})
 
         project_id = context["projectId"]
-        nn_session = state["nnId"]
-        if nn_session is None:
-            return
-        if state["applyTo"] == "image":
-            return
 
-        api.task.set_field(task_id, "state.loading", True)
-        fields["state.loading"] = False
-
-        figure_id = context.get("figureId", None)
-        if figure_id is None:
-            sly.logger.debug("Selected figure is None")
-            prediction.hide(fields)
-            review_tab.reset(fields)
-            api.task.set_fields_from_dict(task_id, fields)
-            return
-
-        project_id = context["projectId"]
         image_id = context["imageId"]
         figure_id = context["figureId"]
 
         ann = cache.get_annotation(project_id, image_id)
-        results = tag_utils.classify(nn_session, image_id, state["topn"], ann, figure_id, state["pad"])
-        prediction.show(results, fields)
+
+        nearest_labels = f.calculate_nearest_labels(images_ids=[image_id],
+                                                    annotations=[ann],
+                                                    figures_ids=[figure_id], top_n=5, padding=0)
+
+        prediction.show(nearest_labels, fields)
         review_tab.refresh_figure(project_id, figure_id, fields)
         api.task.set_fields_from_dict(task_id, fields)
+
     except Exception as e:
         api.task.set_fields_from_dict(task_id, fields)
         raise e
@@ -93,7 +85,6 @@ def main():
 
     g.my_app.run(data=data, state=state)
 
-#@TODO: min instance version
-#@TODO: append vs replace
+
 if __name__ == "__main__":
     sly.main_wrapper("main", main)
