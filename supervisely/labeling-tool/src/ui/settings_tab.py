@@ -8,6 +8,7 @@ def init(data, state):
     state["assignMode"] = "append"
     state["topn"] = 5
     state["pad"] = 10
+    state["addEveryPatchToReference"] = None
 
 
 @g.my_app.callback("clear_cache")

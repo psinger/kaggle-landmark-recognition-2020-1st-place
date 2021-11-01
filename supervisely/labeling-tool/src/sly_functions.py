@@ -13,3 +13,9 @@ def process_info_for_showing(info_data):
 
     return processed_info
 
+
+def remove_keys_from_dict(keys_to_remove, data):
+    for key in keys_to_remove:
+        data.pop(key, None)
+
+

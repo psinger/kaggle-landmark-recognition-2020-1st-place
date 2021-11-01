@@ -31,10 +31,11 @@ def connect_to_model(api: sly.Api, task_id, context, state, app_logger):
 
         response = api.task.send_request(task_id, "get_info", data={}, timeout=3)
         model_info = ast.literal_eval(json.loads(response))
-        model_info.pop('weightsUrl', None)
+
+        keys_to_remove = ['weightsUrl']
+        f.remove_keys_from_dict(keys_to_remove, model_info)
+
         g.model_info = model_info
-
-
 
         fields = [
             {"field": f"data.modelStats", "payload": f.process_info_for_showing(g.model_info.copy())},
