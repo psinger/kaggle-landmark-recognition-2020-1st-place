@@ -49,8 +49,10 @@ def image_changed(api: sly.Api, task_id, context, state, app_logger):
 @g.my_app.ignore_errors_and_show_dialog_window()
 def figure_changed(api: sly.Api, task_id, context, state, app_logger):
     fields = {}
-    api.task.set_field(task_id, "state.loading", True)
+    if context.get("figureId", None) is None:
+        return 2
 
+    api.task.set_field(task_id, "state.loading", True)
     try:
         sly.logger.debug("Context", extra={"context": context})
 
@@ -64,6 +66,7 @@ def figure_changed(api: sly.Api, task_id, context, state, app_logger):
         nearest_labels = f.calculate_nearest_labels(images_ids=[image_id],
                                                     annotations=[ann],
                                                     figures_ids=[figure_id], top_n=5, padding=0)
+
 
         prediction.show(nearest_labels, fields)
         review_tab.refresh_figure(project_id, figure_id, fields)

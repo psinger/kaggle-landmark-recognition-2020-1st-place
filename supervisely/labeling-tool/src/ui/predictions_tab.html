@@ -1,79 +1,30 @@
 <div v-loading="state.loading" element-loading-text="Loading...">
-    <div v-if="data.predTags" class="ml5">
-        <sly-field style="margin-top: 15px;"
-                   v-if="state.previousName"
-                   title="Copy previous result"
-                   :description="`if current ${state.applyTo} looks the same as previous one, you can quickly
-                   assign previous result to current ${state.applyTo}`">
-            <el-button size="small" class="mt5 ml5 mb5"
-                       :plain="true"
-                       :disabled="(!context.figureId && state.applyTo === 'object')"
-                       :loading="state.loading"
-                       @click="command('mark_as_previous');"
-            >
-                Assign tag "{{state.previousName}}" to current {{state.applyTo}}
-            </el-button>
-        </sly-field>
-        <div class="mt10"><b>TOP {{state.topn}} PREDICTIONS:</b></div>
-        <div class="fflex" v-if="data.predTags">
-            <el-button type="text" size="mini"
-                       :disabled="data.predTags.length === state.activeNamesPred.length"
-                       @click="state.activeNamesPred = data.predTagsNames"
-            >
-                <i class="zmdi zmdi-unfold-more mr5"></i>Expand all
-            </el-button>
-            <el-button type="text" size="mini"
-                       :disabled="state.activeNamesPred.length == 0"
-                       @click="state.activeNamesPred = []"
-            >
-                <i class="zmdi zmdi-unfold-less mr5"></i>Collapse all
-            </el-button>
-        </div>
-        <el-collapse class="xxx" v-model="state.activeNamesPred" v-if="data.predTags">
-            <el-collapse-item v-for="tag in data.predTags" :name="tag.name">
-                <template slot="title">
-                    <span style="min-width: 35%; display: inline-block;">
-                        <i class="zmdi zmdi-label mr5" :style="{color: tag.color}"></i>{{tag.name}}
-                    </span>
-                    <b class="ml10">p={{tag.score}}</b>
-                </template>
-                <el-button size="small" type="primary" class="mt5 ml5 mb5"
-                           @click="state.assignName = tag.name;
-                                   command('assign_to_item');"
-                           :loading="state.loading"
-                           :disabled="state.applyTo === 'object' && !context.figureId"
-                >
-                    Assign tag "{{tag.name}}" to current {{state.applyTo}}
-                </el-button>
-                <sly-image-slider v-if="data.tagsExamples.hasOwnProperty(tag.name)" :data="data.tagsExamples[tag.name]"/>
-            </el-collapse-item>
-        </el-collapse>
-        <sly-field style="margin-top: 15px;"
-                   :title="`Correct class not found among top ${state.topn} predictions?`"
-                   :description="`If you compared ${state.applyTo} with all predictions and
-                                   the correct class not found, you can mark this ${state.applyTo} with tag 'Unknown' and
-                                   get back to this case later`">
-            <el-button size="small" class="mt5 ml5 mb5"
-                       :plain="true" type="warning"
-                       :disabled="(!context.figureId && state.applyTo === 'object')"
-                       :loading="state.loading"
-                       @click="state.loading = true; command('mark_unknown');"
-            >
-                Assign tag <span style="color: orange"><i class="zmdi zmdi-label"></i> "Unknown"</span> to current
-                {{state.applyTo}}
-            </el-button>
-        </sly-field>
-    </div>
-    <sly-field style="margin-top: 15px; margin-left: 5px;"
-               title="Manual refresh"
-               description="Model automatically produces predictions for selected item. Manual refresh is helpful if you
-               changed inference settings and would like to apply them to current item">
-        <el-button size="small" class="mt5 ml5 mb5"
-                   :loading="state.loading"
-                   :disabled="(!context.figureId && state.applyTo === 'object')"
-                   @click="state.loading = true; command('predict');"
-        >
-            Refresh predictions for selected {{state.applyTo}}
-        </el-button>
-    </sly-field>
+<!--    <el-collapse v-model="nn_predictions">-->
+    <el-collapse>
+        <el-collapse-item name="last_assigned_item">
+            <template slot="title">
+                <i class="zmdi zmdi-flip-to-back mr5"></i> Last assigned
+            </template>
+            <div>
+                last ass item
+            </div>
+        </el-collapse-item>
+        <el-collapse-item name="review_selected_item">
+            <template slot="title">
+                <i class="zmdi zmdi-eye mr5"></i> Review selected
+            </template>
+            <div>
+                review_selected_item
+            </div>
+        </el-collapse-item>
+        <el-collapse-item name="nn_predictions"
+        :collapsed="false">
+            <template slot="title">
+                <i class="zmdi zmdi-fire mr5"></i> NN Predictions
+            </template>
+            <div>
+                nn_predictions
+            </div>
+        </el-collapse-item>
+    </el-collapse>
 </div>
