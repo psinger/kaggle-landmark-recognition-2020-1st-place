@@ -67,12 +67,8 @@ def generate_data_for_calculator_app(embeddings_by_indexes, top_n):
 
 
 def calculate_nearest_labels(images_ids, annotations, figures_ids, top_n=5, padding=0):
-    output_data = {}
-
     data_for_nn = generate_data_for_nn_app(images_ids=images_ids, annotations=annotations,
                                            figures_ids=figures_ids, padding=padding)
-
-
 
     response = g.api.task.send_request(g.nn_session_id, "inference", data={
         'input_data': data_for_nn
@@ -85,6 +81,10 @@ def calculate_nearest_labels(images_ids, annotations, figures_ids, top_n=5, padd
         'input_data': data_for_calculator
     }, timeout=99999)
 
-    nearest_labels = ast.literal_eval(json.loads(response))  # {'pred_dist': [1.0, ..], 'pred_labels': ['', ..]}
+    nearest_labels = ast.literal_eval(json.loads(response))  # {
+                                                             #     'pred_dist': [1.0, ..],
+                                                             #     'pred_labels': ['label1', ..],
+                                                             #     'pred_urls': ['image_url1', ..],
+                                                             # }
 
-    return output_data
+    return nearest_labels
