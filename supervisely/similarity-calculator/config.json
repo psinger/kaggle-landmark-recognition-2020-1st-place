@@ -1,5 +1,5 @@
 {
-  "name": "Serve Embeddings Similarity",
+  "name": "Serve AI Recommendations",
   "type": "app",
   "categories": [
     "metric learning"
@@ -17,6 +17,6 @@
   "icon_cover": true,
   "instance_version": "6.4.21",
   "session_tags": [
-    "deployed_nn_calculator"
+    "deployed_nn_recommendations"
   ]
 }

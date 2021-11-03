@@ -12,9 +12,17 @@ import cache
 
 
 def init_fields(state, data):
-    state['done2'] = False
+    # state['done2'] = False
+
+    state['done2'] = True  # DEBUG
     state['connectingToCalculator'] = False
     data['calculatorStats'] = {}
+
+    data["ssOptionsCalculator"] = {
+        "sessionTags": ["deployed_nn_calculator"],
+        "showLabel": False,
+        "size": "small"
+    }
 
 
 def handle_model_errors(data):

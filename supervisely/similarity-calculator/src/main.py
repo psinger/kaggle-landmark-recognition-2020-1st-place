@@ -135,6 +135,37 @@ def calculate_similarity(api: sly.Api, task_id, context, state, app_logger):
     g.logger.info(f'successfully calculated! {context["request_id"]}')
 
 
+@g.my_app.callback("add_new_embeddings_to_reference")
+@sly.timeit
+def add_new_embeddings_to_reference(api: sly.Api, task_id, context, state, app_logger):
+    g.logger.info(f'adding embeddings to reference; {context["request_id"]}')
+
+    data_to_process = dict(state['input_data'])
+
+    # {
+    #     'embedding' :[],
+    #     'label' :[],
+    #     'url' :[],
+    #     'bbox' :[]
+    # }
+
+    for key, value in data_to_process.items():
+        g.embeddings_in_memory[key].extend(value)
+
+    g.embeddings_stats = {
+        'Embeddings Count': len(g.embeddings_in_memory['embedding']),
+        'Labels Num': len(set(g.embeddings_in_memory['label']))
+    }
+
+    request_id = context["request_id"]
+    g.my_app.send_response(request_id, data=g.embeddings_stats)
+
+    g.logger.info(f'successfully added! {context["request_id"]}')
+
+
+# @TODO: add_new_embeddings_to_reference store to sly_dataset
+# @TODO: add_new_embeddings_to_reference store to pickles
+
 def main():
     sly.logger.info("Similarity calculator started")
     data = {}
