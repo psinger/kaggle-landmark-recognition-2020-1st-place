@@ -12,7 +12,7 @@
   "modal_template_state": {
     "sessionId": "None",
     "ssOptions": {
-        "sessionTags": ["deployed_nn"],
+        "sessionTags": ["deployed_nn_embeddings"],
         "showLabel": false,
         "size": "small"
     }
