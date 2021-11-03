@@ -163,6 +163,9 @@ def add_new_embeddings_to_reference(api: sly.Api, task_id, context, state, app_l
     g.logger.info(f'successfully added! {context["request_id"]}')
 
 
+# @TODO: add_new_embeddings_to_reference store to sly_dataset
+# @TODO: add_new_embeddings_to_reference store to pickles
+
 def main():
     sly.logger.info("Similarity calculator started")
     data = {}
