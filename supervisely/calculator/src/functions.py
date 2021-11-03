@@ -82,6 +82,7 @@ def get_data_for_each_image(images_annotations):
     for image_annotation in images_annotations:
         image_bounding_boxes = []
         image_tags = []
+        image_descriptions = []
         for current_label in image_annotation.labels:
             sly_rectangle = current_label.geometry.to_bbox()
             image_bounding_boxes.append([sly_rectangle.top,
@@ -90,8 +91,10 @@ def get_data_for_each_image(images_annotations):
                                          sly_rectangle.right - sly_rectangle.left])
 
             image_tags.append(current_label.tags.keys() if len(current_label.tags) > 0 else [None])
+            image_descriptions.append(json.loads(current_label.description) if current_label.description else {})
         data_for_each_image.append({'bbox': image_bounding_boxes,
-                                    'tags': image_tags})
+                                    'tags': image_tags,
+                                    'descriptions': image_descriptions})
 
     return data_for_each_image
 
@@ -105,7 +108,8 @@ def generate_batch_for_inference(images_urls, data_for_each_image):
                 'index': current_index,
                 'url': image_url,
                 'bbox': None,
-                'tags': data_for_each_image['tags'][0]
+                'tags': data_for_each_image['tags'][0],
+                'description': data_for_each_image['descriptions'][0]
             })
             current_index += 1
 
@@ -114,7 +118,9 @@ def generate_batch_for_inference(images_urls, data_for_each_image):
                 'index': current_index,
                 'url': image_url,
                 'bbox': bounding_box,
-                'tags': data_for_each_image['tags'][current_patch_index]
+                'tags': data_for_each_image['tags'][current_patch_index],
+                'description': data_for_each_image['descriptions'][current_patch_index]
+
             })
             current_index += 1
 
@@ -137,7 +143,8 @@ def pack_data(tag_to_data, batch, embeddings_by_indexes):
             data_by_tag.append({
                 'url': image_data['url'],
                 'embedding': indexes_to_embeddings[general_index],
-                'bbox': image_data['bbox']
+                'bbox': image_data['bbox'],
+                'description': image_data['description']
             })
 
             tag_to_data[current_tag] = data_by_tag

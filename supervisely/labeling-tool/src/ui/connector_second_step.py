@@ -12,14 +12,14 @@ import cache
 
 
 def init_fields(state, data):
-    # state['done2'] = False
+    state['done2'] = False
 
-    state['done2'] = True  # DEBUG
+    # state['done2'] = True  # DEBUG
     state['connectingToCalculator'] = False
     data['calculatorStats'] = {}
 
     data["ssOptionsCalculator"] = {
-        "sessionTags": ["deployed_nn_calculator"],
+        "sessionTags": ["deployed_nn_recommendations"],
         "showLabel": False,
         "size": "small"
     }
