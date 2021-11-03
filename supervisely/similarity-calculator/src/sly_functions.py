@@ -189,3 +189,4 @@ def get_topk_cossim(test_emb, tr_emb, batchsize=64, k=10, device='cuda:0', verbo
     vals = torch.cat(vals)
     inds = torch.cat(inds)
     return vals, inds
+

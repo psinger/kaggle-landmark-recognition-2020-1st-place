@@ -23,18 +23,23 @@ my_app: sly.AppService = sly.AppService(ignore_task_id=True)
 api = my_app.public_api
 task_id = my_app.task_id
 
-model_meta: sly.ProjectMeta = None
 
 model_info = None
 calculator_info = None
 
-nn_session_id = None
-calculator_session_id = None
+nn_session_id = 10726  # DEBUG
+calculator_session_id = 10727  # DEBUG
 
 
 tags_examples = None
 examples_data = None
 model_tag_names = None
+
+
+project2meta = {}  # project_id -> project_meta
+image2info = {}
+image2ann = {}  # image_id -> annotation
+figures2embeddings = {}  # image_id -> annotation
 
 cache_path = os.path.join(my_app.data_dir, "cache")
 sly.fs.mkdir(cache_path)

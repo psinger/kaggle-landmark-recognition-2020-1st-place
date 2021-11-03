@@ -15,6 +15,12 @@ def init_fields(state, data):
     state['connectingToNN'] = False
     data['modelStats'] = {}
 
+    data["ssOptionsNN"] = {
+        "sessionTags": ["deployed_nn_embeddings"],
+        "showLabel": False,
+        "size": "small"
+    }
+
 
 def handle_model_errors(data):
     if "error" in data:
@@ -32,7 +38,7 @@ def connect_to_model(api: sly.Api, task_id, context, state, app_logger):
         response = api.task.send_request(task_id, "get_info", data={}, timeout=3)
         model_info = ast.literal_eval(json.loads(response))
 
-        keys_to_remove = ['weightsUrl', 'Config']
+        keys_to_remove = ['weightsUrl', 'config']
         f.remove_keys_from_dict(keys_to_remove, model_info)
 
         g.model_info = model_info
