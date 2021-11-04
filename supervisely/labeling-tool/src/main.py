@@ -1,4 +1,6 @@
 import supervisely_lib as sly
+
+import database_tab
 import sly_globals as g
 
 
@@ -92,6 +94,8 @@ def manual_selected_figure_changed(api: sly.Api, task_id, context, state, app_lo
 
     if context.get("figureId", None) is None or g.nn_session_id is None or g.calculator_session_id is None:
         fields["state.selectedFigureId"] = None
+        f.disable_assigned_buttons('lastAssignedTag', fields)
+        f.disable_assigned_buttons('selectedDatabaseItem', fields)
         api.task.set_fields_from_dict(task_id, fields)
         return 2
 
@@ -127,6 +131,7 @@ def main():
     ui.init(data, state)
     connector_first_step.init_fields(data=data, state=state)
     connector_second_step.init_fields(data=data, state=state)
+    database_tab.init_fields(data=data, state=state)
 
     g.my_app.run(data=data, state=state)
 

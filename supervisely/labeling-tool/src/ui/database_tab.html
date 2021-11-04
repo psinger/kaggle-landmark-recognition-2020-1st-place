@@ -29,7 +29,7 @@
 
 
         <sly-card class="mt5 mb5">
-            <div v-if="!state.lastAssignedTag">
+            <div v-if="!state.selectedDatabaseItem">
                 <sly-field title="INFO: object is not selected"
                            description="search and select from table below"
                            style="padding-top: 0; padding-bottom: 4px">
@@ -40,7 +40,7 @@
                 </sly-field>
             </div>
 
-            <sly-field v-if="state.lastAssignedTag"
+            <sly-field v-if="state.selectedDatabaseItem"
                        title="Selected object"
                        description="from database"
                        style="padding-top: 4px; padding-bottom: 0">
@@ -52,7 +52,7 @@
                              style="flex-direction: column; justify-content: center;">
 
                             <el-tag style="font-size: 15px; margin: 0 0">
-                                TAG: {{state.lastAssignedTag.current_label}}
+                                TAG: {{state.selectedDatabaseItem.current_label}}
                             </el-tag>
 
                             <div class="fflex"
@@ -63,8 +63,9 @@
                                         style="flex-direction: column; width: 150px; margin: 0 30px">
                                     <el-button type="success"
                                                style="margin: 5px; width: 100%"
-                                               @click="state.lastAssignedTag.assignDisabled = true; command('assign_tag_to_figure');"
-                                               :disabled="state.lastAssignedTag.assignDisabled"
+                                               @click="state.lastAssignedTag = state.selectedDatabaseItem;
+                                               state.selectedDatabaseItem.assignDisabled = true; command('assign_tag_to_figure');"
+                                               :disabled="state.selectedDatabaseItem.assignDisabled"
                                     >
                                         Assign
                                     </el-button>
@@ -84,7 +85,7 @@
                                     <sly-image-slider
                                             class="fflex"
                                             style="width: 250px; height: 250px; justify-content: center; align-items: center"
-                                            :data="state.lastAssignedTag.url"/>
+                                            :data="state.selectedDatabaseItem.url"/>
                                 </div>
                             </div>
                         </div>
@@ -93,7 +94,19 @@
                 </div>
             </sly-field>
             <hr class="mt10 mb10" style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>
+            <sly-field title="Database of reference data"
+                       description=""
+                       style="padding-top: 4px; padding-bottom: 0">
 
+<!--                {{state.selectedRowData}}-->
+                <sly-table class="mt10"
+                           v-if="data.items_database.length > 0"
+                           :options="{perPage: 20, pageSizes: 20}"
+                           :content="data.items_database"
+                           @input="state.selectedRowLabel = $event.selectedRowData.label; command('show_database_row', a=1)"
+                >
+                </sly-table>
+            </sly-field>
 
         </sly-card>
 

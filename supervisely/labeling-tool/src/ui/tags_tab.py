@@ -3,9 +3,6 @@ import json
 
 import supervisely_lib as sly
 import tag_utils
-import review_tab
-import cache
-import prediction
 
 import sly_globals as g
 import sly_functions as f
@@ -25,7 +22,7 @@ def init(data, state):
 
 @g.my_app.callback("assign_tag_to_figure")
 @sly.timeit
-# @g.my_app.ignore_errors_and_show_dialog_window()
+@g.my_app.ignore_errors_and_show_dialog_window()
 def assign_tag_to_figure(api: sly.Api, task_id, context, state, app_logger):
     api.task.set_field(task_id, "state.loading", True)
     fields = {"state.loading": False}

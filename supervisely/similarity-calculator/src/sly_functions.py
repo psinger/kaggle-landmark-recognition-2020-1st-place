@@ -1,3 +1,4 @@
+import copy
 
 import torch
 
@@ -190,3 +191,26 @@ def get_topk_cossim(test_emb, tr_emb, batchsize=64, k=10, device='cuda:0', verbo
     inds = torch.cat(inds)
     return vals, inds
 
+
+def unpack_description(embeddings_data_in_list):
+    for row in embeddings_data_in_list:
+        description = row.pop('description')
+        row.update(description)
+
+
+def add_indexes_to_database(embeddings_data_in_list):
+    for index, row in enumerate(embeddings_data_in_list):
+        row.update({'index': index})
+
+
+def prepare_database(embeddings_in_memory):
+    filtered_embeddings_data = copy.deepcopy(embeddings_in_memory)
+    filtered_embeddings_data.pop('embedding')
+    filtered_embeddings_data.pop('bbox')
+
+    embeddings_data_in_list = [dict(zip(filtered_embeddings_data, t)) for t in zip(*filtered_embeddings_data.values())]  # dict_to_list
+
+    unpack_description(embeddings_data_in_list)
+    # add_indexes_to_database(embeddings_data_in_list)
+
+    return embeddings_data_in_list

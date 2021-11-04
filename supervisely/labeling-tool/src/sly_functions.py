@@ -125,7 +125,7 @@ def generate_data_to_show(nearest_labels):
         updated_dist = data_to_show[label].get('dist', 0) + dist
         updated_url = data_to_show[label].get('url', [])
         # updated_url.append({'preview': get_resized_image(url, 250)})  # ONLY ON DEBUG
-        updated_url = [{'preview': get_resized_image(url, 250)}]
+        updated_url = [{'preview': get_resized_image(url, g.items_preview_size)}]
 
         data_to_show[label] = {'dist': updated_dist,
                                'url': updated_url}
@@ -225,14 +225,14 @@ def convert_dict_to_list(data_to_show):
     return data_to_show_list
 
 
-def set_flag_of_last_assigned_tag(assigned_tags, fields):
-    last_assigned_tag = g.api.task.get_field(g.task_id, "state.lastAssignedTag")
+def set_flag_of_last_assigned_tag(assigned_tags, card_name, fields):
+    current_card = g.api.task.get_field(g.task_id, f"state.{card_name}")
 
-    if last_assigned_tag:
-        if last_assigned_tag.get('current_label', '') not in assigned_tags:
-            fields["state.lastAssignedTag.assignDisabled"] = False
+    if current_card:
+        if current_card.get('current_label', '') not in assigned_tags:
+            fields[f"state.{card_name}.assignDisabled"] = False
         else:
-            fields["state.lastAssignedTag.assignDisabled"] = True
+            fields[f"state.{card_name}.assignDisabled"] = True
 
 
 def get_assigned_tags_names_by_label_annotation(label_annotation):
@@ -250,14 +250,15 @@ def sort_by_dist(data_to_show):
     return sorted_predictions_by_dist
 
 
-
 def upload_data_to_tabs(nearest_labels, label_annotation):
     fields = {}
 
     assigned_tags = get_assigned_tags_names_by_label_annotation(label_annotation)
-    set_flag_of_last_assigned_tag(assigned_tags, fields)                        # Last assigned tab
 
-    nearest_labels = {key: value[0] for key, value in nearest_labels.items()}   # NN Prediction tab
+    set_flag_of_last_assigned_tag(assigned_tags, 'lastAssignedTag', fields)                        # Last assigned tab
+    set_flag_of_last_assigned_tag(assigned_tags, 'selectedDatabaseItem', fields)                   # Database tab
+
+    nearest_labels = {key: value[0] for key, value in nearest_labels.items()}                      # NN Prediction tab
     data_to_show = generate_data_to_show(nearest_labels)
     data_to_show = add_info_to_disable_buttons(data_to_show, assigned_tags)
     data_to_show = convert_dict_to_list(data_to_show)
@@ -267,5 +268,15 @@ def upload_data_to_tabs(nearest_labels, label_annotation):
     g.api.task.set_fields_from_dict(g.task_id, fields)
 
     return 0
+
+
+def disable_assigned_buttons(card_name, fields):
+    try:
+        current_card = g.api.task.get_field(g.task_id, f"state.{card_name}")
+        card_labels = [current_card.get('current_label', '')]
+
+        set_flag_of_last_assigned_tag(card_labels, card_name, fields)
+    except:
+        pass
 
 

@@ -1,4 +1,5 @@
 import ast
+import copy
 import json
 
 import supervisely_lib as sly
@@ -6,9 +7,6 @@ import sly_globals as g
 import sly_functions as f
 
 
-import info_tab
-import ui
-import cache
 
 
 def init_fields(state, data):
@@ -42,15 +40,23 @@ def connect_to_calculator(api: sly.Api, task_id, context, state, app_logger):
         calculator_info = ast.literal_eval(json.loads(response))
 
         if calculator_info['Model'] != g.model_info['Model']:
-            raise ValueError('Metric Learning model and Similarity Calculator model must be the same!')
+            raise ValueError('Metric Learning model and AI Recommendations model must be the same!')
 
         keys_to_remove = ['weightsType', 'Model']
         f.remove_keys_from_dict(keys_to_remove, calculator_info)
 
         g.calculator_info = calculator_info
 
+        response = api.task.send_request(task_id, "get_objects_database", data={}, timeout=999)
+        g.items_database = response['database']
+
+        database_to_show = copy.deepcopy(g.items_database)
+        for row in database_to_show:
+            row.pop('url')
+
         fields = [
             {"field": f"data.calculatorStats", "payload": f.process_info_for_showing(g.calculator_info.copy())},
+            {"field": f"data.items_database", "payload": database_to_show},
             {"field": f"state.connectingToCalculator", "payload": False},
             {"field": f"state.done2", "payload": True},
             {"field": f"state.activeStep", "payload": 2},
