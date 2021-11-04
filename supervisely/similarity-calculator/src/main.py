@@ -149,7 +149,6 @@ def add_new_embeddings_to_reference(api: sly.Api, task_id, context, state, app_l
     #     'bbox' :[]
     # }
 
-
     # new_images_urls_here = add_images_to_project
 
     for key, value in data_to_process.items():
@@ -169,11 +168,14 @@ def add_new_embeddings_to_reference(api: sly.Api, task_id, context, state, app_l
 @g.my_app.callback("get_objects_database")
 @sly.timeit
 def get_objects_database(api: sly.Api, task_id, context, state, app_logger):
-    {
-        'fields': ...,
-        'LABEL': ...,
-        'image_url': ...
-    }
+    database_in_list_format = f.prepare_database(g.embeddings_in_memory)
+    request_id = context["request_id"]
+
+    g.my_app.send_response(request_id, data={
+        'database': database_in_list_format
+    })
+
+    g.logger.info(f'successfully added! {context["request_id"]}')
 
 
 # @TODO: add_new_embeddings_to_reference store to sly_dataset
