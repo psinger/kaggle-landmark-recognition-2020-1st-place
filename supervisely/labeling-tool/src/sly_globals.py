@@ -27,8 +27,10 @@ task_id = my_app.task_id
 model_info = None
 calculator_info = None
 
-nn_session_id = 10726  # DEBUG
-calculator_session_id = 10727  # DEBUG
+nn_session_id = None
+calculator_session_id = None
+# nn_session_id = 10726  # DEBUG
+# calculator_session_id = 10727  # DEBUG
 
 
 tags_examples = None

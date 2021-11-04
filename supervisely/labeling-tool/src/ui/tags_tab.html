@@ -1,152 +1,71 @@
 <sly-card
 
-        style="padding: 0 0;"
+        style="padding: 0 0; "
 >
 
     <div v-loading="state.loading" element-loading-text="Loading...">
 
         <div class="app-header">
-            <div class="fflex mb5 mt5" style="justify-content: center">
-                <el-button type="primary"
-                           size="small"
-                           class="regular mt5 ml5 mb5"
-                           @click="state.loading = true; command('prev_object');"
-                           style="width: 160px">
-                    <i class="el-icon-arrow-left el-icon-left"></i>
-                </el-button>
+            <div class="fflex mb5 mt5 ml10 mr10" style="justify-content: space-between">
+                <el-tag type="gray"
+                        style="font-size: 14px">
+                    <b>SELECT OBJECT:</b>
+                </el-tag>
+                <div class="fflex mb5 mt5 " style="justify-content: center">
+                    <el-button type="primary"
+                               size="small"
+                               class="regular mt5 ml5 mb5"
+                               @click="state.loading = true; command('prev_object');"
+                               style="width: 106px">
+                        <i class="el-icon-arrow-left el-icon-left"></i>
+                    </el-button>
 
-                <el-button type="primary"
-                           size="small"
-                           class="regular mt5 ml5 mb5"
-                           @click="state.loading = true; command('next_object');"
-                           style="width: 160px">
-                    <i class="el-icon-arrow-right el-icon-right ml10"></i>
-                </el-button>
+                    <el-button type="primary"
+                               size="small"
+                               class="regular mt5 ml5 mb5"
+                               @click="state.loading = true; command('next_object');"
+                               style="width: 106px">
+                        <i class="el-icon-arrow-right el-icon-right ml10"></i>
+                    </el-button>
+                </div>
 
 
             </div>
         </div>
 
-        <el-collapse v-model="state.collapsedTagsTabs">
-            <!--        <el-collapse>-->
-            <el-collapse-item name="last_assigned_item">
-                <template slot="title">
-                    <i class="zmdi zmdi-flip-to-back mr5"></i> Last assigned tag
-                </template>
 
-                <div v-if="!state.lastAssignedTag">
-                    <sly-field title="INFO: you have not assigned any tags"
-                               description="assign a tag in the NN Predictions tab first"
-                               style="padding-top: 8px; padding-bottom: 0">
-
-                        <sly-icon slot="icon" :options="{ color: '#13ce66', bgColor: '#e1f7eb', rounded: false }">
-                            <i class="zmdi zmdi-info"></i>
-                        </sly-icon>
-                    </sly-field>
-                </div>
+        <div style="overflow-y: scroll;">
 
 
-                <div v-if="state.lastAssignedTag"
-                     class="fflex"
-                     style="flex-direction: column; justify-content: center;">
+            <el-collapse v-model="state.collapsedTagsTabs">
+                <!--        <el-collapse>-->
+                <el-collapse-item name="last_assigned_item">
+                    <template slot="title">
+                        <i class="zmdi zmdi-flip-to-back mr5"></i> Last assigned tag
+                    </template>
 
-                    <div style="margin-bottom: 0">
-                        <div class="fflex"
-                             style="flex-direction: column; justify-content: center;">
+                    <div v-if="!state.lastAssignedTag">
+                        <sly-field title="INFO: you have not assigned any tags"
+                                   description="assign a tag in the NN Predictions tab first"
+                                   style="padding-top: 8px; padding-bottom: 0">
 
-                            <el-tag style="font-size: 15px; margin: 0 0">
-                                TAG: {{state.lastAssignedTag.current_label}}
-                            </el-tag>
-
-                            <div class="fflex"
-                                 style="flex-direction: row; height: 236px">
-
-                                <div
-                                        class="fflex"
-                                        style="flex-direction: column; width: 150px; margin: 0 30px">
-                                    <el-button type="success"
-                                               style="margin: 5px; width: 100%"
-                                               @click="state.lastAssignedTag.assignDisabled = true; command('assign_tag_to_figure');"
-                                               :disabled="state.lastAssignedTag.assignDisabled"
-                                    >
-                                        Assign
-                                    </el-button>
-                                    <el-button type="warning"
-                                               style="margin: 5px; width: 100%"
-                                               :disabled="true"
-
-                                    >
-                                        Reference
-                                    </el-button>
-                                </div>
-
-                                <div class="fflex"
-                                     style="flex-direction: column; justify-content: center; align-items: center;"
-                                >
-
-                                    <sly-image-slider
-                                            class="fflex"
-                                            style="width: 250px; height: 250px; justify-content: center; align-items: center"
-                                            :data="state.lastAssignedTag.url"/>
-                                </div>
-                            </div>
-                        </div>
+                            <sly-icon slot="icon" :options="{ color: '#13ce66', bgColor: '#e1f7eb', rounded: false }">
+                                <i class="zmdi zmdi-info"></i>
+                            </sly-icon>
+                        </sly-field>
                     </div>
 
-                </div>
 
+                    <div v-if="state.lastAssignedTag"
+                         class="fflex"
+                         style="flex-direction: column; justify-content: center;">
 
-            </el-collapse-item>
-            <el-collapse-item name="review_selected_item">
-                <template slot="title">
-                    <i class="zmdi zmdi-eye mr5"></i> Review assigned tags
-                </template>
-
-                <div v-if="!state.selectedFigureId">
-                    <sly-field title="INFO: annotated object is not selected"
-                               description="select the annotated object to review assigned tags "
-                               style="padding-top: 8px; padding-bottom: 0">
-
-                        <sly-icon slot="icon" :options="{ color: '#13ce66', bgColor: '#e1f7eb', rounded: false }">
-                            <i class="zmdi zmdi-info"></i>
-                        </sly-icon>
-                    </sly-field>
-                </div>
-                <div v-if="state.selectedFigureId">
-                    <b>{{state.selectedFigureId}}</b>
-                </div>
-
-            </el-collapse-item>
-            <el-collapse-item name="nn_predictions"
-                              :collapsed="false">
-                <template slot="title">
-                    <i class="zmdi zmdi-fire mr5"></i> NN Predictions
-                </template>
-
-                <div v-if="!state.selectedFigureId">
-                    <sly-field title="INFO: annotated object is not selected"
-                               description="select the annotated object to look at predictions"
-                               style="padding-top: 8px; padding-bottom: 0">
-
-                        <sly-icon slot="icon" :options="{ color: '#13ce66', bgColor: '#e1f7eb', rounded: false }">
-                            <i class="zmdi zmdi-info"></i>
-                        </sly-icon>
-                    </sly-field>
-                </div>
-
-
-                <div v-if="state.selectedFigureId">
-                    <div v-for="predicted_data in data.predicted" class="mb10"
-                         style="word-break: break-all;">
                         <div style="margin-bottom: 0">
-                            <el-tag type="primary" style="font-size: 18px"><b>{{predicted_data.index}}</b></el-tag>
-
                             <div class="fflex"
                                  style="flex-direction: column; justify-content: center;">
 
                                 <el-tag style="font-size: 15px; margin: 0 0">
-                                    TAG: {{predicted_data.current_label}}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;SCORE:
-                                    {{predicted_data.dist.toFixed(2)}}
+                                    TAG: {{state.lastAssignedTag.current_label}}
                                 </el-tag>
 
                                 <div class="fflex"
@@ -157,16 +76,15 @@
                                             style="flex-direction: column; width: 150px; margin: 0 30px">
                                         <el-button type="success"
                                                    style="margin: 5px; width: 100%"
-                                                   @click="state.lastAssignedTag=predicted_data; predicted_data.assignDisabled = true; command('assign_tag_to_figure');"
-                                                   :disabled="predicted_data.assignDisabled"
+                                                   @click="state.lastAssignedTag.assignDisabled = true; command('assign_tag_to_figure');"
+                                                   :disabled="state.lastAssignedTag.assignDisabled"
                                         >
                                             Assign
                                         </el-button>
                                         <el-button type="warning"
                                                    style="margin: 5px; width: 100%"
-                                                   @click="state.predictedDataToReference=predicted_data; predicted_data.referenceDisabled = true; command('add_to_reference');"
-
                                                    :disabled="true"
+
                                         >
                                             Reference
                                         </el-button>
@@ -175,18 +93,170 @@
                                     <div class="fflex"
                                          style="flex-direction: column; justify-content: center; align-items: center;"
                                     >
+
                                         <sly-image-slider
                                                 class="fflex"
                                                 style="width: 250px; height: 250px; justify-content: center; align-items: center"
-                                                :data="predicted_data.url"/>
+                                                :data="state.lastAssignedTag.url"/>
                                     </div>
                                 </div>
                             </div>
-                            <hr class="mt10 mb10" style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>
+                        </div>
+
+                    </div>
+
+
+                </el-collapse-item>
+                <el-collapse-item name="review_selected_item">
+                    <template slot="title">
+                        <i class="zmdi zmdi-eye mr5"></i> Review assigned tags
+                    </template>
+
+                    <div v-if="!state.selectedFigureId">
+                        <sly-field title="INFO: annotated object is not selected"
+                                   description="select the annotated object to review assigned tags "
+                                   style="padding-top: 8px; padding-bottom: 0">
+
+                            <sly-icon slot="icon" :options="{ color: '#13ce66', bgColor: '#e1f7eb', rounded: false }">
+                                <i class="zmdi zmdi-info"></i>
+                            </sly-icon>
+                        </sly-field>
+                    </div>
+                    <div v-if="state.selectedFigureId">
+                        <sly-field v-if="!state.tagsForReview"
+                                   title="INFO: tags not found"
+                                   description="selected figure has no tags"
+                                   style="padding-top: 8px; padding-bottom: 0">
+
+                            <sly-icon slot="icon" :options="{ color: '#13ce66', bgColor: '#e1f7eb', rounded: false }">
+                                <i class="zmdi zmdi-info"></i>
+                            </sly-icon>
+                        </sly-field>
+
+                        <div v-if="state.tagsForReview">
+                            <div v-for="predicted_data in state.tagsForReview" class="mb10"
+                                 style="word-break: break-all;">
+                                <div style="margin-bottom: 0">
+                                    <div class="fflex"
+                                         style="flex-direction: column; justify-content: center;">
+
+                                        <el-tag style="font-size: 15px; margin: 0 0">
+                                            TAG: {{predicted_data.current_label}}
+                                        </el-tag>
+
+                                        <div class="fflex"
+                                             style="flex-direction: row; height: 236px">
+
+                                            <div
+                                                    class="fflex"
+                                                    style="flex-direction: column; width: 150px; margin: 0 30px">
+                                                <el-button type="danger"
+                                                           style="margin: 5px; width: 100%"
+                                                           @click="state.tagToRemove=predicted_data.current_label; predicted_data.removingDisabled=true; command('remove_tag_from_figure');"
+                                                           :disabled="predicted_data.removingDisabled"
+
+                                                >
+                                                    Remove
+                                                </el-button>
+                                                <!--                                            <el-button type="warning"-->
+                                                <!--                                                       style="margin: 5px; width: 100%"-->
+                                                <!--                                                       @click="state.predictedDataToReference=predicted_data; predicted_data.referenceDisabled = true; command('add_to_reference');"-->
+
+                                                <!--                                                       :disabled="true"-->
+                                                <!--                                            >-->
+                                                <!--                                                Reference-->
+                                                <!--                                            </el-button>-->
+                                            </div>
+
+                                            <div class="fflex"
+                                                 style="flex-direction: column; justify-content: center; align-items: center;"
+                                            >
+                                                <sly-image-slider
+                                                        class="fflex"
+                                                        style="width: 250px; height: 250px; justify-content: center; align-items: center"
+                                                        :data="predicted_data.url"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="mt10 mb10" style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </el-collapse-item>
+                <el-collapse-item name="nn_predictions"
+                                  :collapsed="false">
+                    <template slot="title">
+                        <i class="zmdi zmdi-fire mr5"></i> NN Predictions
+                    </template>
+
+                    <div v-if="!state.selectedFigureId">
+                        <sly-field title="INFO: annotated object is not selected"
+                                   description="select the annotated object to look at predictions"
+                                   style="padding-top: 8px; padding-bottom: 0">
+
+                            <sly-icon slot="icon" :options="{ color: '#13ce66', bgColor: '#e1f7eb', rounded: false }">
+                                <i class="zmdi zmdi-info"></i>
+                            </sly-icon>
+                        </sly-field>
+                    </div>
+
+
+                    <div v-if="state.selectedFigureId">
+                        <div v-for="predicted_data in data.predicted" class="mb10"
+                             style="word-break: break-all;">
+                            <div style="margin-bottom: 0">
+                                <el-tag type="primary" style="font-size: 18px"><b>{{predicted_data.index}}</b></el-tag>
+
+                                <div class="fflex"
+                                     style="flex-direction: column; justify-content: center;">
+
+                                    <el-tag style="font-size: 15px; margin: 0 0">
+                                        TAG: {{predicted_data.current_label}}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;SCORE:
+                                        {{predicted_data.dist.toFixed(2)}}
+                                    </el-tag>
+
+                                    <div class="fflex"
+                                         style="flex-direction: row; height: 236px">
+
+                                        <div
+                                                class="fflex"
+                                                style="flex-direction: column; width: 150px; margin: 0 30px">
+                                            <el-button type="success"
+                                                       style="margin: 5px; width: 100%"
+                                                       @click="state.lastAssignedTag=predicted_data; predicted_data.assignDisabled = true; command('assign_tag_to_figure');"
+                                                       :disabled="predicted_data.assignDisabled"
+                                            >
+                                                Assign
+                                            </el-button>
+                                            <el-button type="warning"
+                                                       style="margin: 5px; width: 100%"
+                                                       @click="state.predictedDataToReference=predicted_data; predicted_data.referenceDisabled = true; command('add_to_reference');"
+
+                                                       :disabled="true"
+                                            >
+                                                Reference
+                                            </el-button>
+                                        </div>
+
+                                        <div class="fflex"
+                                             style="flex-direction: column; justify-content: center; align-items: center;"
+                                        >
+                                            <sly-image-slider
+                                                    class="fflex"
+                                                    style="width: 250px; height: 250px; justify-content: center; align-items: center"
+                                                    :data="predicted_data.url"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mt10 mb10" style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </el-collapse-item>
-        </el-collapse>
+                </el-collapse-item>
+            </el-collapse>
+        </div>
     </div>
 </sly-card>

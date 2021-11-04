@@ -6,22 +6,28 @@
     <div v-loading="state.loading" element-loading-text="Loading...">
 
         <div class="app-header">
-            <div class="fflex mb5 mt5" style="justify-content: center">
-                <el-button type="primary"
-                           size="small"
-                           class="regular mt5 ml5 mb5"
-                           @click="state.loading = true; command('prev_object');"
-                           style="width: 160px">
-                    <i class="el-icon-arrow-left el-icon-left"></i>
-                </el-button>
+            <div class="fflex mb5 mt5 ml10 mr10" style="justify-content: space-between">
+                <el-tag type="gray"
+                        style="font-size: 14px">
+                    <b>SELECT OBJECT:</b>
+                </el-tag>
+                <div class="fflex mb5 mt5 " style="justify-content: center">
+                    <el-button type="primary"
+                               size="small"
+                               class="regular mt5 ml5 mb5"
+                               @click="state.loading = true; command('prev_object');"
+                               style="width: 106px">
+                        <i class="el-icon-arrow-left el-icon-left"></i>
+                    </el-button>
 
-                <el-button type="primary"
-                           size="small"
-                           class="regular mt5 ml5 mb5"
-                           @click="state.loading = true; command('next_object');"
-                           style="width: 160px">
-                    <i class="el-icon-arrow-right el-icon-right ml10"></i>
-                </el-button>
+                    <el-button type="primary"
+                               size="small"
+                               class="regular mt5 ml5 mb5"
+                               @click="state.loading = true; command('next_object');"
+                               style="width: 106px">
+                        <i class="el-icon-arrow-right el-icon-right ml10"></i>
+                    </el-button>
+                </div>
 
 
             </div>
@@ -98,12 +104,12 @@
                        description=""
                        style="padding-top: 4px; padding-bottom: 0">
 
-<!--                {{state.selectedRowData}}-->
+                <!--                {{state.selectedRowData}}-->
                 <sly-table class="mt10"
                            v-if="data.items_database.length > 0"
                            :options="{perPage: 20, pageSizes: 20}"
                            :content="data.items_database"
-                           @input="state.selectedRowLabel = $event.selectedRowData.label; command('show_database_row', a=1)"
+                           @input="state.selectedRowLabel = $event.selectedRowData.label; command('show_database_row')"
                 >
                 </sly-table>
             </sly-field>

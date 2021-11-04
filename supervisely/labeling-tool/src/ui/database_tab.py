@@ -12,12 +12,6 @@ def init_fields(data, state):
     data['items_database'] = []
 
 
-def get_urls_by_label(selected_label):
-    urls = []
-    for row in g.items_database:
-        if row['label'] == selected_label:
-            urls.append({'preview': f.get_resized_image(row['url'], g.items_preview_size)})
-    return urls
 
 
 @g.my_app.callback("show_database_row")
@@ -32,9 +26,9 @@ def show_database_row(api: sly.Api, task_id, context, state, app_logger):
     row_label = None
     for i in range(10):
         row_label = g.api.app.get_field(g.task_id, 'state.selectedRowLabel')
-        time.sleep(0.01)
+        time.sleep(1e-3)
 
-    label_urls = get_urls_by_label(row_label)
+    label_urls = f.get_urls_by_label(row_label)
 
     selected_database_item = {
         'url': label_urls,

@@ -114,7 +114,7 @@ def manual_selected_figure_changed(api: sly.Api, task_id, context, state, app_lo
                                                     annotations=[label_annotation],
                                                     figures_ids=[figure_id], top_n=5, padding=0)
 
-        f.upload_data_to_tabs(nearest_labels, label_annotation)
+        f.upload_data_to_tabs(nearest_labels, label_annotation, fields)
 
         fields["state.selectedFigureId"] = figure_id
         api.task.set_fields_from_dict(task_id, fields)

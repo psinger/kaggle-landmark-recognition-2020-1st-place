@@ -8,6 +8,8 @@ from urllib.parse import urlparse
 import supervisely_lib as sly
 import sly_globals as g
 
+from functools import lru_cache
+
 
 def camel_to_snake(string_to_process):
     return re.sub(r'(?<!^)(?=[A-Z])', ' ', string_to_process).lower()
@@ -191,6 +193,7 @@ def get_image_path(image_id):
     return local_path
 
 
+# @lru_cache(maxsize=10)
 def get_annotation(project_id, image_id, optimize=False):
     if image_id not in g.image2ann or not optimize:
         ann_json = g.api.annotation.download(image_id).annotation
@@ -241,6 +244,17 @@ def get_assigned_tags_names_by_label_annotation(label_annotation):
             if assigned_tag.get('name', None) is not None]
 
 
+def get_tag_id_by_tag_name(label_annotation, tag_name):
+    assigned_tags = label_annotation.tags
+
+    for current_tag in assigned_tags:
+        if current_tag.name == tag_name:
+            return current_tag.sly_id
+            # return None
+
+    return None
+
+
 def sort_by_dist(data_to_show):
     sorted_predictions_by_dist = sorted(data_to_show, key=lambda d: d['dist'], reverse=True)
     for index, row in enumerate(sorted_predictions_by_dist):
@@ -250,24 +264,35 @@ def sort_by_dist(data_to_show):
     return sorted_predictions_by_dist
 
 
-def upload_data_to_tabs(nearest_labels, label_annotation):
-    fields = {}
+def update_review_tags_tab(assigned_tags, fields):
+    items_for_review = []
+    for current_tag in assigned_tags:
+        items_for_review.append({
+            'current_label': current_tag,
+            'url': get_urls_by_label(current_tag),
+            'removingDisabled': False
+        })
 
+    if len(items_for_review) == 0:
+        fields['state.tagsForReview'] = None
+    else:
+        fields['state.tagsForReview'] = items_for_review
+
+
+def upload_data_to_tabs(nearest_labels, label_annotation, fields):
     assigned_tags = get_assigned_tags_names_by_label_annotation(label_annotation)
 
-    set_flag_of_last_assigned_tag(assigned_tags, 'lastAssignedTag', fields)                        # Last assigned tab
-    set_flag_of_last_assigned_tag(assigned_tags, 'selectedDatabaseItem', fields)                   # Database tab
+    update_review_tags_tab(assigned_tags, fields)  # Review tags tab
 
-    nearest_labels = {key: value[0] for key, value in nearest_labels.items()}                      # NN Prediction tab
+    set_flag_of_last_assigned_tag(assigned_tags, 'lastAssignedTag', fields)  # Last assigned tab
+    set_flag_of_last_assigned_tag(assigned_tags, 'selectedDatabaseItem', fields)  # Database tab
+
+    nearest_labels = {key: value[0] for key, value in nearest_labels.items()}  # NN Prediction tab
     data_to_show = generate_data_to_show(nearest_labels)
     data_to_show = add_info_to_disable_buttons(data_to_show, assigned_tags)
     data_to_show = convert_dict_to_list(data_to_show)
     data_to_show = sort_by_dist(data_to_show)
     fields['data.predicted'] = data_to_show
-
-    g.api.task.set_fields_from_dict(g.task_id, fields)
-
-    return 0
 
 
 def disable_assigned_buttons(card_name, fields):
@@ -280,3 +305,17 @@ def disable_assigned_buttons(card_name, fields):
         pass
 
 
+def get_urls_by_label(selected_label):
+    urls = []
+    for row in g.items_database:
+        if row['label'] == selected_label:
+            urls.append({'preview': get_resized_image(row['url'], g.items_preview_size)})
+    return urls
+
+
+def remove_from_object(project_id, figure_id, tag_name, tag_id):
+    project_meta = get_meta(project_id)
+    project_tag_meta: sly.TagMeta = project_meta.get_tag_meta(tag_name)
+    if project_tag_meta is None:
+        raise RuntimeError(f"Tag {tag_name} not found in project meta")
+    g.api.advanced.remove_tag_from_object(project_tag_meta.sly_id, figure_id, tag_id)
