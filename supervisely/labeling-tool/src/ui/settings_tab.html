@@ -33,7 +33,7 @@
     >
         <el-switch
                 class="mr15"
-                v-model="state.addEveryPatchToReference"
+                v-model="state.addEveryAssignedToReference"
                 on-text=""
                 off-text="">
 
@@ -47,6 +47,28 @@
 
         </sly-field>
     </div>
+
+    <hr class="mt10 mb10" style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>
+
+    <sly-field
+            style="padding-top: 8px"
+            title="Select description to show"
+            description="select fields of catalog data">
+
+        <div class="fflex">
+            <el-select v-model="state.selectedDescriptionsToShow" multiple placeholder="select"
+                       :disabled="state.databaseKeys.length == 0">
+                <el-option
+                        v-for="item in state.databaseKeys"
+                        v-if="item !== 'label'"
+                        :label="item"
+                        :value="item">
+                </el-option>
+            </el-select>
+        </div>
+    </sly-field>
+
+    <hr class="mt10 mb10" style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>
     <!--    <sly-field title="Apply to" description="Apply model to images or to objects">-->
     <!--        <el-select v-model="state.applyTo" size="small">-->
     <!--            <el-option key="image" label="image" value="image"></el-option>-->

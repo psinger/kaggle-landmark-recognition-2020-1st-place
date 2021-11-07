@@ -29,10 +29,18 @@ embeddings_labels = []
 
 team_id = int(os.environ['context.teamId'])
 workspace_id = int(os.environ['context.workspaceId'])
+project_id = int(os.environ['modal.state.slyProjectId'])
+
+project_info = api.project.get_info_by_id(project_id)
 
 task_id = my_app.task_id
 
 batch_size = 64
+custom_dataset_images_max_count = 1000
+custom_label_title = 'custom_item_for_metric_learning'
+
+
+custom_dataset_figures_in_reference = []
 
 
 entry_point_path = Path(sys.argv[0])

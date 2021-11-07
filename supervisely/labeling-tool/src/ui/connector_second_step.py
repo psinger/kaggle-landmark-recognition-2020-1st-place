@@ -29,6 +29,7 @@ def handle_model_errors(data):
     return data
 
 
+
 @g.my_app.callback("connect_to_calculator")
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
@@ -50,13 +51,21 @@ def connect_to_calculator(api: sly.Api, task_id, context, state, app_logger):
         response = api.task.send_request(task_id, "get_objects_database", data={}, timeout=999)
         g.items_database = response['database']
 
-        database_to_show = copy.deepcopy(g.items_database)
+        database_to_show = [{'label': key, **value} for key, value in g.items_database.items()]
+
         for row in database_to_show:
             row.pop('url')
 
+        g.figures_in_reference = response['figure_id']
+
+        database_keys = list(database_to_show[0].keys()) if len(database_to_show) > 0 else []
+        keys_to_show = [key for key in database_keys if 'name' in key.lower()][:3]
+
         fields = [
+            {"field": f"state.databaseKeys", "payload": database_keys},
+            {"field": f"state.selectedDescriptionsToShow", "payload": keys_to_show},
             {"field": f"data.calculatorStats", "payload": f.process_info_for_showing(g.calculator_info.copy())},
-            {"field": f"data.items_database", "payload": database_to_show},
+            {"field": f"data.itemsDatabase", "payload": database_to_show},
             {"field": f"state.connectingToCalculator", "payload": False},
             {"field": f"state.done2", "payload": True},
             {"field": f"state.activeStep", "payload": 2},

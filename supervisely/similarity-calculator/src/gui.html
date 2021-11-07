@@ -104,8 +104,10 @@
 
         <div>
 
-            <sly-field title="Select reference embeddings"
-                       description="">
+            <sly-field
+                    v-if="false"
+                    title="Select reference embeddings"
+                    description="">
                 <el-checkbox class="mt10 mb5 mr15"
                              :disabled="!state.checkpointSelected || state.embeddingsLoaded"
                              v-model="state.selectAllEmbeddings">All embeddings in workspace
@@ -130,11 +132,24 @@
 
         </div>
 
-        <el-button type="primary" class="regular"
-                   @click="state.loadingEmbeddings=true; command('load_embeddings_to_memory');"
-                   :loading="state.loadingEmbeddings"
-                   :disabled="!state.checkpointSelected || (state.selectedEmbeddings.length===0 && !state.selectAllEmbeddings)"
-                   v-if="!state.embeddingsLoaded">
+        <sly-field
+                class="mt5 mb10"
+                v-if="state.selectedEmbeddings.length == 0"
+                title="WARNING: embeddings not found"
+                description="embeddings for project and model not found">
+            <sly-icon slot="icon" :options="{ color: '#fba607', bgColor: '#ffe9da', rounded: false }">
+                <i class="zmdi zmdi-alert-triangle"></i>
+            </sly-icon>
+        </sly-field>
+
+
+        <el-button
+                v-if="state.selectedEmbeddings.length > 0"
+                type="primary" class="regular"
+                @click="state.loadingEmbeddings=true; command('load_embeddings_to_memory');"
+                :loading="state.loadingEmbeddings"
+                :disabled="!state.checkpointSelected || (state.selectedEmbeddings.length===0 && !state.selectAllEmbeddings) || state.selectedEmbeddings.length == 0"
+                v-if="!state.embeddingsLoaded">
             load selected embeddings
         </el-button>
 

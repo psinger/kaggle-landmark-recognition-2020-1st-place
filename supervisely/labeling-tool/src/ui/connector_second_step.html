@@ -1,4 +1,5 @@
 <sly-card
+        style="width: 340px; overflow: hidden"
         :disabled="{disabled: !state.done1, message: 'complete stage 1 to unlock'}"
 
 >
@@ -21,7 +22,7 @@
         </sly-icon>
 
     </sly-field>
-    <div class="fflex">
+    <div class="fflex" style="overflow: hidden">
         <sly-select-app-session :group-id="data.teamId"
                                 :app-session-id.sync="state.calculatorId"
                                 :options="data.ssOptionsCalculator"
