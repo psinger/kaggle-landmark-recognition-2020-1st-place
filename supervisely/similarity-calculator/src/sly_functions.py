@@ -185,8 +185,7 @@ def get_topn_cossim(test_emb, tr_emb, batchsize=64, n=10, device='cuda:0', verbo
     vals = []
     inds = []
 
-    n = tr_emb.shape[0] if n > tr_emb.shape[0] else n
-
+    n = tr_emb.shape[0]
     for test_batch in test_emb.split(batchsize):
         sim_mat = cos_similarity_matrix(test_batch, tr_emb)
         vals_batch, inds_batch = torch.topk(sim_mat, k=n, dim=1)
@@ -247,14 +246,14 @@ def update_class_list(project_id):
     if g.custom_label_title not in [class_info['title'] for class_info in project_meta['classes']]:
         objects_classes = sly.ObjClassCollection([sly.ObjClass(g.custom_label_title, sly.Rectangle)])
         meta = sly.ProjectMeta(obj_classes=objects_classes)
+        meta = meta.merge(sly.ProjectMeta.from_json(project_meta))
         g.api.project.update_meta(project_id, meta.to_json())
 
 
 def init_project_remotely(project_id=None, items_count=0, project_name='custom_reference_data'):
-    if project_id is None:
-        project_id = get_custom_project_id(project_name)
 
     if not project_id:
+        project_id = get_custom_project_id(project_name)
         project = g.api.project.create(g.workspace_id, project_name, type=sly.ProjectType.IMAGES,
                                        change_name_if_conflict=True)
     else:

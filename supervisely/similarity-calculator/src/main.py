@@ -101,13 +101,25 @@ def select_checkpoint(api: sly.Api, task_id, context, state, app_logger):
     g.api.task.set_fields(g.task_id, fields)
 
 
+def get_indexes_of_labels(labels, indexes_list):
+    founded_indexes = []
+    for label in labels:
+        founded_indexes.append(np.where(np.isin(indexes_list, label)))
+    return founded_indexes
+
+
 def get_topk_predictions(pred_dist, pred_index_of_labels, k):
     topk_pred_dist, topk_pred_index_of_labels = [], []
 
     for dist_vector, index_vector in zip(pred_dist, pred_index_of_labels):
         dict_of_predictions = {}
-        for dist_value, index_value in zip(dist_vector, index_vector):
-            dict_of_predictions[index_value] = dict_of_predictions.get(index_value, 0) + dist_value
+
+        unique_labels = list(set(index_vector))
+        indexes_of_unique_labels = get_indexes_of_labels(unique_labels, index_vector)
+
+        for unique_label, curr_indexes_of_label in zip(unique_labels, indexes_of_unique_labels):
+            dists_for_label = dist_vector[curr_indexes_of_label]
+            dict_of_predictions[unique_label] = sum(dists_for_label) / len(dists_for_label)
 
         sorted_dict_of_predictions = {k: v for k, v in sorted(dict_of_predictions.items(),
                                                               key=lambda item: item[1], reverse=True)}
@@ -137,11 +149,11 @@ def calculate_similarity(api: sly.Api, task_id, context, state, app_logger):
                                                         embeddings_in_memory,
                                                         n=100,
                                                         device='cpu')
-    pred_dist = [list(curr_row) for curr_row in list(pred_dist.data.cpu().numpy())]
+    pred_dist = [curr_row for curr_row in list(pred_dist.data.cpu().numpy())]
     pred_index_of_labels = [list(curr_row) for curr_row in list(pred_index_of_labels.data.cpu().numpy())]
 
     indexes_to_labels = np.asarray(g.embeddings_in_memory['label'])
-    pred_dist = [list(curr_row) for curr_row in list(pred_dist)]
+
     pred_labels = [list(indexes_to_labels[list(curr_row)]) for curr_row in list(pred_index_of_labels)]
 
     pred_dist, pred_labels = get_topk_predictions(pred_dist, pred_labels, k=top_k)
