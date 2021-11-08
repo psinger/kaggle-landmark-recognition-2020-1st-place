@@ -233,3 +233,13 @@ def update_table(dataset_id, packed_data):
 def write_packed_data(dataset_id, packed_data):
     dump_embeddings(dataset_id, packed_data)
     update_table(dataset_id, packed_data)
+
+
+def get_images_count_in_project(project_id):
+    images_count = 0
+    datasets = g.api.dataset.get_list(project_id)
+    for dataset_info in datasets:
+        if dataset_info.images_count:
+            images_count += dataset_info.images_count
+
+    return images_count

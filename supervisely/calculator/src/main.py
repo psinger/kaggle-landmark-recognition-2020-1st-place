@@ -10,11 +10,11 @@ import functions as f
 @sly.timeit
 def calculate_embeddings_for_project(api: sly.Api, task_id, context, state, app_logger):
     datasets_list = g.api.dataset.get_list(g.project_id)
+    images_count = f.get_images_count_in_project(project_id=g.project_id)
+    progress = sly.Progress("processing image:", images_count)
     for current_dataset in datasets_list:
         packed_data = {}
         images_info = api.image.get_list(current_dataset.id)
-
-        progress = sly.Progress("processing dataset:", len(images_info))
 
         images_ids = f.split_list_to_batches([current_image_info.id for current_image_info in images_info])
         images_urls = f.split_list_to_batches([current_image_info.full_storage_url
