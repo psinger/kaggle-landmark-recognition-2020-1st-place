@@ -89,6 +89,9 @@ def calculate_nearest_labels(images_ids, annotations, figures_ids, top_n=5, padd
     }, timeout=99999)
     embeddings_by_indexes = ast.literal_eval(json.loads(response))  # [{'index': 0, 'embedding': [...], ..}, ..]
 
+    if len(embeddings_by_indexes) != len(data_for_nn):
+        raise ValueError(f'Data error. Check that the label is selected correctly.')
+
     add_embeddings_to_cache_by_figures(embeddings_by_indexes, data_for_nn)
     data_for_calculator = generate_data_for_calculator_app(embeddings_by_indexes, top_n)
 

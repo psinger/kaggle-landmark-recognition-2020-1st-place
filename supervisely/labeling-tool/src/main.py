@@ -57,6 +57,7 @@ def _select_object(api: sly.Api, task_id, context, state, iterate_func):
         ann = f.get_annotation(project_id, image_id)
         if len(ann.labels) == 0:
             g.my_app.show_modal_window("There are no figures on image")
+            api.task.set_fields_from_dict(task_id, fields)
         else:
             iter_figure_id = iterate_func(ann, figure_id)
             if iter_figure_id is not None:
@@ -66,7 +67,7 @@ def _select_object(api: sly.Api, task_id, context, state, iterate_func):
                 manual_selected_figure_changed(api, task_id, context, state, g.my_app.logger)
             else:
                 g.my_app.show_modal_window("All figures are visited.")
-        api.task.set_fields_from_dict(task_id, fields)
+                api.task.set_fields_from_dict(task_id, fields)
     except Exception as e:
         api.task.set_fields_from_dict(task_id, fields)
         raise e
@@ -88,7 +89,7 @@ def next_object(api: sly.Api, task_id, context, state, app_logger):
 
 @g.my_app.callback("manual_selected_figure_changed")
 @sly.timeit
-# @g.my_app.ignore_errors_and_show_dialog_window()
+@g.my_app.ignore_errors_and_show_dialog_window()
 def manual_selected_figure_changed(api: sly.Api, task_id, context, state, app_logger):
     fields = {}
 
