@@ -17,7 +17,7 @@
                                    style="width: 140px; margin: 2px 3px">
                             <i class="el-icon-arrow-left el-icon-left"></i>
                         </el-button>
-                        <p style="font-size: 10px; color: #5a6772; margin: 2px 0">prev object&nbsp;&nbsp;|&nbsp;&nbsp;<b
+                        <p style="font-size: 10px; color: #5a6772; margin: 1px 0">prev object&nbsp;&nbsp;|&nbsp;&nbsp;<b
                                 style="color: #ef23f1;">CTRL+P</b></p>
                     </div>
                     <div class="fflex" style="justify-content: center; flex-direction: column">
@@ -29,7 +29,7 @@
                                    style="width: 140px; margin: 2px 3px">
                             <i class="el-icon-arrow-right el-icon-right ml10"></i>
                         </el-button>
-                        <p style="font-size: 10px; color: #5a6772; margin: 2px 0">next object&nbsp;&nbsp;|&nbsp;&nbsp;<b
+                        <p style="font-size: 10px; color: #5a6772; margin: 1px 0">next object&nbsp;&nbsp;|&nbsp;&nbsp;<b
                                 style="color: #ef23f1;">CTRL+N</b></p>
                     </div>
                 </div>
@@ -63,15 +63,16 @@
 
                     <div v-if="state.lastAssignedTag"
                          class="fflex"
-                         style="height:213px; flex-direction: row; justify-content: space-between;">
+                         style="height:212px; flex-direction: row; justify-content: space-between;">
 
                         <div class="fflex"
-                             style="flex-direction: column; justify-content: center; align-items: flex-start; width: 100%; height: 100%">
+                             style="flex-direction: column; justify-content: flex-start; align-items: flex-start;  width: 100%; height: 100%;
+                             margin-right: 10px">
                             <div
                                     class="fflex"
                                     style="flex-direction: row; margin: 0 0; justify-content: center">
                                 <el-button type="success"
-                                           style="margin: 5px 2px; width: 100px"
+                                           style="margin: 6px 2px; width: 100px"
                                            size="small"
                                            @click="state.lastAssignedTag.assignDisabled = true; command('assign_tag_to_figure');"
                                            :disabled="state.lastAssignedTag.assignDisabled"
@@ -81,7 +82,7 @@
                                 <el-button
                                         v-if="!state.addEveryAssignedToReference"
                                         type="warning"
-                                        style="margin: 5px 4px; width: 100px"
+                                        style="margin: 6px 4px; width: 100px"
                                         size="small"
                                         @click="state.itemToReference=state.lastAssignedTag; state.lastAssignedTag.referenceDisabled=true; command('add_to_reference');"
                                         :disabled="state.lastAssignedTag.referenceDisabled"
@@ -96,7 +97,7 @@
                                     TAG: {{state.lastAssignedTag.current_label}}
                                 </el-tag>
                             </div>
-                            <div style="width: 100%; overflow-y: hidden; margin-left: 3px">
+                            <div style="width: 100%; overflow-y: hidden; margin-left: 3px; margin-top: 2px">
                                 <div v-for="v,k in state.lastAssignedTag.description" style="word-break: break-all;">
                                     <div v-if="state.selectedDescriptionsToShow.includes(k)">
                                         <div style="margin-bottom: 0">
@@ -149,42 +150,33 @@
                         </sly-field>
 
                         <div v-if="state.tagsForReview">
+
                             <div v-for="predicted_data in state.tagsForReview" class="mb10"
                                  style="word-break: break-all;">
                                 <div style="margin-bottom: 0">
                                     <div class="fflex"
-                                         style="flex-direction: column; justify-content: center;">
-                                        <div class="fflex"
-                                             style="flex-direction: row; justify-content: space-between; width: 100%">
+                                         style="height:212px;  flex-direction: row; justify-content: space-between;">
 
+                                        <div class="fflex"
+                                             style="flex-direction: column; justify-content: flex-start; align-items: flex-start; width: 100%; height: 100%; margin-right: 10px">
+                                            <div
+                                                    class="fflex"
+                                                    style="flex-direction: row; margin: 0 0; justify-content: center">
+                                                <el-button type="danger"
+                                                           style="margin: 6px 2px; width: 100px"
+                                                           size="small"
+                                                           @click="state.tagToRemove=predicted_data.current_label; predicted_data.removingDisabled=true; command('remove_tag_from_figure');"
+                                                           :disabled="predicted_data.removingDisabled"
+                                                >
+                                                    Remove
+                                                </el-button>
+                                            </div>
                                             <div>
                                                 <el-tag style="font-size: 13px; margin: 0 2px;">
                                                     TAG: {{predicted_data.current_label}}
                                                 </el-tag>
                                             </div>
-
-                                            <div
-                                                    class="fflex"
-                                                    style="flex-direction: row; margin: 0 0; justify-content: center">
-
-                                                <el-button type="danger"
-                                                           style="margin: 5px; width: 100px"
-                                                           size="small"
-                                                           @click="state.tagToRemove=predicted_data.current_label; predicted_data.removingDisabled=true; command('remove_tag_from_figure');"
-                                                           :disabled="predicted_data.removingDisabled">
-                                                    Remove
-                                                </el-button>
-
-                                            </div>
-                                        </div>
-
-
-                                        <div class="fflex"
-                                             style="flex-direction: row; justify-content: space-between; align-items: center; width: 100%"
-                                        >
-
-                                            <div style="width: 160px; height: 213px; overflow-y: hidden; margin-left: 3px">
-
+                                            <div style="width: 100%; overflow-y: hidden; margin-left: 3px; margin-top: 2px">
                                                 <div v-for="v,k in predicted_data.description"
                                                      style="word-break: break-all;">
                                                     <div v-if="state.selectedDescriptionsToShow.includes(k)">
@@ -195,6 +187,12 @@
                                                 </div>
                                             </div>
 
+                                        </div>
+
+
+                                        <div class="fflex"
+                                             style="flex-direction: row; justify-content: space-between; align-items: center; width: 100%">
+
 
                                             <sly-image-slider
                                                     class="fflex custom-slider-wrapper"
@@ -202,9 +200,11 @@
                                                     :data="predicted_data.url"></sly-image-slider>
                                         </div>
                                     </div>
-                                    <hr class="mb10"
-                                        style="border: 0; border-top: 1px solid rgba(0,0,0,.12); margin-top: 0"/>
                                 </div>
+                                <hr
+                                        v-if="predicted_data !== state.tagsForReview[state.tagsForReview.length - 1]"
+                                        class="mb10"
+                                        style="border: 0; border-top: 1px solid rgba(0,0,0,.12); margin-top: 0"/>
                             </div>
                         </div>
                     </div>
@@ -232,51 +232,38 @@
                              style="word-break: break-all;">
                             <div style="margin-bottom: 0">
                                 <div class="fflex"
-                                     style="flex-direction: column; justify-content: center;">
+                                     style="height:212px; flex-direction: row; justify-content: space-between;">
 
                                     <div class="fflex"
-                                         style="flex-direction: row; justify-content: space-between; width: 100%">
-
-                                        <div>
-                                            <!--                                            <el-tag type="primary" style="font-size: 13px; margin: 0 0;">-->
-                                            <!--                                                <b>{{predicted_data.index + 1}}</b>-->
-                                            <!--                                            </el-tag>-->
-                                            <el-tag style="font-size: 13px; margin: 0 0;">
-                                                TAG: {{predicted_data.current_label}}&nbsp;&nbsp;|&nbsp;&nbsp;SCORE:
-                                                {{predicted_data.dist.toFixed(2)}}
-                                            </el-tag>
-                                        </div>
-
+                                         style="flex-direction: column; justify-content: flex-start; align-items: flex-start; width: 100%; height: 100%; margin-right: 10px">
                                         <div
                                                 class="fflex"
                                                 style="flex-direction: row; margin: 0 0; justify-content: center">
-                                            <el-button
-                                                    v-if="!state.addEveryAssignedToReference"
-                                                    type="warning"
-                                                    style="margin: 5px; width: 100px"
-                                                    size="small"
-                                                    @click="state.itemToReference=predicted_data; predicted_data.referenceDisabled = true; command('add_to_reference');"
-                                                    :disabled="predicted_data.referenceDisabled">
-                                                Reference
-                                            </el-button>
                                             <el-button type="success"
-                                                       style="margin: 5px; width: 100px"
+                                                       style="margin: 6px 2px; width: 100px"
                                                        size="small"
                                                        @click="state.lastAssignedTag=predicted_data; predicted_data.assignDisabled = true; command('assign_tag_to_figure');"
                                                        :disabled="predicted_data.assignDisabled">
                                                 Assign
                                             </el-button>
-
+                                            <el-button
+                                                    v-if="!state.addEveryAssignedToReference"
+                                                    type="warning"
+                                                    style="margin: 6px 4px; width: 100px"
+                                                    size="small"
+                                                    @click="state.itemToReference=predicted_data; predicted_data.referenceDisabled = true; command('add_to_reference');"
+                                                    :disabled="predicted_data.referenceDisabled"
+                                            >
+                                                Reference
+                                            </el-button>
                                         </div>
-                                    </div>
-
-
-                                    <div class="fflex"
-                                         style="flex-direction: row; justify-content: space-between; align-items: center; width: 100%"
-                                    >
-
-                                        <div style="width: 160px; height: 213px; overflow-y: hidden; margin-left: 3px">
-
+                                        <div>
+                                            <el-tag style="font-size: 13px; margin: 0 2px;">
+                                                TAG: {{predicted_data.current_label}}&nbsp;&nbsp;|&nbsp;&nbsp;SCORE:
+                                                {{predicted_data.dist.toFixed(2)}}
+                                            </el-tag>
+                                        </div>
+                                        <div style="width: 100%; overflow-y: hidden; margin-left: 3px; margin-top: 2px">
                                             <div v-for="v,k in predicted_data.description"
                                                  style="word-break: break-all;">
                                                 <div v-if="state.selectedDescriptionsToShow.includes(k)">
@@ -286,18 +273,28 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                    </div>
+
+
+                                    <div class="fflex"
+                                         style="flex-direction: row; justify-content: space-between; align-items: center; width: 100%">
+
+
                                         <sly-image-slider
                                                 class="fflex custom-slider-wrapper"
                                                 style="width: 250px; height: 213px; justify-content: flex-end; align-items: center"
                                                 :data="predicted_data.url"></sly-image-slider>
                                     </div>
-
                                 </div>
-                                <hr class="mb10"
-                                    style="border: 0; border-top: 1px solid rgba(0,0,0,.12); margin-top: 0"/>
                             </div>
+                            <hr
+                                    v-if="predicted_data !== data.predicted[data.predicted.length - 1]"
+                                    class="mb10"
+                                    style="border: 0; border-top: 1px solid rgba(0,0,0,.12); margin-top: 0"/>
                         </div>
                     </div>
+
                 </el-collapse-item>
             </el-collapse>
         </div>

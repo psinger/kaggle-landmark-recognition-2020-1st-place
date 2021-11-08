@@ -45,6 +45,7 @@ def show_database_row(api: sly.Api, task_id, context, state, app_logger):
         label_annotation = annotations_for_image.get_label_by_id(figure_id)
         assigned_tags = f.get_assigned_tags_names_by_label_annotation(label_annotation)
         fields["state.selectedFigureId"] = figure_id
+        api.task.set_fields_from_dict(task_id, fields)
 
         f.update_card_buttons('selectedDatabaseItem', assigned_tags, fields)  # Database tab
     else:
