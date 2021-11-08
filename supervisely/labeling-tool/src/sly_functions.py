@@ -1,12 +1,18 @@
 import ast
+import copy
 import json
 import os
 import re
 from collections import OrderedDict
+from dataclasses import fields
 from urllib.parse import urlparse
 
 import supervisely_lib as sly
+
+import sly_functions
 import sly_globals as g
+
+from functools import lru_cache
 
 
 def camel_to_snake(string_to_process):
@@ -119,19 +125,15 @@ def generate_data_to_show(nearest_labels):
     data_to_show = {pred_label: {} for pred_label in unique_labels}
     data_to_show = OrderedDict(data_to_show)
 
-    for dist, label, url in zip(nearest_labels['pred_dist'],
-                                nearest_labels['pred_labels'],
-                                nearest_labels['pred_urls']):
-        updated_dist = data_to_show[label].get('dist', 0) + dist
-        updated_url = data_to_show[label].get('url', [])
-        # updated_url.append({'preview': get_resized_image(url, 250)})  # ONLY ON DEBUG
-        updated_url = [{'preview': get_resized_image(url, g.items_preview_size)}]
+    for dist, label in zip(nearest_labels['pred_dist'],
+                           nearest_labels['pred_labels']):
+        data_to_show[label]['dist'] = data_to_show[label].get('dist', 0) + dist
 
-        data_to_show[label] = {'dist': updated_dist,
-                               'url': updated_url}
+        if data_to_show[label].get('url', None) is None:
+            data_to_show[label]['url'] = get_urls_by_label(label)
 
-    # for index, label in enumerate(data_to_show.keys()):
-    #     data_to_show[label].update({'index': index})
+        if data_to_show[label].get('description', None) is None:
+            data_to_show[label]['description'] = get_item_description_by_label(label)
 
     return dict(data_to_show)
 
@@ -191,6 +193,7 @@ def get_image_path(image_id):
     return local_path
 
 
+# @lru_cache(maxsize=10)
 def get_annotation(project_id, image_id, optimize=False):
     if image_id not in g.image2ann or not optimize:
         ann_json = g.api.annotation.download(image_id).annotation
@@ -225,20 +228,21 @@ def convert_dict_to_list(data_to_show):
     return data_to_show_list
 
 
-def set_flag_of_last_assigned_tag(assigned_tags, card_name, fields):
-    current_card = g.api.task.get_field(g.task_id, f"state.{card_name}")
-
-    if current_card:
-        if current_card.get('current_label', '') not in assigned_tags:
-            fields[f"state.{card_name}.assignDisabled"] = False
-        else:
-            fields[f"state.{card_name}.assignDisabled"] = True
-
-
 def get_assigned_tags_names_by_label_annotation(label_annotation):
     assigned_tags = label_annotation.tags.to_json()
     return [assigned_tag.get('name', None) for assigned_tag in assigned_tags
             if assigned_tag.get('name', None) is not None]
+
+
+def get_tag_id_by_tag_name(label_annotation, tag_name):
+    assigned_tags = label_annotation.tags
+
+    for current_tag in assigned_tags:
+        if current_tag.name == tag_name:
+            return current_tag.sly_id
+            # return None
+
+    return None
 
 
 def sort_by_dist(data_to_show):
@@ -250,33 +254,90 @@ def sort_by_dist(data_to_show):
     return sorted_predictions_by_dist
 
 
-def upload_data_to_tabs(nearest_labels, label_annotation):
-    fields = {}
+def get_item_description_by_label(current_label):
+    item = copy.deepcopy(g.items_database.get(current_label, {}))
+    keys_to_clear = ['url']
+    for current_key in keys_to_clear:
+        try:
+            item.pop(current_key)
+        except:
+            pass
 
+    return item
+
+
+def update_review_tags_tab(assigned_tags, fields):
+    items_for_review = []
+    for current_tag in assigned_tags:
+        items_for_review.append({
+            'current_label': current_tag,
+            'url': get_urls_by_label(current_tag),
+            'removingDisabled': False,
+            'description': get_item_description_by_label(current_tag)
+        })
+
+    if len(items_for_review) == 0:
+        fields['state.tagsForReview'] = None
+    else:
+        fields['state.tagsForReview'] = items_for_review
+
+
+def update_card_buttons(card_name, assigned_tags, fields):
+    current_card = fields.get(f"state.{card_name}", None)
+
+    if current_card is None:
+        current_card = g.api.task.get_field(g.task_id, f"state.{card_name}")
+
+    if current_card:
+        assign_disabled = True
+        reference_disabled = True
+
+        if current_card.get('current_label', '') not in assigned_tags:
+            assign_disabled = False
+
+        selected_figure_id = fields.get('state.selectedFigureId', -1)
+        if selected_figure_id not in g.figures_in_reference:
+            reference_disabled = False
+
+        set_buttons(assign_disabled=assign_disabled, reference_disabled=reference_disabled, card_name=card_name,
+                    fields=fields)
+
+
+def upload_data_to_tabs(nearest_labels, label_annotation, fields):
     assigned_tags = get_assigned_tags_names_by_label_annotation(label_annotation)
 
-    set_flag_of_last_assigned_tag(assigned_tags, 'lastAssignedTag', fields)                        # Last assigned tab
-    set_flag_of_last_assigned_tag(assigned_tags, 'selectedDatabaseItem', fields)                   # Database tab
+    update_review_tags_tab(assigned_tags, fields)  # Review tags tab
 
-    nearest_labels = {key: value[0] for key, value in nearest_labels.items()}                      # NN Prediction tab
+    update_card_buttons('lastAssignedTag', assigned_tags, fields)  # Last assigned tab
+    update_card_buttons('selectedDatabaseItem', assigned_tags, fields)  # Database tab
+
+    nearest_labels = {key: value[0] for key, value in nearest_labels.items()}  # NN Prediction tab
     data_to_show = generate_data_to_show(nearest_labels)
     data_to_show = add_info_to_disable_buttons(data_to_show, assigned_tags)
     data_to_show = convert_dict_to_list(data_to_show)
     data_to_show = sort_by_dist(data_to_show)
     fields['data.predicted'] = data_to_show
 
-    g.api.task.set_fields_from_dict(g.task_id, fields)
 
-    return 0
-
-
-def disable_assigned_buttons(card_name, fields):
-    try:
-        current_card = g.api.task.get_field(g.task_id, f"state.{card_name}")
-        card_labels = [current_card.get('current_label', '')]
-
-        set_flag_of_last_assigned_tag(card_labels, card_name, fields)
-    except:
-        pass
+def get_urls_by_label(selected_label):
+    label_info = g.items_database[selected_label]
+    return [{'preview': get_resized_image(current_url, g.items_preview_size)} for current_url in label_info['url']]
 
 
+def remove_from_object(project_id, figure_id, tag_name, tag_id):
+    project_meta = get_meta(project_id)
+    project_tag_meta: sly.TagMeta = project_meta.get_tag_meta(tag_name)
+    if project_tag_meta is None:
+        raise RuntimeError(f"Tag {tag_name} not found in project meta")
+    g.api.advanced.remove_tag_from_object(project_tag_meta.sly_id, figure_id, tag_id)
+
+
+def set_button_flag(card_name, flag_name, flag_value, fields):
+    current_card = g.api.task.get_field(g.task_id, f"state.{card_name}")
+    if current_card:
+        fields[f"state.{card_name}.{flag_name}"] = flag_value
+
+
+def set_buttons(assign_disabled, reference_disabled, card_name, fields):
+    set_button_flag(flag_name='assignDisabled', flag_value=assign_disabled, card_name=card_name, fields=fields)
+    set_button_flag(flag_name='referenceDisabled', flag_value=reference_disabled, card_name=card_name, fields=fields)

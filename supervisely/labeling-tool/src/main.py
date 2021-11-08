@@ -1,6 +1,6 @@
 import supervisely_lib as sly
 
-import database_tab
+import catalog_tab
 import sly_globals as g
 
 
@@ -94,8 +94,9 @@ def manual_selected_figure_changed(api: sly.Api, task_id, context, state, app_lo
 
     if context.get("figureId", None) is None or g.nn_session_id is None or g.calculator_session_id is None:
         fields["state.selectedFigureId"] = None
-        f.disable_assigned_buttons('lastAssignedTag', fields)
-        f.disable_assigned_buttons('selectedDatabaseItem', fields)
+        f.set_buttons(assign_disabled=True, reference_disabled=True, card_name='lastAssignedTag', fields=fields)
+        f.set_buttons(assign_disabled=True, reference_disabled=True, card_name='selectedDatabaseItem', fields=fields)
+
         api.task.set_fields_from_dict(task_id, fields)
         return 2
 
@@ -106,6 +107,7 @@ def manual_selected_figure_changed(api: sly.Api, task_id, context, state, app_lo
         sly.logger.debug("Context", extra={"context": context})
 
         project_id, image_id, figure_id = context["projectId"], context["imageId"], context["figureId"]
+        fields["state.selectedFigureId"] = figure_id
 
         annotations_for_image = f.get_annotation(project_id, image_id)
         label_annotation = annotations_for_image.get_label_by_id(figure_id)
@@ -114,9 +116,7 @@ def manual_selected_figure_changed(api: sly.Api, task_id, context, state, app_lo
                                                     annotations=[label_annotation],
                                                     figures_ids=[figure_id], top_n=5, padding=0)
 
-        f.upload_data_to_tabs(nearest_labels, label_annotation)
-
-        fields["state.selectedFigureId"] = figure_id
+        f.upload_data_to_tabs(nearest_labels, label_annotation, fields)
         api.task.set_fields_from_dict(task_id, fields)
     except Exception as e:
         api.task.set_fields_from_dict(task_id, fields)
@@ -131,7 +131,7 @@ def main():
     ui.init(data, state)
     connector_first_step.init_fields(data=data, state=state)
     connector_second_step.init_fields(data=data, state=state)
-    database_tab.init_fields(data=data, state=state)
+    catalog_tab.init_fields(data=data, state=state)
 
     g.my_app.run(data=data, state=state)
 

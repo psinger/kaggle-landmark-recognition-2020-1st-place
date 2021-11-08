@@ -1,3 +1,4 @@
+import itertools
 import os
 
 import supervisely_lib as sly
@@ -90,12 +91,33 @@ def select_checkpoint(api: sly.Api, task_id, context, state, app_logger):
         pass
 
     fields = [
+        {"field": "state.selectedEmbeddings",
+         "payload": paths_by_projects.get(f'{g.project_info.name}_{g.project_id}', [])},  # HARDCODE
         {"field": f"state.checkpointSelected", "payload": True},
         {"field": f"state.loadingEmbeddingsList", "payload": False},
         {"field": f"data.embeddingsInfo", "payload": paths_by_projects},
     ]
 
     g.api.task.set_fields(g.task_id, fields)
+
+
+def get_topk_predictions(pred_dist, pred_index_of_labels, k):
+    topk_pred_dist, topk_pred_index_of_labels = [], []
+
+    for dist_vector, index_vector in zip(pred_dist, pred_index_of_labels):
+        dict_of_predictions = {}
+        for dist_value, index_value in zip(dist_vector, index_vector):
+            dict_of_predictions[index_value] = dict_of_predictions.get(index_value, 0) + dist_value
+
+        sorted_dict_of_predictions = {k: v for k, v in sorted(dict_of_predictions.items(),
+                                                              key=lambda item: item[1], reverse=True)}
+
+        sorted_dict_of_predictions = dict(itertools.islice(sorted_dict_of_predictions.items(), k))
+
+        topk_pred_dist.append(list(sorted_dict_of_predictions.values()))
+        topk_pred_index_of_labels.append(list(sorted_dict_of_predictions.keys()))
+
+    return topk_pred_dist, topk_pred_index_of_labels
 
 
 @g.my_app.callback("calculate_similarity")
@@ -111,23 +133,21 @@ def calculate_similarity(api: sly.Api, task_id, context, state, app_logger):
     input_embeddings = np.asarray(input_embeddings).astype(np.float32)
     embeddings_in_memory = np.asarray(g.embeddings_in_memory["embedding"]).astype(np.float32)
 
-    pred_dist, pred_index_of_labels = f.get_topk_cossim(input_embeddings,
+    pred_dist, pred_index_of_labels = f.get_topn_cossim(input_embeddings,
                                                         embeddings_in_memory,
-                                                        k=top_k,
+                                                        n=100,
                                                         device='cpu')
+    pred_dist = [list(curr_row) for curr_row in list(pred_dist.data.cpu().numpy())]
+    pred_index_of_labels = [list(curr_row) for curr_row in list(pred_index_of_labels.data.cpu().numpy())]
 
     indexes_to_labels = np.asarray(g.embeddings_in_memory['label'])
-    indexes_to_urls = np.asarray(g.embeddings_in_memory['url'])
+    pred_dist = [list(curr_row) for curr_row in list(pred_dist)]
+    pred_labels = [list(indexes_to_labels[list(curr_row)]) for curr_row in list(pred_index_of_labels)]
 
-    pred_dist = [list(curr_row) for curr_row in list(pred_dist.data.cpu().numpy())]
-    pred_labels = [list(indexes_to_labels[list(curr_row)]) for curr_row in
-                   list(pred_index_of_labels.data.cpu().numpy())]
-    pred_urls = [list(indexes_to_urls[list(curr_row)]) for curr_row in
-                 list(pred_index_of_labels.data.cpu().numpy())]
+    pred_dist, pred_labels = get_topk_predictions(pred_dist, pred_labels, k=top_k)
 
     output_data = json.dumps(str({'pred_dist': pred_dist,
-                                  'pred_labels': pred_labels,
-                                  'pred_urls': pred_urls}))
+                                  'pred_labels': pred_labels}))
 
     request_id = context["request_id"]
     g.my_app.send_response(request_id, data=output_data)
@@ -146,13 +166,20 @@ def add_new_embeddings_to_reference(api: sly.Api, task_id, context, state, app_l
     #     'embedding' :[],
     #     'label' :[],
     #     'url' :[],
-    #     'bbox' :[]
+    #     'bbox' :[],
+    #     'figure_id': []
     # }
 
-    # new_images_urls_here = add_images_to_project
+    images_urls, bboxes = f.add_images_to_project(data_to_process)
+
+    data_to_process['url'] = images_urls
+    data_to_process['bbox'] = bboxes
 
     for key, value in data_to_process.items():
-        g.embeddings_in_memory[key].extend(value)
+        if key != 'figure_id':
+            g.embeddings_in_memory[key].extend(value)
+        else:
+            g.custom_dataset_figures_in_reference.extend(value)
 
     g.embeddings_stats = {
         'Embeddings Count': len(g.embeddings_in_memory['embedding']),
@@ -160,26 +187,32 @@ def add_new_embeddings_to_reference(api: sly.Api, task_id, context, state, app_l
     }
 
     request_id = context["request_id"]
-    g.my_app.send_response(request_id, data=g.embeddings_stats)
+    g.my_app.send_response(request_id, data={
+        'embeddings_stats': g.embeddings_stats,
+        'new_images_url': images_urls
+    })
 
     g.logger.info(f'successfully added! {context["request_id"]}')
+
+    fields = [
+        {"field": f"data.embeddingsStats", "payload": g.embeddings_stats}
+    ]
+    g.api.task.set_fields(g.task_id, fields)
 
 
 @g.my_app.callback("get_objects_database")
 @sly.timeit
 def get_objects_database(api: sly.Api, task_id, context, state, app_logger):
-    database_in_list_format = f.prepare_database(g.embeddings_in_memory)
+    database_in_dict_format = f.prepare_database(g.embeddings_in_memory)
     request_id = context["request_id"]
 
     g.my_app.send_response(request_id, data={
-        'database': database_in_list_format
+        'database': database_in_dict_format,
+        'figure_id': g.custom_dataset_figures_in_reference
     })
 
     g.logger.info(f'successfully added! {context["request_id"]}')
 
-
-# @TODO: add_new_embeddings_to_reference store to sly_dataset
-# @TODO: add_new_embeddings_to_reference store to pickles
 
 def main():
     sly.logger.info("Similarity calculator started")

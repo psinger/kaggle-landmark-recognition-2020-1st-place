@@ -27,8 +27,10 @@ task_id = my_app.task_id
 model_info = None
 calculator_info = None
 
-nn_session_id = 10726  # DEBUG
-calculator_session_id = 10727  # DEBUG
+nn_session_id = None
+calculator_session_id = None
+# nn_session_id = 10726  # DEBUG
+# calculator_session_id = 10727  # DEBUG
 
 
 tags_examples = None
@@ -41,12 +43,14 @@ image2info = {}
 image2ann = {}  # image_id -> annotation
 figures2embeddings = {}  # image_id -> annotation
 
+figures_in_reference = []
+
+
 items_database = None
 
 cache_path = os.path.join(my_app.data_dir, "cache")
 sly.fs.mkdir(cache_path)
 
 unknown_tag_meta = sly.TagMeta("unknown", sly.TagValueType.NONE, color=[255, 165, 0])
-
 
 items_preview_size = 250

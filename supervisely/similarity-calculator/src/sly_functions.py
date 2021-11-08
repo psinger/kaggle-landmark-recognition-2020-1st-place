@@ -13,6 +13,8 @@ import numpy as np
 from tqdm import tqdm
 from functools import lru_cache
 
+import supervisely_lib as sly
+
 import sly_globals as g
 import sly_progress
 
@@ -74,8 +76,8 @@ def init_fields(state, data):
 
     data['embeddingsInfo'] = {}
 
-    state['selectAllEmbeddings'] = True
-    state['selectedEmbeddings'] = []
+    state['selectAllEmbeddings'] = False
+    state['selectedEmbeddings'] = [f'{g.project_info.name}_{g.project_id}']  # HARDCODE
 
     state['embeddingsLoaded'] = False
     state['loadingEmbeddings'] = False
@@ -177,25 +179,22 @@ def cos_similarity_matrix(a, b, eps=1e-8):
     return sim_mt
 
 
-def get_topk_cossim(test_emb, tr_emb, batchsize=64, k=10, device='cuda:0', verbose=True):
+def get_topn_cossim(test_emb, tr_emb, batchsize=64, n=10, device='cuda:0', verbose=True):
     tr_emb = torch.tensor(tr_emb, dtype=torch.float32, device=torch.device(device))
     test_emb = torch.tensor(test_emb, dtype=torch.float32, device=torch.device(device))
     vals = []
     inds = []
+
+    n = tr_emb.shape[0] if n > tr_emb.shape[0] else n
+
     for test_batch in test_emb.split(batchsize):
         sim_mat = cos_similarity_matrix(test_batch, tr_emb)
-        vals_batch, inds_batch = torch.topk(sim_mat, k=k, dim=1)
+        vals_batch, inds_batch = torch.topk(sim_mat, k=n, dim=1)
         vals += [vals_batch.detach().cpu()]
         inds += [inds_batch.detach().cpu()]
     vals = torch.cat(vals)
     inds = torch.cat(inds)
     return vals, inds
-
-
-def unpack_description(embeddings_data_in_list):
-    for row in embeddings_data_in_list:
-        description = row.pop('description')
-        row.update(description)
 
 
 def add_indexes_to_database(embeddings_data_in_list):
@@ -204,13 +203,190 @@ def add_indexes_to_database(embeddings_data_in_list):
 
 
 def prepare_database(embeddings_in_memory):
-    filtered_embeddings_data = copy.deepcopy(embeddings_in_memory)
-    filtered_embeddings_data.pop('embedding')
-    filtered_embeddings_data.pop('bbox')
+    labels_list = embeddings_in_memory['label']
+    items_database = {current_label: {} for current_label in labels_list}
 
-    embeddings_data_in_list = [dict(zip(filtered_embeddings_data, t)) for t in zip(*filtered_embeddings_data.values())]  # dict_to_list
+    for index, current_url in enumerate(embeddings_in_memory['url']):
+        current_label = labels_list[index]
+        urls_in_memory = items_database[current_label].get('url', [])
+        urls_in_memory.append(current_url)
+        items_database[current_label]['url'] = urls_in_memory
 
-    unpack_description(embeddings_data_in_list)
-    # add_indexes_to_database(embeddings_data_in_list)
+    for index, current_description in enumerate(embeddings_in_memory['description']):
+        current_label = labels_list[index]
+        description_in_memory = items_database[current_label].get('description', None)
+        if description_in_memory is None:
+            items_database[current_label].update(current_description)
 
-    return embeddings_data_in_list
+    return items_database
+
+
+def get_custom_project_id(project_name):
+    projects_list = g.api.project.get_list(g.workspace_id)
+    for current_project in projects_list:
+        if current_project.name == project_name:
+            return current_project.id
+    return None
+
+
+def get_custom_dataset_id(project_id, items_count):
+    datasets_list = g.api.dataset.get_list(project_id)
+
+    if items_count > g.custom_dataset_images_max_count or len(datasets_list) == 0:
+        return None
+
+    if datasets_list[-1].images_count and ('custom_data' in str(datasets_list[-1].name)):
+        if datasets_list[-1].images_count + items_count < g.custom_dataset_images_max_count:
+            return datasets_list[-1].id
+
+    return None
+
+
+def update_class_list(project_id):
+    project_meta = g.api.project.get_meta(project_id)
+    if g.custom_label_title not in [class_info['title'] for class_info in project_meta['classes']]:
+        objects_classes = sly.ObjClassCollection([sly.ObjClass(g.custom_label_title, sly.Rectangle)])
+        meta = sly.ProjectMeta(obj_classes=objects_classes)
+        g.api.project.update_meta(project_id, meta.to_json())
+
+
+def init_project_remotely(project_id=None, items_count=0, project_name='custom_reference_data'):
+    if project_id is None:
+        project_id = get_custom_project_id(project_name)
+
+    if not project_id:
+        project = g.api.project.create(g.workspace_id, project_name, type=sly.ProjectType.IMAGES,
+                                       change_name_if_conflict=True)
+    else:
+        project = g.api.project.get_info_by_id(project_id)
+
+    update_class_list(project.id)
+    ds_id = get_custom_dataset_id(project.id, items_count)
+
+    if not ds_id:
+        ds_name = 'custom_data'
+        dataset = g.api.dataset.create(project.id, f'{ds_name}',
+                                       change_name_if_conflict=True)
+    else:
+        dataset = None
+        for dataset in g.api.dataset.get_list(project_id):
+            if dataset.name == ds_id:
+                dataset = dataset
+                break
+
+    return project, dataset
+
+
+@lru_cache(maxsize=32)
+def url_to_image(url):
+    with urllib.request.urlopen(url) as resp:
+        image = np.asarray(bytearray(resp.read()), dtype="uint8")
+        image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        # return the image
+        return image
+
+
+def cache_images(data):
+    """
+     FOR EACH url in data
+     download image to RAM by url
+    """
+    for row in tqdm(data, desc='⏬ downloading images'):
+        try:
+            image_in_memory = url_to_image(row['url'])
+            row['cached_image'] = image_in_memory
+        except Exception as ex:
+            g.logger.warn(f'image not downloaded: {row["url"]}\n'
+                          f'reason: {ex}')
+
+            row['cached_image'] = None
+
+
+def crop_images(data):
+    """
+     FOR EACH image in data
+     crop image if bbox is not None
+    """
+    for row in data:
+        if row['cached_image'] is not None and row['bbox']:
+            top, left, height, width = row['bbox'][0], row['bbox'][1], row['bbox'][2], row['bbox'][3]
+            crop = row['cached_image'][top:top + height, left:left + width]
+
+            if crop.shape[0] > 0 and crop.shape[1] > 0:
+                row['cached_image'] = crop
+            else:
+                g.logger.warn(f'image not cropped: {row["url"]}\n'
+                              f'reason: {crop.shape}')
+                row['cached_image'] = None
+
+
+def get_data_to_upload(sly_dataset, data_to_process):
+    img_names = []
+    images_nps = []
+
+    if sly_dataset.images_count:
+        start_image_number = sly_dataset.images_count + 1
+    else:
+        start_image_number = 1
+    for index, row in enumerate(data_to_process):
+        img_names.append(f"{start_image_number + index:04d}.jpg")
+        images_nps.append(row['cached_image'])
+
+    return img_names, images_nps
+
+
+def get_project_tags_names(project_meta):
+    tags_names = []
+    for curr_tag in project_meta.tag_metas:
+        if curr_tag.name:
+            tags_names.append(curr_tag.name)
+    return tags_names
+
+
+def generate_annotations(project_id, data_to_process, new_images_info):
+    project_meta = g.api.project.get_meta(project_id)
+    project_meta = sly.ProjectMeta.from_json(project_meta)
+    project_tags_names = get_project_tags_names(project_meta)
+
+    annotations = []
+    for row, image_info in zip(data_to_process, new_images_info):
+        tag_meta = sly.TagMeta(row['label'], sly.TagValueType.NONE)
+
+        if row['label'] not in project_tags_names:
+            project_meta = project_meta.add_tag_meta(tag_meta)
+            project_tags_names.append(row['label'])
+
+        tag_collection = sly.TagCollection([sly.Tag(tag_meta)])
+
+        label = sly.Label(sly.Rectangle(top=0, left=0, bottom=image_info.height - 1, right=image_info.width - 1),
+                          sly.ObjClass(g.custom_label_title, sly.Rectangle), tag_collection)
+        annotations.append(sly.Annotation((image_info.height, image_info.width), [label]))
+
+    g.api.project.update_meta(project_id, project_meta.to_json())
+    return annotations
+
+
+def add_images_to_project(data_to_process):
+    data_to_process = [dict(zip(data_to_process, t)) for t in zip(*data_to_process.values())]
+
+    sly_project, sly_dataset = init_project_remotely(project_id=g.project_id, items_count=len(data_to_process))
+
+    cache_images(data_to_process)
+    crop_images(data_to_process)
+
+    images_names, images_nps = get_data_to_upload(sly_dataset, data_to_process)
+
+    new_image_infos = g.api.image.upload_nps(sly_dataset.id, images_names, images_nps, metas=None, progress_cb=None)
+
+    annotations = generate_annotations(sly_project.id, data_to_process, new_image_infos)
+
+    g.api.annotation.upload_anns(
+        img_ids=[current_image.id for current_image in new_image_infos],
+        anns=annotations
+    )
+
+    new_images_urls = [current_image.full_storage_url for current_image in new_image_infos]
+    new_bboxes = [[0, 0, current_image.height - 1, current_image.width - 1] for current_image in new_image_infos]
+
+    return new_images_urls, new_bboxes

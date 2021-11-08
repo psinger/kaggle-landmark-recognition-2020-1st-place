@@ -1,4 +1,4 @@
-<sly-card>
+<sly-card style="width: 340px; overflow: hidden">
     <sly-field title="Connect to Model"
                description="select served Metric Learning model"
                style="margin-left: 5px;"
@@ -17,7 +17,7 @@
 
 
     </sly-field>
-    <div class="fflex">
+    <div class="fflex" style="overflow: hidden">
         <sly-select-app-session :group-id="data.teamId"
                                 :app-session-id.sync="state.nnId"
                                 :options="data.ssOptionsNN"

@@ -52,16 +52,24 @@
             background: #f8f9fc;
             }
 
-            .slider-wrapper {
+
+            #gl-ml-labeling-tool .slider-wrapper .slider-tape .fflex {
             width: 250 px;
             }
 
-            .slider-wrapper .slider-tape {
-            width: 250 px;
-            }
-
-            .sly-image-slider .slider-wrapper .slider-tape {
+            #gl-ml-labeling-tool .sly-image-slider .slider-wrapper .slider-tape {
             overflow: hidden;
+            }
+
+            #gl-ml-labeling-tool .custom-slider-wrapper .slider-tape {
+            width: 250px;
+            }
+            #gl-ml-labeling-tool .custom-full-size-slider .slider-tape {
+            width: 100%;
+            }
+
+             #gl-ml-labeling-tool .custom-full-size-slider .slider-wrapper {
+            width: 100%;
             }
 
         </sly-style>
@@ -97,9 +105,9 @@
                 <span slot="label"><i class="zmdi zmdi-tag mr5"></i>TAGS</span>
                 {% include 'src/ui/tags_tab.html' %}
             </el-tab-pane>
-            <el-tab-pane label="DATABASE" name="database">
-                <span slot="label"><i class="zmdi zmdi-storage mr5"></i>DATABASE</span>
-                {% include 'src/ui/database_tab.html' %}
+            <el-tab-pane label="CATALOG" name="catalog">
+                <span slot="label"><i class="zmdi zmdi-storage mr5"></i>CATALOG</span>
+                {% include 'src/ui/catalog_tab.html' %}
             </el-tab-pane>
             <el-tab-pane label="SETTINGS" name="settings">
                 <span slot="label"><i class="zmdi zmdi-settings mr5"></i>SETTINGS</span>
