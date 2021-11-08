@@ -18,31 +18,31 @@
     "models": [
       {
         "config": "",
-        "weightsUrl": "https://app.supervise.ly/h5un6l2bnaz1vj8a9qgms4-public/teams_storage/44467/T/5/Y7/3kHqfajvBP9Ry8TSc2LvNVjmZpaAtOlzCyqwwfb0TmxQfrjtrIDQz09Occgetu3OlT6QwHYm0DvwbNMXlCOaBDapXuYtPPbXyNAccvm342HUy8yCVlKmAKaNr8F7.bin",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/landmarks.ckpt",
         "Model": "landmarks",
         "Classes": "10752"
       },
       {
         "config": "",
-        "weightsUrl": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/pictures_v1.ckpt",
         "Model": "pictures v1",
         "Classes": "83"
       },
       {
         "config": "",
-        "weightsUrl": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/snacks_v1.ckpt",
         "Model": "snacks v1",
         "Classes": "83"
       },
       {
         "config": "",
-        "weightsUrl": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/r2pk.ckpt",
         "Model": "rp2k",
         "Classes": "2384"
       },
       {
         "config": "",
-        "weightsUrl": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/r2pk_and_10k.ckpt",
         "Model": "rp2k and 10k",
         "Classes": "12075"
       }
