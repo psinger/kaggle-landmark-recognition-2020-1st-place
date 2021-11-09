@@ -77,14 +77,14 @@ def _select_object(api: sly.Api, task_id, context, state, iterate_func):
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def prev_object(api: sly.Api, task_id, context, state, app_logger):
-    _select_object(api, task_id, context, state, tag_utils.get_prev)
+    _select_object(api, task_id, context, state, tag_utils.get_next)
 
 
 @g.my_app.callback("next_object")
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def next_object(api: sly.Api, task_id, context, state, app_logger):
-    _select_object(api, task_id, context, state, tag_utils.get_next)
+    _select_object(api, task_id, context, state, tag_utils.get_prev)
 
 
 @g.my_app.callback("manual_selected_figure_changed")
@@ -115,7 +115,7 @@ def manual_selected_figure_changed(api: sly.Api, task_id, context, state, app_lo
 
         nearest_labels = f.calculate_nearest_labels(images_ids=[image_id],
                                                     annotations=[label_annotation],
-                                                    figures_ids=[figure_id], top_n=5, padding=0)
+                                                    figures_ids=[figure_id], top_n=state.get('topn', 5), padding=0)
 
         f.upload_data_to_tabs(nearest_labels, label_annotation, fields)
         api.task.set_fields_from_dict(task_id, fields)
@@ -137,10 +137,7 @@ def main():
     g.my_app.run(data=data, state=state)
 
 
-#  @TODO: multiple urls for reference data
-#  @TODO: add top_n predictions
-#  @TODO: predictions padding
-#  @TODO: manual search
+#  @TODO: patches padding
 
 if __name__ == "__main__":
     sly.main_wrapper("main", main)
