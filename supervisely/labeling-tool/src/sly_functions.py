@@ -9,7 +9,6 @@ from urllib.parse import urlparse
 
 import supervisely_lib as sly
 
-import sly_functions
 import sly_globals as g
 
 from functools import lru_cache
@@ -141,13 +140,23 @@ def generate_data_to_show(nearest_labels):
     return dict(data_to_show)
 
 
-def add_info_to_disable_buttons(data_to_show, assigned_tags):
+def add_info_to_disable_buttons(data_to_show, assigned_tags, fields):
+    reference_disabled = True
+    selected_figure_id = fields.get('state.selectedFigureId', -1)
+    if selected_figure_id not in g.figures_in_reference:
+        reference_disabled = False
+
     data_to_show = OrderedDict(data_to_show)
     for label, data in data_to_show.items():
         if label in assigned_tags:
-            data_to_show[label].update({'assignDisabled': True})
+            data_to_show[label].update({'assignDisabled': True,
+                                        'referenceDisabled': reference_disabled})
         else:
-            data_to_show[label].update({'assignDisabled': False})
+            data_to_show[label].update({'assignDisabled': False,
+                                        'referenceDisabled': reference_disabled})
+
+
+
     return dict(data_to_show)
 
 
@@ -316,7 +325,7 @@ def upload_data_to_tabs(nearest_labels, label_annotation, fields):
 
     nearest_labels = {key: value[0] for key, value in nearest_labels.items()}  # NN Prediction tab
     data_to_show = generate_data_to_show(nearest_labels)
-    data_to_show = add_info_to_disable_buttons(data_to_show, assigned_tags)
+    data_to_show = add_info_to_disable_buttons(data_to_show, assigned_tags, fields)
     data_to_show = convert_dict_to_list(data_to_show)
     data_to_show = sort_by_dist(data_to_show)
     fields['data.predicted'] = data_to_show
@@ -324,7 +333,8 @@ def upload_data_to_tabs(nearest_labels, label_annotation, fields):
 
 def get_urls_by_label(selected_label):
     label_info = g.items_database[selected_label]
-    return [{'preview': get_resized_image(current_url, g.items_preview_size)} for current_url in label_info['url']]
+    return [{'preview': get_resized_image(current_url, g.items_preview_size)}
+            for current_url in label_info['url']][:g.items_preview_count]
 
 
 def remove_from_object(project_id, figure_id, tag_name, tag_id):

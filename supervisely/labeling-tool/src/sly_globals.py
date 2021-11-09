@@ -54,3 +54,4 @@ sly.fs.mkdir(cache_path)
 unknown_tag_meta = sly.TagMeta("unknown", sly.TagValueType.NONE, color=[255, 165, 0])
 
 items_preview_size = 250
+items_preview_count = 5
