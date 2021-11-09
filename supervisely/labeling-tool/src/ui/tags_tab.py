@@ -73,7 +73,7 @@ def remove_tag_from_figure(api: sly.Api, task_id, context, state, app_logger):
 
 @g.my_app.callback("add_to_reference")
 @sly.timeit
-# @g.my_app.ignore_errors_and_show_dialog_window()
+@g.my_app.ignore_errors_and_show_dialog_window()
 def add_to_reference(api: sly.Api, task_id, context, state, app_logger):
     api.task.set_field(task_id, "state.loading", True)
     fields = {"state.loading": False,
