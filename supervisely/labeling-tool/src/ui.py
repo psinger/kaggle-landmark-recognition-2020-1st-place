@@ -8,6 +8,10 @@ import catalog_tab
 import settings_tab
 
 
+import connector_first_step
+import connector_second_step
+
+
 def init(data, state):
     state["loading"] = False
 
