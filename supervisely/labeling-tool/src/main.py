@@ -1,7 +1,6 @@
 import supervisely_lib as sly
+
 import sly_globals as g
-
-
 
 
 import ui
@@ -127,7 +126,8 @@ def main():
     data = {}
     state = {}
     ui.init(data, state)
-    
+
+
 
     g.my_app.run(data=data, state=state)
 

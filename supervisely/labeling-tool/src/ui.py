@@ -4,8 +4,8 @@ import supervisely_lib as sly
 import sly_globals as g
 import info_tab
 import tags_tab
-import catalog_tab
 import settings_tab
+import catalog_tab
 
 
 import connector_first_step
@@ -31,7 +31,7 @@ def init(data, state):
     info_tab.init(data, state)
     tags_tab.init(data, state)
     settings_tab.init(data, state)
-    
+
     connector_first_step.init_fields(data=data, state=state)
     connector_second_step.init_fields(data=data, state=state)
     catalog_tab.init_fields(data=data, state=state)
