@@ -2,16 +2,13 @@ import supervisely_lib as sly
 import sly_globals as g
 
 
-import catalog_tab
+
 
 import ui
 import tag_utils
 
-import connector_first_step
-import connector_second_step
 
 # to register callbacks
-
 
 import sly_functions as f
 
@@ -130,9 +127,7 @@ def main():
     data = {}
     state = {}
     ui.init(data, state)
-    connector_first_step.init_fields(data=data, state=state)
-    connector_second_step.init_fields(data=data, state=state)
-    catalog_tab.init_fields(data=data, state=state)
+    
 
     g.my_app.run(data=data, state=state)
 
