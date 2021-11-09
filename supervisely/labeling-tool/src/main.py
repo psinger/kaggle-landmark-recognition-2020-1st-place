@@ -1,8 +1,8 @@
 import supervisely_lib as sly
-
-import catalog_tab
 import sly_globals as g
 
+
+import catalog_tab
 
 import ui
 import tag_utils
