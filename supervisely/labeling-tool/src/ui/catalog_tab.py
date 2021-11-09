@@ -21,10 +21,10 @@ def show_database_row(api: sly.Api, task_id, context, state, app_logger):
     api.task.set_field(task_id, "state.loading", True)
     fields["state.loading"] = False
 
-    row_label = None
-    for i in range(10):
-        row_label = g.api.app.get_field(g.task_id, 'state.selectedRowLabel')
-        time.sleep(1e-3)
+    row_label = state['selectedRowLabel']
+    # for i in range(10):
+    #     row_label = g.api.app.get_field(g.task_id, 'state.selectedRowLabel')
+    #     time.sleep(1e-3)
 
     label_urls = f.get_urls_by_label(row_label)
 
