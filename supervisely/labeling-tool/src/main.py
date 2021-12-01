@@ -1,21 +1,35 @@
 import supervisely_lib as sly
 
 import sly_globals as g
-
+import tags_tab
 
 import ui
 import tag_utils
-
 
 # to register callbacks
 
 import sly_functions as f
 
+
+@g.my_app.callback("manual_selected_image_changed")
+@sly.timeit
+@g.my_app.ignore_errors_and_show_dialog_window()
+def image_changed(api: sly.Api, task_id, context, state, app_logger):
+    project_id, image_id = context["projectId"], context["imageId"]
+    annotation = f.get_annotation(project_id, image_id)
+
+    g.annotated_figures_count = f.get_tagged_objects_count_on_frame(annotation)
+    g.figures_on_frame_count = len(annotation.labels)
+
+    api.task.set_field(task_id, 'state.allFiguresCount', g.figures_on_frame_count)
+    api.task.set_field(task_id, 'state.annotatedFiguresCount', g.annotated_figures_count)
+
+
+
 #
 # @g.my_app.callback("manual_selected_image_changed")
 # @sly.timeit
 # @g.my_app.ignore_errors_and_show_dialog_window()
-# def image_changed(api: sly.Api, task_id, context, state, app_logger):
 #     fields = {}
 #     try:
 #         nn_session = state["nnId"]
@@ -44,6 +58,7 @@ def _select_object(api: sly.Api, task_id, context, state, iterate_func):
     fields = {
         "state.loading": False
     }
+
     try:
         sly.logger.debug("Context", extra={"context": context})
 
@@ -113,7 +128,13 @@ def manual_selected_figure_changed(api: sly.Api, task_id, context, state, app_lo
                                                     annotations=[label_annotation],
                                                     figures_ids=[figure_id], top_n=state.get('topn', 5), padding=0)
 
-        f.upload_data_to_tabs(nearest_labels, label_annotation, fields)
+        if state['copyingMode']:
+            state["selectedFigureId"] = figure_id
+            tags_tab.assign_tag_to_figure(api, task_id, context, state, app_logger)
+        else:
+            f.upload_data_to_tabs(nearest_labels, label_annotation, fields)
+
+
         api.task.set_fields_from_dict(task_id, fields)
     except Exception as e:
         api.task.set_fields_from_dict(task_id, fields)
@@ -126,8 +147,6 @@ def main():
     data = {}
     state = {}
     ui.init(data, state)
-
-
 
     g.my_app.run(data=data, state=state)
 

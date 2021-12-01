@@ -66,8 +66,9 @@ def load_embeddings_to_memory(api: sly.Api, task_id, context, state, app_logger)
 def clear_fields(api: sly.Api, task_id, context, state, app_logger):
     fields = [
         {"field": f"state.selectAllEmbeddings", "payload": True},
-        {"field": f"state.selectedEmbeddings", "payload": []},
+        {"field": f"state.selectedEmbeddings", "payload": [f'{g.project_info.name}_{g.project_id}']},
         {"field": f"state.embeddingsLoaded", "payload": False},
+
     ]
     g.api.task.set_fields(g.task_id, fields)
 
