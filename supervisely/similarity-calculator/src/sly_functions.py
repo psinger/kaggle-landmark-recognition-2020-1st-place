@@ -78,6 +78,7 @@ def init_fields(state, data):
 
     state['selectAllEmbeddings'] = False
     state['selectedEmbeddings'] = [f'{g.project_info.name}_{g.project_id}']  # HARDCODE
+    # state['selectedEmbeddings'] = []
 
     state['embeddingsLoaded'] = False
     state['loadingEmbeddings'] = False

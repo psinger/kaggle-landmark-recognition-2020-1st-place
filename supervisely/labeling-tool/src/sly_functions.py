@@ -213,6 +213,8 @@ def get_annotation(project_id, image_id, optimize=False):
         g.image2ann[image_id] = ann
     else:
         ann = g.image2ann[image_id]
+
+    g.figures_on_frame_count = len(ann.labels)
     return ann
 
 
@@ -354,3 +356,11 @@ def set_button_flag(card_name, flag_name, flag_value, fields):
 def set_buttons(assign_disabled, reference_disabled, card_name, fields):
     set_button_flag(flag_name='assignDisabled', flag_value=assign_disabled, card_name=card_name, fields=fields)
     set_button_flag(flag_name='referenceDisabled', flag_value=reference_disabled, card_name=card_name, fields=fields)
+
+
+def get_tagged_objects_count_on_frame(annotation):
+    tagged_objects = 0
+    for label in annotation.labels:
+        if len(label.tags) > 0:
+            tagged_objects += 1
+    return tagged_objects

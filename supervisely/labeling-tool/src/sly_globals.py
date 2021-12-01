@@ -55,3 +55,6 @@ unknown_tag_meta = sly.TagMeta("unknown", sly.TagValueType.NONE, color=[255, 165
 
 items_preview_size = 250
 items_preview_count = 5
+
+annotated_figures_count = 0
+figures_on_frame_count = 0

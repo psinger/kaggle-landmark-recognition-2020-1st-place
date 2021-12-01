@@ -4,7 +4,8 @@
 >
 
     <div v-loading="state.loading" element-loading-text="Loading...">
-
+        <span style="font-size: 11px; position: absolute; top: 2px; right: 5px; cursor: default;">
+            {{state.annotatedFiguresCount}} / {{state.allFiguresCount}}</span>
         <div class="app-header">
             <div class="fflex" style="justify-content: center; margin: 0 10px">
                 <div class="fflex" style="justify-content: center; margin: 3px 0">

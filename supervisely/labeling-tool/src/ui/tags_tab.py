@@ -21,6 +21,11 @@ def init(data, state):
     state["selectedFigureId"] = None
     state["collapsedTagsTabs"] = ['nn_predictions']
 
+    state["copyingMode"] = False
+
+    state['annotatedFiguresCount'] = 0
+    state['allFiguresCount'] = 0
+
 
 @g.my_app.callback("assign_tag_to_figure")
 @sly.timeit
@@ -34,6 +39,11 @@ def assign_tag_to_figure(api: sly.Api, task_id, context, state, app_logger):
         class_name = state["lastAssignedTag"]['current_label']
 
         f.assign_to_object(project_id, figure_id, class_name)
+
+        g.annotated_figures_count += 1
+        fields.update({"state.annotatedFiguresCount": g.annotated_figures_count,
+                       "state.allFiguresCount": g.figures_on_frame_count})
+
         api.task.set_fields_from_dict(task_id, fields)
 
         if state.get('addEveryAssignedToReference', False):
@@ -42,6 +52,8 @@ def assign_tag_to_figure(api: sly.Api, task_id, context, state, app_logger):
 
     except Exception as e:
         api.task.set_fields_from_dict(task_id, fields)
+        if "Tag already exists" in e.args[0]:
+            return -1
         raise e
 
 
