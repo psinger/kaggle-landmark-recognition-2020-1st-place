@@ -4,7 +4,7 @@
   "categories": [
     "metric learning"
   ],
-  "description": "google landmarks challenge models",
+  "description": "Google landmarks challenge models",
   "docker_image": "supervisely/base-pytorch:6.0.22",
   "main_script": "supervisely/serve/src/main.py",
   "modal_template": "supervisely/serve/src/modal.html",
@@ -61,8 +61,7 @@
     ]
   },
   "task_location": "application_sessions",
-  "icon": "https://imgur.com/a9u0M3Y.png",
-  "icon_cover": true,
+  "icon": "https://i.imgur.com/9ruNKUS.png",
   "isolate": true,
   "need_gpu": true,
   "headless": true,
