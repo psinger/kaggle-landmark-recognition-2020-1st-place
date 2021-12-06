@@ -6,6 +6,7 @@
 
 <p align="center">
   <a href="#Overview">Overview</a> •
+  <a href="#How-To-Run">How To Run</a> •
   <a href="#How-To-Use">How To Use</a> •
   <a href="#Watch-Demo-Video">Demo</a> •
     <a href="#For-Developers">For Developers</a>
@@ -26,27 +27,23 @@ Serve Metric Learning model as Supervisely APP.
 Application key points:
 - Can be deployed on CPU or GPU
 - Can be used in Supervisely APPs
-- Available via REST API
+- Choose from 5 pretrained models or provide your own
 
 
+# How to Run
 
-# How to Use
-
-1. Train your model using [Train FairMOT APP](https://ecosystem.supervise.ly/apps/supervisely-ecosystem%252Ffairmot%252Fsupervisely%252Ftrain).  
-After the end of the train, you get a folder with checkpoints available in [Supervisely Files](https://app.supervise.ly/files/) by `/FairMOT/train/{experiment_name}/checkpoints` path.
-
-<img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/FairMOT/supervisely/train" src="" width="350px" style='padding-bottom: 10px'/>
-
-
-2. Add [Serve FairMOT](https://ecosystem.supervise.ly/apps/supervisely-ecosystem%252Ffairmot%252Fsupervisely%252Fserve) from ecosystem to your team  
+1. Add [Serve FairMOT](https://ecosystem.supervise.ly/apps/supervisely-ecosystem%252Ffairmot%252Fsupervisely%252Fserve) from ecosystem to your team  
 
 <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/FairMOT/supervisely/serve" src="" width="350px" style='padding-bottom: 10px'/>
 
-3. Open checkpoints dir `/FairMOT/train/{experiment_name}/checkpoints` in [Supervisely Files](https://app.supervise.ly/files/) and **Run Application**.  
+2. Choose model, deploying device and press the **Run** button
+
 <img src="" width="80%" style='padding-top: 10px'>  
 
-4. The model has been successfully deployed  
+3. Wait for the model to deploy
 <img src="" width="80%" style='padding-top: 10px'>  
+
+# How to Use
 
 
 
