@@ -21,12 +21,7 @@
 
 # Overview
 
-Application calculates embeddings for the selected serving session
-
-Application key points:  
-- 
-
-Example [CSV catalog](https://github.com/supervisely-ecosystem/import-csv-catalog/releases/download/v0.0.1/test_snacks_catalog.csv)
+Application calculates embeddings for the selected images project
 
 # How to Use
 1. Add [Embeddings Calculator](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/calculator) to your team from Ecosystem.
