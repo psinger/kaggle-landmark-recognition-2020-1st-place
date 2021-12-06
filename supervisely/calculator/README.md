@@ -30,15 +30,15 @@ Application calculates embeddings for the selected images project
 
 2. Run app from the context menu of **Images Project**:
 
-<img src="" width="100%"/>
+<img src="https://i.imgur.com/piXysyf.png" width="100%"/>
 
 3. Select served session in modal window
 
-<img src="" width="100%"/>
+<img src="https://i.imgur.com/sqeuh4D.png" width="100%"/>
 
 
 # Results
 
-After running the application, you will be redirected to the `Tasks` page. Once application processing has finished, your calculations will be available. Click on the file name to proceed to it.
+After running the application, you will be redirected to the `Tasks` page. Once application processing has finished, your calculations will become available. Click on the file name to proceed to it.
 
-<img src=""/>
+<img src="https://i.imgur.com/4fKEJrn.png"/>
