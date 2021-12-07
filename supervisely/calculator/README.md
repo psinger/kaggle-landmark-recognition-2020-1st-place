@@ -21,7 +21,13 @@
 
 # Overview
 
-Application calculates embeddings for the selected images project
+Application calculates **reference embeddings** for the selected Images Project
+
+Application key points:
+
+- Every image in project must have annotation with **item_tag**
+- Calculated embeddings can be used in AI Recommendations
+- Store embeddings in Team Files
 
 # How to Use
 1. Add [Embeddings Calculator](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/calculator) to your team from Ecosystem.
