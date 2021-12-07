@@ -3,7 +3,7 @@
         You don't have permissions to open this application session.
     </div>
 
-    <div v-if="context.userId === data.ownerId">
+    <div v-if="context.userId === data.ownerId" style="height: 100%">
         <sly-style>
             #gl-ml-labeling-tool {
             }
@@ -41,11 +41,13 @@
             height: calc(100% - 60px);
             }
             #gl-ml-labeling-tool .el-tabs__content {
-            overflow: scroll;
+            overflow: auto;
             }
             #gl-ml-labeling-tool .el-tabs__header {
             margin-bottom: 0
             }
+
+
             #gl-ml-labeling-tool .xxx .el-collapse-item__header {
             height: 30px;
             line-height: 30px;
@@ -61,9 +63,7 @@
             overflow: hidden;
             }
 
-            #gl-ml-labeling-tool .custom-slider-wrapper .slider-tape {
-            width: 250px;
-            }
+
             #gl-ml-labeling-tool .custom-full-size-slider .slider-tape {
             width: 100%;
             }
@@ -124,7 +124,11 @@
         <!--        >-->
         <!--            -->
         <!--            <hr style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>-->
+
+
+
         <el-tabs id="small_tabs" v-model="state.tabName"
+                 style="height: 100%"
                  v-if="context.userId === data.ownerId && state.done2"
         >
             <el-tab-pane label="INFO" name="info">
