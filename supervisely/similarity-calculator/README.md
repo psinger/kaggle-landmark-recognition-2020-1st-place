@@ -47,7 +47,7 @@ Application key points:
 
 <img src="https://i.imgur.com/N0yy4Cy.png" width="100%"/>
 
-# Result
+# Results
 
 Embeddings have been loaded to RAM and are ready to go. The application will continue to run in server mode and wait for incoming requests.
 
