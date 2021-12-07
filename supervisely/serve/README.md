@@ -19,12 +19,12 @@
 
 # Overview
 
-Serve Metric Learning model as Supervisely APP.
+Serve Metric Learning model as Supervisely Application.
 
 Application key points:
-- Can be deployed on CPU or GPU
-- Can be used in Supervisely APPs
-- Choose from 5 pretrained models
+- Deployed on GPU
+- Can be used with Supervisely Applications or API
+- Choose from 5 models, pretrained on different domains 
 
 
 # How to Run
