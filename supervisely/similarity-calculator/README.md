@@ -6,6 +6,7 @@
 
 <p align="center">
   <a href="#Overview">Overview</a> •
+  <a href="#How-To-Run">How To Run</a> •
   <a href="#How-To-Use">How To Use</a> •
   <a href="#Results">Results</a>
 </p>
@@ -23,22 +24,24 @@
 
 Application compare embeddings and recommends matching items from the catalog.
 
-# How to Use
+# How to Run
 1. Add [AI Recommendations](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/similarity-calculator) to your team from Ecosystem.
 
-<img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/similarity-calculator" src="" width="350px" style='padding-bottom: 20px'/>  
+<img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/similarity-calculator" src="https://i.imgur.com/1QpAfy2.png" width="350px" style='padding-bottom: 20px'/>  
 
 2. Run app from the context menu of **Images Project**:
 
-<img src="" width="100%"/>
-
-3. Select served session in modal window
-
-<img src="" width="100%"/>
+<img src="https://i.imgur.com/XHZ4OZq.png" width="100%"/>
 
 
-# Results
+# How to Use
 
-After running the application, you will be redirected to the `Tasks` page. Once application processing has finished, your calculations will become available. Click on the file name to proceed to it.
+1. Select checkpoint with which you computed the embeddings for the selected project
+2. Load selected embeddings
 
-<img src=""/>
+<img src="https://i.imgur.com/N0yy4Cy.png" width="100%"/>
+
+# Result
+
+
+<img src="https://i.imgur.com/ZnFhygP.png" width="100%"/>
