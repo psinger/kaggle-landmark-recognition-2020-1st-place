@@ -23,7 +23,7 @@ Serve Metric Learning model as Supervisely Application.
 
 Application key points:
 - Deployed on GPU
-- Can be used with Supervisely Applications or API
+- Can be used with Supervisely Applications or [API](https://github.com/supervisely-ecosystem/gl-metric-learning/blob/main/supervisely/serve/src/demo_api_requests.py)
 - Choose from 5 models, pretrained on different domains 
 
 
