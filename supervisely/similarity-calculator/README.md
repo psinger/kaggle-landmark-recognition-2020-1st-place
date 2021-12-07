@@ -22,8 +22,8 @@
 
 # Overview
 
-Application calculates **cosine similarity** between **reference database** and **incoming embeddings**.  
-It returns **recommended items** from reference database with their **probabilities** (cosine similarity score).
+Application calculates cosine similarity between reference database and incoming embeddings.  
+It returns recommended items from reference database with their probabilities (cosine similarity score).
 
 Application key points:
 - Return recommended item from reference database [using API](https://github.com/supervisely-ecosystem/gl-metric-learning/blob/main/supervisely/similarity-calculator/src/demo_api_requests.py)
