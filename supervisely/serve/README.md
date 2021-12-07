@@ -39,3 +39,8 @@ Application key points:
 
 3. Wait for the model to deploy
 <img src="https://i.imgur.com/xbt4Aqj.png" width="80%">  
+
+
+# Acknowledgment
+
+This app is based on the great work `Reviving Iterative Training with Mask Guidance for Interactive Segmentation` ([paper](https://arxiv.org/abs/2010.01650),  [github](https://github.com/psinger/kaggle-landmark-recognition-2020-1st-place)). ![GitHub Org's stars](https://img.shields.io/github/stars/psinger/kaggle-landmark-recognition-2020-1st-place?style=social)
