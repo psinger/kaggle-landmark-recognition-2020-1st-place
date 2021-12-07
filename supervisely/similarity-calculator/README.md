@@ -22,13 +22,13 @@
 
 # Overview
 
-Application calculates cosine similarity between reference database and selected embeddings and return recommended items from reference database with their probabilities (cosine similarity score)
+Application calculates **cosine similarity** between **reference database** and **incoming embeddings**.  
+It returns **recommended items** from reference database with their **probabilities** (cosine similarity score).
 
 Application key points:
-- Return recommended item from reference database using API
-- Only Pretrained models available
+- Return recommended item from reference database [using API](https://github.com/supervisely-ecosystem/gl-metric-learning/blob/main/supervisely/similarity-calculator/src/demo_api_requests.py)
 - Load previously calculated embeddings from [Embeddings Calculator](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/calculator) application to RAM
-- Dynamically updates embeddings base in RAM
+- Allows dynamically updates reference database in RAM
 
 # How to Run
 1. Add [AI Recommendations](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/similarity-calculator) to your team from Ecosystem.
@@ -49,8 +49,9 @@ Application key points:
 
 # Results
 
-Embeddings have been loaded to RAM and are ready to go. The application will continue to run in server mode and wait for incoming requests.
+Embeddings have been loaded to RAM and are ready to go.  
+The application will continue to run in server mode and wait for incoming requests.
 
-[Example requests](https://github.com/supervisely-ecosystem/gl-metric-learning/blob/app_readme/supervisely/similarity-calculator/src/demo_api_requests.py)
+[**requests examples**](https://github.com/supervisely-ecosystem/gl-metric-learning/blob/main/supervisely/similarity-calculator/src/demo_api_requests.py)
 
 <img src="https://i.imgur.com/aa9UMFB.jpg" width="100%"/>
