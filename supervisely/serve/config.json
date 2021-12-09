@@ -63,6 +63,7 @@
   },
   "task_location": "application_sessions",
   "icon": "https://i.imgur.com/9ruNKUS.png",
+  "icon_background": "#FFFFFF",
   "isolate": true,
   "need_gpu": true,
   "headless": true,
