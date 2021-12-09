@@ -35,7 +35,7 @@ Application key points:
 
 2. Choose model, deploying device and press the **Run** button
 
-<img src="https://i.imgur.com/RCkK10C.png" width="80%" style='padding-top: 10px'>  
+<img src="https://i.imgur.com/tAbVgt8.png" width="80%" style='padding-top: 10px'>  
 
 3. Wait for the model to deploy
 <img src="https://i.imgur.com/xbt4Aqj.png" width="80%">  
