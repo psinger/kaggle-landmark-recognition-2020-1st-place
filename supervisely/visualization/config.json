@@ -11,6 +11,7 @@
   "task_location": "workspace_tasks",
   "need_gpu": true,
   "icon": "https://img.icons8.com/color/100/000000/tesseract.png",
+  "icon_background": "#FFFFFF",
   "icon_cover": true,
   "instance_version": "6.4.21"
 }
