@@ -26,7 +26,7 @@ def init_fields(state, data):
     state['weightsPath'] = None
 
     state["modelWeightsOptions"] = "pretrained"
-    state["selectedModel"] = "landmarks"
+    state["selectedModel"] = "retail [medium]"
     state["device"] = "cuda:0"
     state["weightsPath"] = ""
     state["models"] = [
