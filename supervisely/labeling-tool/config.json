@@ -19,11 +19,11 @@
   "icon_cover": true,
   "hotkeys": [
     {
-      "hotkey": "ctrl+n",
+      "hotkey": "ctrl+]",
       "command": "next_object"
     },
     {
-      "hotkey": "ctrl+p",
+      "hotkey": "ctrl+[",
       "command": "prev_object"
     }
   ],
