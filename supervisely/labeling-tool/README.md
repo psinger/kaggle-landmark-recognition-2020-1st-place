@@ -40,11 +40,11 @@ Application key points:
 
 2. Run app from the apps tab in **Image Annotation Tool**:
 
-<img src="https://i.imgur.com/ooeRD5s.png" width="100%"/>
+<img src="https://i.imgur.com/JCyFsqP.png" width="100%"/>
 
 **Note**: Move apps tab to the left for a better experience
 
-<img src="https://i.imgur.com/YVdJ2Fc.png" width="100%"/>
+<img src="https://i.imgur.com/OSbrDm1.png" width="100%"/>
 
 # How to Use
 
