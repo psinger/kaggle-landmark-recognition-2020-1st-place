@@ -45,7 +45,7 @@ Application key points:
 1. Select checkpoint with which you computed the embeddings for the selected project
 2. Load selected embeddings
 
-<img src="https://i.imgur.com/N0yy4Cy.png" width="100%"/>
+<img src="https://i.imgur.com/m8jmQIv.png" width="100%"/>
 
 # Results
 
@@ -54,4 +54,4 @@ The application will continue to run in server mode and wait for incoming reques
 
 [**requests examples**](https://github.com/supervisely-ecosystem/gl-metric-learning/blob/main/supervisely/similarity-calculator/src/demo_api_requests.py)
 
-<img src="https://i.imgur.com/aa9UMFB.jpg" width="100%"/>
+<img src="https://i.imgur.com/D9pXsm9.png" width="100%"/>
