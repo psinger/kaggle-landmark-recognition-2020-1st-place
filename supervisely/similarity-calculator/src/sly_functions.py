@@ -26,40 +26,40 @@ def init_fields(state, data):
     state['weightsPath'] = None
 
     state["modelWeightsOptions"] = "pretrained"
-    state["selectedModel"] = "landmarks"
+    state["selectedModel"] = "retail [medium]"
     state["device"] = "cuda:0"
     state["weightsPath"] = ""
     state["models"] = [
         {
-            "config": "",
-            "weightsUrl": "https://app.supervise.ly/h5un6l2bnaz1vj8a9qgms4-public/teams_storage/44467/T/5/Y7/3kHqfajvBP9Ry8TSc2LvNVjmZpaAtOlzCyqwwfb0TmxQfrjtrIDQz09Occgetu3OlT6QwHYm0DvwbNMXlCOaBDapXuYtPPbXyNAccvm342HUy8yCVlKmAKaNr8F7.bin",
-            "Model": "landmarks",
-            "Classes": "10752"
-        },
-        {
-            "config": "",
-            "weightsUrl": "",
-            "Model": "pictures v1",
-            "Classes": "83"
-        },
-        {
-            "config": "",
-            "weightsUrl": "",
-            "Model": "snacks v1",
-            "Classes": "83"
-        },
-        {
-            "config": "",
-            "weightsUrl": "",
-            "Model": "rp2k",
-            "Classes": "2384"
-        },
-        {
-            "config": "",
-            "weightsUrl": "",
-            "Model": "rp2k and 10k",
-            "Classes": "12075"
-        }
+        "config": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/r2pk_and_10k.ckpt",
+        "Model": "retail [medium]",
+        "Classes": "12075"
+      },
+      {
+        "config": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/r2pk.ckpt",
+        "Model": "retail [small]",
+        "Classes": "2384"
+      },
+      {
+        "config": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/snacks_v1.ckpt",
+        "Model": "retail [nano]",
+        "Classes": "83"
+      },
+      {
+        "config": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/landmarks.ckpt",
+        "Model": "landmarks [medium]",
+        "Classes": "10752"
+      },
+      {
+        "config": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/pictures_v1.ckpt",
+        "Model": "pictures [nano]",
+        "Classes": "83"
+      }
     ]
     state["modelColumns"] = [
         {

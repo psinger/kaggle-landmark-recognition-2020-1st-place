@@ -1,10 +1,10 @@
 {
-  "name": "Serve AI Recommendations",
+  "name": "AI Recommendations",
   "type": "app",
   "categories": [
     "metric learning"
   ],
-  "description": "google landmarks challenge models",
+  "description": "Recommends matching items from the catalog",
   "docker_image": "supervisely/base-pytorch:6.0.22",
   "main_script": "supervisely/similarity-calculator/src/main.py",
   "gui_template": "supervisely/similarity-calculator/src/gui.html",
@@ -13,8 +13,7 @@
     "modelWeightsOptions": "pretrained"
   },
   "task_location": "application_sessions",
-  "icon": "https://imgur.com/a9u0M3Y.png",
-  "icon_cover": true,
+  "icon": "https://i.imgur.com/JiPxjlO.png",
   "instance_version": "6.4.21",
 
   "context_menu": {
