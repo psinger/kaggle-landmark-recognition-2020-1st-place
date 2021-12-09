@@ -45,7 +45,7 @@
         "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/snacks_v1.ckpt",
         "Model": "retail [nano]",
         "Classes": "83"
-      },
+      }
       
     ],
     "modelColumns": [
