@@ -19,6 +19,7 @@
   },
   "task_location": "workspace_tasks",
   "icon": "https://i.imgur.com/FHHLYZQ.png",
+  "icon_background": "#FFFFFF",
   "need_gpu": false,
   "headless": true,
   "instance_version": "6.4.21",
