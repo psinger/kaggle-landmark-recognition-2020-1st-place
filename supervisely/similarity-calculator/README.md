@@ -1,5 +1,5 @@
 <div align="center" markdown>
-<img src=""/>
+<img src="https://i.imgur.com/ndhSKM8.jpg"/>
 
 
 # AI Recommendations
