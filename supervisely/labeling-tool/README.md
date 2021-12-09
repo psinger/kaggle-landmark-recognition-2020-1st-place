@@ -26,17 +26,25 @@ Application calculates cosine similarity between reference database and incoming
 It returns recommended items from reference database with their probabilities (cosine similarity score).
 
 Application key points:
-- Allows dynamically updates reference database in RAM
+- Preview top@N predicted items from reference database
+- Label new data by predicted items
+- Every new-labled item can be added to reference database
+- Review mode for review labeled objects
+- Copy mode for fast labeling
+- Browse reference database
 
 # How to Run
 1. Add [Metric Learning Labeling Tool](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/labeling-tool) to your team from Ecosystem.
 
-<img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool" src="" width="350px" style='padding-bottom: 20px'/>  
+<img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool" src="https://i.imgur.com/P3oE9Re.png" width="350px" style='padding-bottom: 20px'/>  
 
-2. Run app from the context menu of **Images Project**:
+2. Run app from the apps tab in **Image Annotation Tool**:
 
-<img src="" width="100%"/>
+<img src="https://i.imgur.com/ooeRD5s.png" width="100%"/>
 
+**Note**: Move apps tab to the left for a better experience
+
+<img src="https://i.imgur.com/YVdJ2Fc.png" width="100%"/>
 
 # How to Use
 
