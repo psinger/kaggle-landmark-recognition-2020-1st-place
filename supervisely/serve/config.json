@@ -30,6 +30,12 @@
       },
       {
         "config": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/snacks_v1.ckpt",
+        "Model": "retail [nano]",
+        "Classes": "83"
+      },
+      {
+        "config": "",
         "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/landmarks.ckpt",
         "Model": "landmarks [medium]",
         "Classes": "10752"
@@ -38,12 +44,6 @@
         "config": "",
         "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/pictures_v1.ckpt",
         "Model": "pictures [nano]",
-        "Classes": "83"
-      },
-      {
-        "config": "",
-        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/snacks_v1.ckpt",
-        "Model": "retail [nano]",
         "Classes": "83"
       }
       
