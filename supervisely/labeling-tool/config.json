@@ -14,9 +14,8 @@
   "integrated_into": [
     "image_annotation_tool"
   ],
-  "icon": "https://imgur.com/a9u0M3Y.png",
+  "icon": "https://i.imgur.com/16BX0EP.png",
   "icon_background": "#FFFFFF",
-  "icon_cover": true,
   "hotkeys": [
     {
       "hotkey": "ctrl+]",
