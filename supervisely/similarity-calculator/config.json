@@ -14,7 +14,7 @@
   },
   "task_location": "application_sessions",
   "icon": "https://i.imgur.com/JiPxjlO.png",
-  "icon_cover": true,
+
   "icon_background": "#FFFFFF",
   "instance_version": "6.4.21",
 
