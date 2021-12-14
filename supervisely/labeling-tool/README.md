@@ -36,7 +36,7 @@ Application key points:
 # How to Run
 1. Add [Metric Learning Labeling Tool](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/labeling-tool) to your team from Ecosystem.
 
-<img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool" src="https://i.imgur.com/P3oE9Re.png" width="350px" style='padding-bottom: 20px'/>  
+<img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool" src="https://imgur.com/faHLnLM.png" width="350px" style='padding-bottom: 20px'/>  
 
 2. Run app from the apps tab in **Image Annotation Tool**:
 
