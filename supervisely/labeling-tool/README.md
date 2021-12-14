@@ -48,14 +48,6 @@ Application key points:
 
 # How to Use
 
-1. Select checkpoint with which you computed the embeddings for the selected project
-2. Load selected embeddings
+## video placeholder
 
-<img src="" width="100%"/>
 
-# Results
-
-Embeddings have been loaded to RAM and are ready to go.  
-The application will continue to run in server mode and wait for incoming requests.
-
-<img src="" width="100%"/>
