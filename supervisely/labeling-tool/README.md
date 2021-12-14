@@ -32,11 +32,18 @@ Application key points:
 - Browse reference database
 
 # How to Run
-1. Add [Metric Learning Labeling Tool](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/labeling-tool) to your team from Ecosystem.
+
+### 1. Launch Applications:
+
+- [Serve Metric Learning](https://ecosystem.supervise.ly/apps/supervisely-ecosystem%252Ffairmot%252Fsupervisely%252Fserve)
+- [AI Recommendations](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/similarity-calculator)  
+
+
+### 2. Add [Metric Learning Labeling Tool](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/labeling-tool) to your team from Ecosystem  
 
 <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool" src="https://imgur.com/faHLnLM.png" width="350px" style='padding-bottom: 20px'/>  
 
-2. Run app from the apps tab in **Image Annotation Tool**:
+### 3. Run app from the apps tab in **Images Annotation Tool**:  
 
 <img src="https://i.imgur.com/JCyFsqP.png" width="100%"/>
 
