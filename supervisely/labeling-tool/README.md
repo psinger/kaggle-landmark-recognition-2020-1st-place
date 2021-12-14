@@ -7,8 +7,7 @@
 <p align="center">
   <a href="#Overview">Overview</a> •
   <a href="#How-To-Run">How To Run</a> •
-  <a href="#How-To-Use">How To Use</a> •
-  <a href="#Results">Results</a>
+  <a href="#How-To-Use">How To Use</a> 
 </p>
 
 [![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool)
