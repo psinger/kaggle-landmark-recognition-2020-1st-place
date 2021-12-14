@@ -40,9 +40,6 @@ Application key points:
 
 <img src="https://i.imgur.com/JCyFsqP.png" width="100%"/>
 
-**Note**: Move apps tab to the left for a better experience
-
-<img src="https://i.imgur.com/OSbrDm1.png" width="100%"/>
 
 # How to Use
 
