@@ -21,8 +21,7 @@
 
 # Overview
 
-Application calculates cosine similarity between reference database and incoming embeddings.  
-It returns recommended items from reference database with their probabilities (cosine similarity score).
+The application allows you to classify and tag images.
 
 Application key points:
 - Preview top@N predicted items from reference database
