@@ -41,6 +41,13 @@ Application key points:
 <img src="https://i.imgur.com/xbt4Aqj.png" width="80%">  
 
 
+# Watch Tutorial Video
+
+<a data-key="sly-embeded-video-link" href="https://youtu.be/rUADHx23eTc" data-video-code="rUADHx23eTc">
+    <img src="https://i.imgur.com/UPy4WJd.png" alt="SLY_EMBEDED_VIDEO_LINK"  width="70%">
+</a>
+
+
 # Acknowledgment
 
 This app is based on the great work `Kaggle Landmark Recognition 2020 competition: Winner solution` ([paper](https://arxiv.org/abs/2010.01650),  [github](https://github.com/psinger/kaggle-landmark-recognition-2020-1st-place)). ![GitHub Org's stars](https://img.shields.io/github/stars/psinger/kaggle-landmark-recognition-2020-1st-place?style=social)
