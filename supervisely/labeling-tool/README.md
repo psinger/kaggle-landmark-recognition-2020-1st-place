@@ -50,6 +50,8 @@ Application key points:
 
 # How to Use
 
-## video placeholder
+<a data-key="sly-embeded-video-link" href="" data-video-code="">
+    <img src="https://i.imgur.com/dMfSEdB.png" alt="SLY_EMBEDED_VIDEO_LINK"  width="70%">
+</a>
 
 
