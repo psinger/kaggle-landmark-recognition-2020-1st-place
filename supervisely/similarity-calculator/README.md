@@ -47,6 +47,11 @@ Application key points:
 
 <img src="https://i.imgur.com/m8jmQIv.png" width="100%"/>
 
+# Watch Tutorial Video
+<a data-key="sly-embeded-video-link" href="https://youtu.be/okFQDSJTgYk" data-video-code="okFQDSJTgYk">
+    <img src="https://i.imgur.com/qchPUuB.png" alt="SLY_EMBEDED_VIDEO_LINK"  width="70%">
+</a>
+
 # Results
 
 Embeddings have been loaded to RAM and are ready to go.  
