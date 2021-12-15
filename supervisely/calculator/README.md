@@ -42,6 +42,11 @@ Application key points:
 
 <img src="https://i.imgur.com/sqeuh4D.png" width="100%"/>
 
+# Watch Tutorial Video
+<a data-key="sly-embeded-video-link" href="https://youtu.be/xoIzIvvA2b0" data-video-code="xoIzIvvA2b0">
+    <img src="https://i.imgur.com/A4bu2Yk.png" alt="SLY_EMBEDED_VIDEO_LINK"  width="70%">
+</a>
+
 
 # Results
 
