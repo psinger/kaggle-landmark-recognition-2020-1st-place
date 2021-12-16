@@ -8,6 +8,7 @@
   <a href="#Overview">Overview</a> •
   <a href="#How-To-Run">How To Run</a> •
   <a href="#How-To-Use">How To Use</a> •
+  <a href="#Demo-Video">Demo Video</a> •
   <a href="#Results">Results</a>
 </p>
 
@@ -47,7 +48,7 @@ Application key points:
 
 <img src="https://i.imgur.com/m8jmQIv.png" width="100%"/>
 
-# Watch Tutorial Video
+# Demo Video
 <a data-key="sly-embeded-video-link" href="https://youtu.be/okFQDSJTgYk" data-video-code="okFQDSJTgYk">
     <img src="https://i.imgur.com/qchPUuB.png" alt="SLY_EMBEDED_VIDEO_LINK"  width="70%">
 </a>
