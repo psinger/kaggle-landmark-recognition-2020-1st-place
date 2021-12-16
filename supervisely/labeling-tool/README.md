@@ -7,7 +7,7 @@
 <p align="center">
   <a href="#Overview">Overview</a> •
   <a href="#How-To-Run">How To Run</a> •
-  <a href="#How-To-Use">How To Use</a> 
+  <a href="#Demo-Video">Demo Video</a> 
 </p>
 
 [![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool)
@@ -48,7 +48,7 @@ Application key points:
 <img src="https://i.imgur.com/JCyFsqP.png" width="100%"/>
 
 
-# How to Use
+# Demo Video
 
 <a data-key="sly-embeded-video-link" href="" data-video-code="">
     <img src="https://i.imgur.com/dMfSEdB.png" alt="SLY_EMBEDED_VIDEO_LINK"  width="70%">
