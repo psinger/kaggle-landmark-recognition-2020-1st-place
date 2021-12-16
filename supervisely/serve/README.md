@@ -7,6 +7,8 @@
 <p align="center">
   <a href="#Overview">Overview</a> •
   <a href="#How-To-Run">How To Run</a> •
+  <a href="#Demo-Video">Demo Video</a> •
+  <a href="#Acknowledgment">Acknowledgment</a>
 </p>
 
 [![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervise.ly/slack)
@@ -41,7 +43,7 @@ Application key points:
 <img src="https://i.imgur.com/xbt4Aqj.png" width="80%">  
 
 
-# Watch Tutorial Video
+# Demo Video
 
 <a data-key="sly-embeded-video-link" href="https://youtu.be/rUADHx23eTc" data-video-code="rUADHx23eTc">
     <img src="https://i.imgur.com/UPy4WJd.png" alt="SLY_EMBEDED_VIDEO_LINK"  width="70%">
