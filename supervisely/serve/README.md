@@ -11,6 +11,7 @@
   <a href="#Acknowledgment">Acknowledgment</a>
 </p>
 
+[![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/gl-metric-learning/supervisely/serve)
 [![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervise.ly/slack)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/supervisely-ecosystem/gl-metric-learning)
 [![views](https://app.supervise.ly/public/api/v3/ecosystem.counters?repo=supervisely-ecosystem/gl-metric-learning/supervisely/serve&counter=views&label=views)](https://supervise.ly)
