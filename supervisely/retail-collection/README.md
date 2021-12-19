@@ -58,7 +58,7 @@ All you need to start is:
 
 ---
 
-## How To Run
+## Launch
 
 <img src="https://imgur.com/ejK0mHt.png" style="width:100%;"/>
 
@@ -67,7 +67,7 @@ All you need to start is:
 
 ## Map
 
-<p>this map illustrates how each application in the collection connected to each other</p>
+<p>This map illustrates how each application in the collection connected to each other</p>
 <img src="https://imgur.com/pwPAdqb.png" style="width:100%;"/>
 
 --- 
@@ -118,7 +118,7 @@ command on your machine with the GPU that installs the Agent. After that, you ke
 GPU related computations will be performed on the connected machine(s).
 
 - for technical support please leave issues, questions or suggestions in
-  our [repo](https://github.com/supervisely-ecosystem/mmclassification). Our team will try to help.
+  our [repo](https://github.com/supervisely-ecosystem/gl-metric-learning). Our team will try to help.
 - also we can chat in slack
   channel [![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervise.ly/slack)
 - if you are interested in Supervisely Enterprise Edition (EE) please send us
