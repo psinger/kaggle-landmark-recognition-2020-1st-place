@@ -30,7 +30,7 @@ Application key points:
 - Calculated embeddings can be used in AI Recommendations
 - Store embeddings in Team Files
 
-# How to Use
+# How To Use
 1. Add [Embeddings Calculator](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/calculator) to your team from Ecosystem.
 
 <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/calculator" src="https://i.imgur.com/8SY4Rxc.png" width="350px" style='padding-bottom: 20px'/>  
