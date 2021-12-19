@@ -41,21 +41,21 @@ All you need to start is:
     <tr style="width: 100%">
         <td >
           <img src="https://imgur.com/4fZNO25.png" style=""/>
-            <p align="center" style="font-family:'Lucida Console', monospace; margin-top: 8px; padding-bottom: 0">assign tags using NN predictions</p>
+            <h4 align="center" style="font-family:'Lucida Console', monospace; padding-top: 3px; padding-bottom: 0">assign tags using NN predictions</h4>
         </td>
         <td>
           <img src="https://imgur.com/KRcUqSg.png" style=""/>
-            <p align="center" style="font-family:'Lucida Console', monospace; margin-top: 8px; padding-bottom: 0">add new items to Reference Database</p> 
+            <h4 align="center" style="font-family:'Lucida Console', monospace; margin-top: 8px; padding-bottom: 0">add new items to Reference Database</h4> 
         </td>
     </tr>
     <tr>
         <td>
           <img src="https://imgur.com/VI5mcA1.png" style=""/>
-            <p align="center" style="font-family:'Lucida Console', monospace; margin-top: 8px">review assigned tags</p> 
+            <h4 align="center" style="font-family:'Lucida Console', monospace; margin-top: 8px">review assigned tags</h4> 
         </td>
         <td>
           <img src="https://imgur.com/rrDFVQP.png" style=""/>
-            <p align="center" style="font-family:'Lucida Console', monospace; margin-top: 8px">manual search in Reference Database</p> 
+            <h4 align="center" style="font-family:'Lucida Console', monospace; margin-top: 8px">manual search in Reference Database</h4> 
         </td>
     </tr>
     
