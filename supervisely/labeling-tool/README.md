@@ -12,7 +12,7 @@
 
 [![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool)
 [![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervise.ly/slack)
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/supervisely-ecosystem/gl-metric-learning)
 [![views](https://app.supervise.ly/public/api/v3/ecosystem.counters?repo=supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool&counter=views&label=views)](https://supervise.ly)
 [![used by teams](https://app.supervise.ly/public/api/v3/ecosystem.counters?repo=supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool&counter=downloads&label=used%20by%20teams)](https://supervise.ly)
 [![runs](https://app.supervise.ly/public/api/v3/ecosystem.counters?repo=supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool&counter=runs&label=runs&123)](https://supervise.ly)
@@ -35,7 +35,7 @@ Application key points:
 
 ### 1. Launch Applications:
 
-- [Serve Metric Learning](https://ecosystem.supervise.ly/apps/supervisely-ecosystem%252Ffairmot%252Fsupervisely%252Fserve)
+- [Serve Metric Learning](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/serve)
 - [AI Recommendations](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/similarity-calculator)  
 
 

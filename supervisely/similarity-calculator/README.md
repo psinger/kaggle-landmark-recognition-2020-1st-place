@@ -14,7 +14,7 @@
 
 [![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/gl-metric-learning/supervisely/similarity-calculator)
 [![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervise.ly/slack)
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/supervisely-ecosystem/gl-metric-learning/supervisely/similarity-calculator)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/supervisely-ecosystem/gl-metric-learning)
 [![views](https://app.supervise.ly/public/api/v3/ecosystem.counters?repo=supervisely-ecosystem/gl-metric-learning/supervisely/similarity-calculator&counter=views&label=views)](https://supervise.ly)
 [![used by teams](https://app.supervise.ly/public/api/v3/ecosystem.counters?repo=supervisely-ecosystem/gl-metric-learning/supervisely/similarity-calculator&counter=downloads&label=used%20by%20teams)](https://supervise.ly)
 [![runs](https://app.supervise.ly/public/api/v3/ecosystem.counters?repo=supervisely-ecosystem/gl-metric-learning/supervisely/similarity-calculator&counter=runs&label=runs&123)](https://supervise.ly)
@@ -32,12 +32,11 @@ Application key points:
 - Allows dynamically updates reference database in RAM
 
 # How to Run
-1. Add [AI Recommendations](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/similarity-calculator) to your team from Ecosystem.
 
+### 1. Add [AI Recommendations](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/similarity-calculator) to your team from Ecosystem.
 <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/similarity-calculator" src="https://i.imgur.com/1QpAfy2.png" width="350px" style='padding-bottom: 20px'/>  
 
-2. Run app from the context menu of **Images Project**:
-
+### 2. Run app from the context menu of **Images Project**:
 <img src="https://i.imgur.com/XHZ4OZq.png" width="100%"/>
 
 
