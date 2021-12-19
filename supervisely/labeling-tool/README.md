@@ -50,7 +50,7 @@ Application key points:
 
 # Demo Video
 
-<a data-key="sly-embeded-video-link" href="" data-video-code="">
+<a data-key="sly-embeded-video-link" href="https://youtu.be/h5cGZuqIdiM" data-video-code="">
     <img src="https://i.imgur.com/dMfSEdB.png" alt="SLY_EMBEDED_VIDEO_LINK"  width="70%">
 </a>
 
