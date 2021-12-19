@@ -56,21 +56,16 @@ All you need to start is:
 </table>
 
 
----
-
 ## Launch
 
 <img src="https://imgur.com/ejK0mHt.png" style="width:100%;"/>
 
-
----
 
 ## Map
 
 <p>This map illustrates how each application in the collection connected to each other</p>
 <img src="https://imgur.com/pwPAdqb.png" style="width:100%;"/>
 
---- 
 
 ## Applications
 
