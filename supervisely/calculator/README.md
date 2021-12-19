@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="#Overview">Overview</a> •
-  <a href="#How-To-Use">How To Use</a> •
+  <a href="#How-To-Run">How To Use</a> •
   <a href="#Demo-Video">Demo Video</a> •
   <a href="#Results">Results</a>
 </p>
@@ -30,18 +30,17 @@ Application key points:
 - Calculated embeddings can be used in AI Recommendations
 - Store embeddings in Team Files
 
-# How To Use
-1. Add [Embeddings Calculator](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/calculator) to your team from Ecosystem.
+# How to Run
 
+### 1. Add [Embeddings Calculator](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/calculator) to your team from Ecosystem  
 <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/calculator" src="https://i.imgur.com/8SY4Rxc.png" width="350px" style='padding-bottom: 20px'/>  
 
-2. Run app from the context menu of **Images Project**:
-
+### 2. Run app from the context menu of **Images Project**:
 <img src="https://i.imgur.com/piXysyf.png" width="100%"/>
 
-3. Select served session in modal window
-
+### 3. Select served session in modal window
 <img src="https://i.imgur.com/sqeuh4D.png" width="100%"/>
+
 
 # Demo Video
 <a data-key="sly-embeded-video-link" href="https://youtu.be/xoIzIvvA2b0" data-video-code="xoIzIvvA2b0">
