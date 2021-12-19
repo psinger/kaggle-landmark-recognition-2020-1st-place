@@ -41,7 +41,7 @@ def batch_inference(data):
     :param data: np.arrays: [[img, img, img, img]]
     :return: embedding for every image [[emb1, emb2, emb3, emb4]]
     """
-    splits_num = int(len(data) / g.batch_size) > 0 if int(len(data) / g.batch_size) > 0 else 1
+    splits_num = int(len(data) / g.batch_size) if int(len(data) / g.batch_size) > 0 else 1
     batches = np.array_split(data, splits_num, axis=0)
     batches = [batch for batch in batches if batch.size > 0]
 
