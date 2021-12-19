@@ -6,5 +6,6 @@
   ],
   "description": "Label images using updatable Reference Database",
   "icon": "https://i.imgur.com/buzK2ah.png",
-  "icon_background": "#FFFFFF"
+  "icon_background": "#FFFFFF",
+  "icon_cover": true
 }
