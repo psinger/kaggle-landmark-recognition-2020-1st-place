@@ -35,7 +35,7 @@ Application key points:
 
 ### 1. Launch Applications:
 
-- [Serve Metric Learning](https://ecosystem.supervise.ly/apps/supervisely-ecosystem%252Ffairmot%252Fsupervisely%252Fserve)
+- [Serve Metric Learning](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/serve)
 - [AI Recommendations](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/similarity-calculator)  
 
 
