@@ -37,6 +37,7 @@ Application key points:
 <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/similarity-calculator" src="https://i.imgur.com/1QpAfy2.png" width="350px" style='padding-bottom: 20px'/>  
 
 ### 2. Run app from the context menu of **Images Project**:
+ℹ️ You can use [Embeddings Calculator](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/gl-metric-learning/supervisely/calculator) application to get Images Project in suitable format
 <img src="https://i.imgur.com/XHZ4OZq.png" width="100%"/>
 
 
