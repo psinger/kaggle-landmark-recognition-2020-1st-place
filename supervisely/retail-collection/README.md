@@ -79,21 +79,30 @@ All you need to start is:
 
     <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/import-csv-catalog" src="https://imgur.com/NtiwR4g.png" width="350px"/> 
 
-- [Serve Metric Learning](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/serve)
+- [Serve Metric Learning](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/gl-metric-learning/supervisely/serve)
 
     <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/serve" src="https://imgur.com/A3BW6hP.png" width="350px"/> 
 
-- [Embeddings Calculator](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/calculator)
+- [Embeddings Calculator](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/gl-metric-learning/supervisely/calculator)
 
     <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/calculator" src="https://imgur.com/QL90cJS.png" width="350px"/>  
 
-- [AI Recommendations](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/similarity-calculator)
+- [AI Recommendations](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/gl-metric-learning/supervisely/similarity-calculator)
 
     <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/similarity-calculator" src="https://imgur.com/WptA30Z.png" width="350px"/> 
 
-- [Metric Learning Labeling Tool](https://ecosystem.supervise.ly/apps/gl-metric-learning/supervisely/labeling-tool)
+- [Metric Learning Labeling Tool](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool)
 
     <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool" src="https://imgur.com/8HQvAuT.png" width="350px"/>  
+    
+    
+## Demo data
+
+- [.CSV table to import example](https://github.com/supervisely-ecosystem/import-csv-catalog/releases/download/v0.0.1/test_snacks_catalog.csv)
+- [Grocery store shelves](https://ecosystem.supervise.ly/projects/grocery-store-shelves) - images 
+  with products on shelves, will be used to test classification model on real data
+
+    <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/grocery-store-shelves" src="https://i.imgur.com/Mqqqs4c.png" width="350px"/>
 
 
 # For Developers
