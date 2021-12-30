@@ -10,7 +10,7 @@
   <a href="#Launch">Launch</a> •
   <a href="#Map">Map</a> •
   <a href="#Applications">Applications</a> •
-  <a href="#Demo Data">Demo Data</a> •
+  <a href="#Demo-Data">Demo Data</a> •
   <a href="#For-Developers">For Developers</a> •
   <a href="#About-Us">About Us</a>
 </p>
