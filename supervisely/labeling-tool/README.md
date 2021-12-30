@@ -7,6 +7,7 @@
 <p align="center">
   <a href="#Overview">Overview</a> •
   <a href="#How-To-Run">How To Run</a> •
+  <a href="#Demo-Data">Demo Data</a> •
   <a href="#Demo-Video">Demo Video</a> 
 </p>
 
@@ -47,6 +48,11 @@ Application key points:
 
 <img src="https://i.imgur.com/JCyFsqP.png" width="100%"/>
 
+# Demo Data
+
+- [Grocery store shelves](https://ecosystem.supervise.ly/projects/grocery-store-shelves) - labeled and untagged images for test
+
+    <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/grocery-store-shelves" src="https://i.imgur.com/Mqqqs4c.png" width="350px"/>
 
 # Demo Video
 
