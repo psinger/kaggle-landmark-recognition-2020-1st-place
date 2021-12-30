@@ -10,6 +10,7 @@
   <a href="#Launch">Launch</a> •
   <a href="#Map">Map</a> •
   <a href="#Applications">Applications</a> •
+  <a href="#Demo Data">Demo Data</a> •
   <a href="#For-Developers">For Developers</a> •
   <a href="#About-Us">About Us</a>
 </p>
@@ -96,7 +97,7 @@ All you need to start is:
     <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/gl-metric-learning/supervisely/labeling-tool" src="https://imgur.com/8HQvAuT.png" width="350px"/>  
     
     
-## Demo data
+## Demo Data
 
 - [.CSV table to import example](https://github.com/supervisely-ecosystem/import-csv-catalog/releases/download/v0.0.1/test_snacks_catalog.csv) — the table that is used in the **first step** of [launch](#Launch) 
 - [Grocery store shelves](https://ecosystem.supervise.ly/projects/grocery-store-shelves) - labeled and untagged images for test
