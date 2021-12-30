@@ -98,7 +98,7 @@ All you need to start is:
     
 ## Demo data
 
-- [.CSV table to import example](https://github.com/supervisely-ecosystem/import-csv-catalog/releases/download/v0.0.1/test_snacks_catalog.csv)
+- [.CSV table to import example](https://github.com/supervisely-ecosystem/import-csv-catalog/releases/download/v0.0.1/test_snacks_catalog.csv) — the table that is used in the first step of [launch](#Launch) 
 - [Grocery store shelves](https://ecosystem.supervise.ly/projects/grocery-store-shelves) - images 
   with products on shelves, will be used to test classification model on real data
 
