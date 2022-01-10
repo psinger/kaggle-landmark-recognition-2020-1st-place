@@ -6,17 +6,17 @@ def main():
     api = sly.Api.from_env()
 
     # task id of the deployed model
-    task_id = 10595
+    task_id = 12330
 
     # get embedding for test image
-    # response = api.task.send_request(task_id, "inference", data={
-    #     'input_data': [{
-    #         'index': 0,
-    #         'url': 'https://supervise.ly/_nuxt/img/video.00ef1f3.jpg',
-    #         'bbox': [212, 203, 257, 594]
-    #     }]
-    #
-    # }, timeout=60)
+    response = api.task.send_request(task_id, "inference", data={
+        'input_data': [{
+            'index': i,
+            'url': 'https://supervise.ly/_nuxt/img/video.00ef1f3.jpg',
+            'bbox': [212, 203, 257, 594]
+        } for i in range(100)]
+
+    }, timeout=600)
     # print("APP returns data:")
     # print(json.loads(response))
 

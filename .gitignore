@@ -8,3 +8,4 @@ models/*
 secret_debug.env
 
 .idea
+venv

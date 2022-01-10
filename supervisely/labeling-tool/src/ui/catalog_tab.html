@@ -123,7 +123,7 @@
                 <!--                {{state.selectedRowData}}-->
                 <sly-table class="mt10"
                            v-if="data.itemsDatabase.length > 0"
-                           :options="{perPage: 20, pageSizes: 20}"
+                           :options="{perPage: 20, pageSize: 20}"
                            :content="data.itemsDatabase"
                            @input="state.selectedRowLabel = $event.selectedRowData.label; command('show_database_row')"
                 >
