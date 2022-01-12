@@ -6,7 +6,7 @@ def main():
     api = sly.Api.from_env()
 
     # task id of the deployed model
-    task_id = 12330
+    task_id = 12483
 
     # get embedding for test image
     response = api.task.send_request(task_id, "inference", data={
