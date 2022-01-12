@@ -65,7 +65,6 @@
   "icon": "https://i.imgur.com/9ruNKUS.png",
   "icon_background": "#FFFFFF",
   "isolate": true,
-  "need_gpu": true,
   "headless": true,
   "instance_version": "6.4.21",
   "session_tags": [
