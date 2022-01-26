@@ -76,9 +76,9 @@ All you need to start is:
 
 ## Applications
 
-- [CSV To Images Project](https://ecosystem.supervise.ly/apps/import-csv-catalog) 
+- [CSV Products Catalog To Images Project](https://ecosystem.supervise.ly/apps/import-csv-catalog) 
 
-    <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/import-csv-catalog" src="https://imgur.com/NtiwR4g.png" width="350px"/> 
+    <img data-key="sly-module-link" data-module-slug="supervisely-ecosystem/import-csv-catalog" src="https://imgur.com/NxeAATL.png" width="350px"/> 
 
 - [Serve Metric Learning](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/gl-metric-learning/supervisely/serve)
 
