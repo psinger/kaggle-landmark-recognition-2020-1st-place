@@ -107,7 +107,7 @@ def add_to_reference(api: sly.Api, task_id, context, state, app_logger):
         reference_label = reference_data['current_label']
         embedding = g.figures2embeddings[figure_id]
 
-        image_info = g.api.image.get_info_by_id(image_id)
+        image_info = g.spawn_api.image.get_info_by_id(image_id)
         image_url = image_info.full_storage_url
 
         annotations_for_image = f.get_annotation(project_id, image_id)

@@ -48,7 +48,7 @@ def generate_data_for_nn_app(images_ids, figures_ids, annotations, padding):
                 f"Label with id={figure_id} not found. Maybe cached annotation differs from the actual one. "
                 f"Please clear cache on settings tab")
 
-        image_info = g.api.image.get_info_by_id(image_id)
+        image_info = g.spawn_api.image.get_info_by_id(image_id)
         image_url = image_info.full_storage_url
         bbox = sly_annotation_to_bbox(label)
 
@@ -162,7 +162,7 @@ def add_info_to_disable_buttons(data_to_show, assigned_tags, fields):
 
 def get_meta(project_id, optimize=True):
     if project_id not in g.project2meta or optimize is False:
-        meta_json = g.api.project.get_meta(project_id)
+        meta_json = g.spawn_api.project.get_meta(project_id)
         meta = sly.ProjectMeta.from_json(meta_json)
         g.project2meta[project_id] = meta
     else:
@@ -171,7 +171,7 @@ def get_meta(project_id, optimize=True):
 
 
 def update_project_meta(project_id, project_meta: sly.ProjectMeta):
-    g.api.project.update_meta(project_id, project_meta.to_json())
+    g.spawn_api.project.update_meta(project_id, project_meta.to_json())
     get_meta(project_id, optimize=False)
 
 
@@ -201,14 +201,14 @@ def get_image_path(image_id):
     info = get_image_info(image_id)
     local_path = os.path.join(g.cache_path, f"{info.id}{sly.fs.get_file_name_with_ext(info.name)}")
     if not sly.fs.file_exists(local_path):
-        g.api.image.download_path(image_id, local_path)
+        g.spawn_api.image.download_path(image_id, local_path)
     return local_path
 
 
 # @lru_cache(maxsize=10)
 def get_annotation(project_id, image_id, optimize=False):
     if image_id not in g.image2ann or not optimize:
-        ann_json = g.api.annotation.download(image_id).annotation
+        ann_json = g.spawn_api.annotation.download(image_id).annotation
         ann = sly.Annotation.from_json(ann_json, get_meta(project_id))
         g.image2ann[image_id] = ann
     else:
@@ -221,7 +221,7 @@ def get_annotation(project_id, image_id, optimize=False):
 def get_image_info(image_id):
     info = None
     if image_id not in g.image2info:
-        info = g.api.image.get_info_by_id(image_id)
+        info = g.spawn_api.image.get_info_by_id(image_id)
         g.image2info[image_id] = info
     else:
         info = g.image2info[image_id]

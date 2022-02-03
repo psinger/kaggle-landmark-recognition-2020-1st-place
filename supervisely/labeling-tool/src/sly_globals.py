@@ -2,6 +2,7 @@ from pathlib import Path
 import sys
 import os
 import supervisely_lib as sly
+from supervisely_lib import Api
 
 root_source_dir = str(Path(sys.argv[0]).parents[1])
 sly.logger.info(f"Root source directory: {root_source_dir}")
@@ -23,6 +24,8 @@ my_app: sly.AppService = sly.AppService(ignore_task_id=True)
 api = my_app.public_api
 task_id = my_app.task_id
 
+spawn_api = Api(server_address=os.environ['SERVER_ADDRESS'], token=os.environ['_SPAWN_API_TOKEN'],
+                ignore_task_id=True, retry_count=5)  # api of spawner (admin / manager)
 
 model_info = None
 calculator_info = None
@@ -37,14 +40,12 @@ tags_examples = None
 examples_data = None
 model_tag_names = None
 
-
 project2meta = {}  # project_id -> project_meta
 image2info = {}
 image2ann = {}  # image_id -> annotation
 figures2embeddings = {}  # image_id -> annotation
 
 figures_in_reference = []
-
 
 items_database = None
 
