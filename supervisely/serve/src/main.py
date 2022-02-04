@@ -1,3 +1,5 @@
+import functools
+
 import supervisely_lib as sly
 
 import json
@@ -9,7 +11,21 @@ import sly_globals as g
 import sly_functions as f
 
 
+def warn_on_exception(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        value = None
+        try:
+            value = func(*args, **kwargs)
+        except Exception as e:
+            sly.logger.warn(f'{e}', exc_info=True)
+        return value
+
+    return wrapper
+
+
 @g.my_app.callback("inference")
+@warn_on_exception
 @sly.timeit
 def inference(api: sly.Api, task_id, context, state, app_logger):
     data_to_process = list(state['input_data'])
@@ -30,6 +46,7 @@ def inference(api: sly.Api, task_id, context, state, app_logger):
 
 
 @g.my_app.callback("get_info")
+@warn_on_exception
 @sly.timeit
 def get_info(api: sly.Api, task_id, context, state, app_logger):
     if g.selected_weights_type == 'pretrained':
