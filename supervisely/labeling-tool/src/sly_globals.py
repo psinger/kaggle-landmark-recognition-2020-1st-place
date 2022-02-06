@@ -4,6 +4,7 @@ import os
 import supervisely_lib as sly
 from supervisely_lib import Api
 
+
 root_source_dir = str(Path(sys.argv[0]).parents[1])
 sly.logger.info(f"Root source directory: {root_source_dir}")
 sys.path.append(root_source_dir)  # adds labeling-tool to path
@@ -26,6 +27,8 @@ task_id = my_app.task_id
 
 spawn_api = Api(server_address=os.environ['SERVER_ADDRESS'], token=os.environ['_SPAWN_API_TOKEN'],
                 ignore_task_id=True, retry_count=5)  # api of spawner (admin / manager)
+
+spawn_user_login = os.environ['_SPAWN_USER_LOGIN']
 
 model_info = None
 calculator_info = None

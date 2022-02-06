@@ -160,8 +160,8 @@ def add_info_to_disable_buttons(data_to_show, assigned_tags, fields):
     return dict(data_to_show)
 
 
-def get_meta(project_id, optimize=True):
-    if project_id not in g.project2meta or optimize is False:
+def get_meta(project_id, from_server=False):
+    if from_server is True or project_id not in g.project2meta:
         meta_json = g.spawn_api.project.get_meta(project_id)
         meta = sly.ProjectMeta.from_json(meta_json)
         g.project2meta[project_id] = meta
@@ -171,17 +171,22 @@ def get_meta(project_id, optimize=True):
 
 
 def update_project_meta(project_id, project_meta: sly.ProjectMeta):
+    sly.logger.info(f'update_project_meta: {project_id=}, {g.spawn_user_login=}')
     g.spawn_api.project.update_meta(project_id, project_meta.to_json())
-    get_meta(project_id, optimize=False)
 
 
 def _get_or_create_tag_meta(project_id, tag_meta):
-    project_meta = get_meta(project_id)
-    project_tag_meta: sly.TagMeta = project_meta.get_tag_meta(tag_meta.name)
+    for get_from_server_flag in [False, True]:  # check tag in local and remote metas
+        project_meta = get_meta(project_id, from_server=get_from_server_flag)
+        project_tag_meta: sly.TagMeta = project_meta.get_tag_meta(tag_meta.name)
+        sly.logger.info(f'_get_or_create_tag_meta: {project_tag_meta is None=}, {get_from_server_flag=}')
+        if project_tag_meta is not None:
+            break
+
     if project_tag_meta is None:
-        project_meta = project_meta.add_tag_meta(tag_meta)
+        project_meta = project_meta.add_tag_meta(tag_meta)  # add tag to newest meta
         update_project_meta(project_id, project_meta)
-        project_meta = get_meta(project_id)
+        project_meta = get_meta(project_id, from_server=True)
         project_tag_meta = project_meta.get_tag_meta(tag_meta.name)
     return project_tag_meta
 
@@ -192,7 +197,7 @@ def _assign_tag_to_object(project_id, figure_id, tag_meta):
 
 
 def assign_to_object(project_id, figure_id, class_name):
-    # tag_meta = g.model_meta.tag_metas.get(class_name)
+    sly.logger.info(f'assign_to_object: {project_id=}, {figure_id=}, {class_name=}')
     tag_meta = sly.TagMeta(class_name, sly.TagValueType.NONE)
     _assign_tag_to_object(project_id, figure_id, tag_meta)
 
