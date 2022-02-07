@@ -4,11 +4,11 @@ import sys
 from pathlib import Path
 
 import supervisely_lib as sly
-import dotenv
+# import dotenv
 import ast
 
-dotenv.load_dotenv('./debug.env')
-dotenv.load_dotenv('./secret_debug.env')
+# dotenv.load_dotenv('./debug.env')
+# dotenv.load_dotenv('./secret_debug.env')
 
 logger = sly.logger
 
@@ -24,6 +24,7 @@ remote_embeddings_dir = '/GL-MetricLearning/embeddings/'
 local_embeddings_dir = os.path.join(my_app.data_dir, 'local_embeddings')
 
 embeddings_in_memory = []
+placeholders_in_memory = []
 embeddings_labels = []
 
 

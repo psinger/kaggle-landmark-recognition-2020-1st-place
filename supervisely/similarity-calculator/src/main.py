@@ -47,7 +47,8 @@ def load_embeddings_to_memory(api: sly.Api, task_id, context, state, app_logger)
         raise ValueError('No embedding files found. Please reselect embeddings.')
 
     local_pickles_paths = f.download_embeddings(embeddings_paths)
-    g.embeddings_in_memory = f.load_embeddings_to_memory(local_pickles_paths)
+
+    g.embeddings_in_memory, g.placeholders_in_memory = f.load_embeddings_to_memory(local_pickles_paths)
 
     g.embeddings_stats = {
         'Embeddings Count': len(g.embeddings_in_memory['embedding']),
@@ -216,7 +217,8 @@ def add_new_embeddings_to_reference(api: sly.Api, task_id, context, state, app_l
 @g.my_app.callback("get_objects_database")
 @sly.timeit
 def get_objects_database(api: sly.Api, task_id, context, state, app_logger):
-    database_in_dict_format = f.prepare_database(g.embeddings_in_memory)
+    database_in_dict_format = f.prepare_database(g.placeholders_in_memory)
+    database_in_dict_format.update(f.prepare_database(g.embeddings_in_memory))
     request_id = context["request_id"]
 
     g.my_app.send_response(request_id, data={

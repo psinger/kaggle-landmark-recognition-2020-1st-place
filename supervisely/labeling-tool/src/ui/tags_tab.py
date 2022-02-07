@@ -134,7 +134,7 @@ def add_to_reference(api: sly.Api, task_id, context, state, app_logger):
         g.figures_in_reference.append(figure_id)
 
         new_image_urls = response['new_images_url']  # updating label urls
-        g.items_database[reference_label]['url'].extend(new_image_urls)
+        g.items_database[reference_label]['url'] = new_image_urls + g.items_database[reference_label]['url']
 
         api.task.set_fields_from_dict(task_id, fields)
     except Exception as e:

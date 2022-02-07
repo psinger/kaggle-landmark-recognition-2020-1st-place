@@ -63,7 +63,6 @@ def check_model_connection():
 
 
 def split_list_to_batches(input_list):
-
     splits_num = int(len(input_list) / g.batch_size) > 0 if int(len(input_list) / g.batch_size) > 0 else 1
 
     batches = np.array_split(input_list, splits_num, axis=0)
@@ -150,9 +149,24 @@ def pack_data(tag_to_data, batch, embeddings_by_indexes):
             tag_to_data[current_tag] = data_by_tag
 
 
+def process_placeholder_images(batch):
+    placeholder_data = []
+    images_to_inference = []
+
+    for item in batch:
+        if item['bbox'] == [0, 0, 1, 1]:
+            placeholder_data.append({'index': item['index'],
+                                     'embedding': None})
+        else:
+            images_to_inference.append(item)
+
+    return placeholder_data, images_to_inference
+
+
 def inference_batch(batch):
-    response = g.api.task.send_request(g.session_id, "inference", data={'input_data': batch}, timeout=99999)
-    embeddings_by_indexes = ast.literal_eval(json.loads(response))
+    embeddings_by_indexes, inference_items = process_placeholder_images(batch)
+    response = g.api.task.send_request(g.session_id, "inference", data={'input_data': inference_items}, timeout=99999)
+    embeddings_by_indexes.extend(ast.literal_eval(json.loads(response)))
 
     return embeddings_by_indexes
 

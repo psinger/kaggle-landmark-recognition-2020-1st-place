@@ -151,25 +151,34 @@ def load_embeddings_to_memory(pickles_files):
         'label': []
     }
 
+    placeholders_data = {
+        'label': []
+    }
+
     for pickle_file_path in pickles_files:
         with open(pickle_file_path, 'rb') as pickle_file:
             current_data = pickle.load(pickle_file)
 
             for current_label, current_embeddings_data in current_data.items():
                 for current_embedding_data in current_embeddings_data:
+                    if current_embedding_data['embedding'] is None:
+                        current_storage = placeholders_data
+                    else:
+                        current_storage = embeddings_data
 
-                    if len(embeddings_data) == 1:
+                    if len(current_storage) == 1:
                         for new_key in current_embedding_data.keys():
                             embeddings_data[new_key] = []
+                            placeholders_data[new_key] = []
 
                     for key, value in current_embedding_data.items():
-                        embeddings_data[key].append(value)
+                        current_storage[key].append(value)
 
-                    embeddings_data['label'].append(current_label)
+                    current_storage['label'].append(current_label)
 
         sly_progress_pickles.next_step()
     sly_progress_pickles.reset_params()
-    return embeddings_data
+    return embeddings_data, placeholders_data
 
 
 def cos_similarity_matrix(a, b, eps=1e-8):
