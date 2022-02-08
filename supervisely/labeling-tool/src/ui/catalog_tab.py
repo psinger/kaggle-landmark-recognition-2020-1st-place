@@ -47,7 +47,7 @@ def show_database_row(api: sly.Api, task_id, context, state, app_logger):
         fields["state.selectedFigureId"] = figure_id
         api.task.set_fields_from_dict(task_id, fields)
 
-        f.update_card_buttons('selectedDatabaseItem', assigned_tags, fields)  # Database tab
+        f.update_card_buttons('selectedDatabaseItem', assigned_tags, fields, state)  # Database tab
     else:
         f.set_buttons(assign_disabled=True, reference_disabled=True, card_name='selectedDatabaseItem', fields=fields)
 

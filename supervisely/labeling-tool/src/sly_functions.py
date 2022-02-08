@@ -140,7 +140,7 @@ def generate_data_to_show(nearest_labels):
     return dict(data_to_show)
 
 
-def add_info_to_disable_buttons(data_to_show, assigned_tags, fields):
+def add_info_to_disable_buttons(data_to_show, assigned_tags, fields, state):
     reference_disabled = True
     selected_figure_id = fields.get('state.selectedFigureId', -1)
     if selected_figure_id not in g.figures_in_reference:
@@ -148,14 +148,12 @@ def add_info_to_disable_buttons(data_to_show, assigned_tags, fields):
 
     data_to_show = OrderedDict(data_to_show)
     for label, data in data_to_show.items():
-        if label in assigned_tags:
+        if label in assigned_tags or (len(assigned_tags) > 0 and state['tagPerImage']):
             data_to_show[label].update({'assignDisabled': True,
                                         'referenceDisabled': reference_disabled})
         else:
             data_to_show[label].update({'assignDisabled': False,
                                         'referenceDisabled': reference_disabled})
-
-
 
     return dict(data_to_show)
 
@@ -301,7 +299,7 @@ def update_review_tags_tab(assigned_tags, fields):
         fields['state.tagsForReview'] = items_for_review
 
 
-def update_card_buttons(card_name, assigned_tags, fields):
+def update_card_buttons(card_name, assigned_tags, fields, state):
     current_card = fields.get(f"state.{card_name}", None)
 
     if current_card is None:
@@ -311,7 +309,8 @@ def update_card_buttons(card_name, assigned_tags, fields):
         assign_disabled = True
         reference_disabled = True
 
-        if current_card.get('current_label', '') not in assigned_tags:
+        if current_card.get('current_label', '') not in assigned_tags and not (
+                len(assigned_tags) > 0 and state['tagPerImage']):
             assign_disabled = False
 
         selected_figure_id = fields.get('state.selectedFigureId', -1)
@@ -322,17 +321,17 @@ def update_card_buttons(card_name, assigned_tags, fields):
                     fields=fields)
 
 
-def upload_data_to_tabs(nearest_labels, label_annotation, fields):
+def upload_data_to_tabs(nearest_labels, label_annotation, fields, state):
     assigned_tags = get_assigned_tags_names_by_label_annotation(label_annotation)
 
     update_review_tags_tab(assigned_tags, fields)  # Review tags tab
 
-    update_card_buttons('lastAssignedTag', assigned_tags, fields)  # Last assigned tab
-    update_card_buttons('selectedDatabaseItem', assigned_tags, fields)  # Database tab
+    update_card_buttons('lastAssignedTag', assigned_tags, fields, state)  # Last assigned tab
+    update_card_buttons('selectedDatabaseItem', assigned_tags, fields, state)  # Database tab
 
     nearest_labels = {key: value[0] for key, value in nearest_labels.items()}  # NN Prediction tab
     data_to_show = generate_data_to_show(nearest_labels)
-    data_to_show = add_info_to_disable_buttons(data_to_show, assigned_tags, fields)
+    data_to_show = add_info_to_disable_buttons(data_to_show, assigned_tags, fields, state)
     data_to_show = convert_dict_to_list(data_to_show)
     data_to_show = sort_by_dist(data_to_show)
     fields['data.predicted'] = data_to_show

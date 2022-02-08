@@ -154,7 +154,7 @@ def process_placeholder_images(batch):
     images_to_inference = []
 
     for item in batch:
-        if item['bbox'] == [0, 0, 1, 1]:
+        if item['bbox'] == [0, 0, 1 - 1, 1 - 1]:
             placeholder_data.append({'index': item['index'],
                                      'embedding': None})
         else:

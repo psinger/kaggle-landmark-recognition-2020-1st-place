@@ -132,8 +132,7 @@ def manual_selected_figure_changed(api: sly.Api, task_id, context, state, app_lo
             state["selectedFigureId"] = figure_id
             tags_tab.assign_tag_to_figure(api, task_id, context, state, app_logger)
         else:
-            f.upload_data_to_tabs(nearest_labels, label_annotation, fields)
-
+            f.upload_data_to_tabs(nearest_labels, label_annotation, fields, state)
 
         api.task.set_fields_from_dict(task_id, fields)
     except Exception as e:
