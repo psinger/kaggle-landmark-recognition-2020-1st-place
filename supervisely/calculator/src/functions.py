@@ -185,13 +185,17 @@ def dump_embeddings(dataset_id, packed_data):
                                    f'{dataset_uuid}.pkl'
                                    )
 
-    with tempfile.NamedTemporaryFile() as tmp_file:
+    temp_file_name_path = f'{g.my_app.data_dir}/temp_file.pkl'
+    if os.path.isfile(temp_file_name_path):
+        os.remove(temp_file_name_path)
+
+    with open(temp_file_name_path, 'wb') as tmp_file:
         pickle.dump(packed_data, tmp_file)
 
-        if g.api.file.exists(g.team_id, remote_pkl_path):
-            g.api.file.remove(g.team_id, remote_pkl_path)
+    if g.api.file.exists(g.team_id, remote_pkl_path):
+        g.api.file.remove(g.team_id, remote_pkl_path)
 
-        g.api.file.upload(g.team_id, tmp_file.name, remote_pkl_path)
+    g.api.file.upload(g.team_id, temp_file_name_path, remote_pkl_path)
 
 
 def create_table(local_table_path):
