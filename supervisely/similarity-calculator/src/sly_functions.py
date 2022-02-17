@@ -339,7 +339,7 @@ def get_data_to_upload(sly_dataset, data_to_process):
     else:
         start_image_number = 1
     for index, row in enumerate(data_to_process):
-        img_names.append(f"{start_image_number + index:04d}.jpg")
+        img_names.append(f"{start_image_number + index:04d}_{time.time_ns()}.jpg")
         images_nps.append(row['cached_image'])
 
     return img_names, images_nps

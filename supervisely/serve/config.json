@@ -1,6 +1,7 @@
 {
   "name": "Serve Metric Learning",
   "type": "app",
+  "restart_policy": "on_error",
   "categories": [
     "metric learning"
   ],

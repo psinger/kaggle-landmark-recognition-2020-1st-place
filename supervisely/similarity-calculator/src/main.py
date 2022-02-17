@@ -1,3 +1,4 @@
+import functools
 import itertools
 import os
 
@@ -10,7 +11,22 @@ import sly_globals as g
 import sly_functions as f
 
 
+def warn_on_exception(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        value = None
+        try:
+            value = func(*args, **kwargs)
+        except Exception as e:
+            sly.logger.warn(f'{e}', exc_info=True)
+        return value
+
+    return wrapper
+
+
+
 @g.my_app.callback("get_info")
+@warn_on_exception
 @sly.timeit
 def get_info(api: sly.Api, task_id, context, state, app_logger):
     if g.selected_weights_type == 'pretrained':
@@ -29,6 +45,7 @@ def get_info(api: sly.Api, task_id, context, state, app_logger):
 
 
 @g.my_app.callback("load_embeddings_to_memory")
+@warn_on_exception
 @sly.timeit
 @g.my_app.ignore_errors_and_show_dialog_window()
 def load_embeddings_to_memory(api: sly.Api, task_id, context, state, app_logger):
@@ -64,6 +81,7 @@ def load_embeddings_to_memory(api: sly.Api, task_id, context, state, app_logger)
 
 
 @g.my_app.callback("clear_fields")
+@warn_on_exception
 def clear_fields(api: sly.Api, task_id, context, state, app_logger):
     fields = [
         {"field": f"state.selectAllEmbeddings", "payload": True},
@@ -75,6 +93,7 @@ def clear_fields(api: sly.Api, task_id, context, state, app_logger):
 
 
 @g.my_app.callback("select_checkpoint")
+@warn_on_exception
 @sly.timeit
 def select_checkpoint(api: sly.Api, task_id, context, state, app_logger):
     g.selected_weights_type = state['modelWeightsOptions']
@@ -135,6 +154,7 @@ def get_topk_predictions(pred_dist, pred_index_of_labels, k):
 
 
 @g.my_app.callback("calculate_similarity")
+@warn_on_exception
 @sly.timeit
 def calculate_similarity(api: sly.Api, task_id, context, state, app_logger):
     g.logger.info(f'calculating similarity for batch; {context["request_id"]}')
@@ -170,6 +190,7 @@ def calculate_similarity(api: sly.Api, task_id, context, state, app_logger):
 
 
 @g.my_app.callback("add_new_embeddings_to_reference")
+@warn_on_exception
 @sly.timeit
 def add_new_embeddings_to_reference(api: sly.Api, task_id, context, state, app_logger):
     g.logger.info(f'adding embeddings to reference; {context["request_id"]}')
@@ -215,6 +236,7 @@ def add_new_embeddings_to_reference(api: sly.Api, task_id, context, state, app_l
 
 
 @g.my_app.callback("get_objects_database")
+@warn_on_exception
 @sly.timeit
 def get_objects_database(api: sly.Api, task_id, context, state, app_logger):
     database_in_dict_format = f.prepare_database(g.placeholders_in_memory)
