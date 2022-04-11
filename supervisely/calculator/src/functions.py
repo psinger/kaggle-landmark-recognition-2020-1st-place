@@ -1,5 +1,6 @@
 import ast
 import json
+import logging
 import os
 import pickle
 import tempfile
@@ -165,6 +166,7 @@ def process_placeholder_images(batch):
 
 def inference_batch(batch):
     embeddings_by_indexes, inference_items = process_placeholder_images(batch)
+    logging.info('big req sent')
     response = g.api.task.send_request(g.session_id, "inference", data={'input_data': inference_items}, timeout=99999)
     embeddings_by_indexes.extend(ast.literal_eval(json.loads(response)))
 

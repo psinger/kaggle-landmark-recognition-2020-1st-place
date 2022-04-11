@@ -34,7 +34,7 @@ def inference(api: sly.Api, task_id, context, state, app_logger):
     f.crop_images(data_to_process)
 
     filtered_data = [row for row in data_to_process if row['cached_image'] is not None]
-    images_to_process = np.asarray([row['cached_image'] for row in filtered_data])
+    images_to_process = np.asarray([np.asarray(row['cached_image']) for row in filtered_data])
 
     embeddings = f.batch_inference(images_to_process)
 

@@ -69,7 +69,7 @@ def load_embeddings_to_memory(api: sly.Api, task_id, context, state, app_logger)
 
     g.embeddings_stats = {
         'Embeddings Count': len(g.embeddings_in_memory['embedding']),
-        'Labels Num': len(set(g.embeddings_in_memory['label']))
+        'Labels Num': len(set(g.embeddings_in_memory['label']).union(g.placeholders_in_memory['label']))
     }
 
     fields = [
@@ -218,7 +218,7 @@ def add_new_embeddings_to_reference(api: sly.Api, task_id, context, state, app_l
 
     g.embeddings_stats = {
         'Embeddings Count': len(g.embeddings_in_memory['embedding']),
-        'Labels Num': len(set(g.embeddings_in_memory['label']))
+        'Labels Num': len(set(g.embeddings_in_memory['label']).union(g.placeholders_in_memory['label']))
     }
 
     request_id = context["request_id"]
