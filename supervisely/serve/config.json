@@ -47,7 +47,6 @@
         "Model": "pictures [nano]",
         "Classes": "83"
       }
-      
     ],
     "modelColumns": [
       {
@@ -71,5 +70,6 @@
   "instance_version": "6.4.21",
   "session_tags": [
     "deployed_nn_embeddings"
-  ]
+  ],
+  "poster": "https://i.imgur.com/d6mC6qp.jpg"
 }
