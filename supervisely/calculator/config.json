@@ -12,9 +12,11 @@
   "modal_template_state": {
     "sessionId": "None",
     "ssOptions": {
-        "sessionTags": ["deployed_nn_embeddings"],
-        "showLabel": false,
-        "size": "small"
+      "sessionTags": [
+        "deployed_nn_embeddings"
+      ],
+      "showLabel": false,
+      "size": "small"
     }
   },
   "task_location": "workspace_tasks",
@@ -24,7 +26,10 @@
   "headless": true,
   "instance_version": "6.4.21",
   "context_menu": {
-    "target": ["images_project"],
+    "target": [
+      "images_project"
+    ],
     "context_category": "Metric Learning"
-  }
+  },
+  "poster": "https://i.imgur.com/XLxFpq8.jpg"
 }
