@@ -2,7 +2,10 @@
   "name": "Metric Learning Labeling Tool",
   "type": "app",
   "categories": [
-    "labeling"
+    "neural network",
+    "images",
+    "metric learning",
+    "inference interfaces"
   ],
   "description": "Use metric learning models to classify images",
   "docker_image": "supervisely/base-py-sdk:6.1.102",
