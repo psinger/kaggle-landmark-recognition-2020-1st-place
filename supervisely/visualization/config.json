@@ -2,7 +2,10 @@
   "name": "Visualize Embeddings",
   "type": "app",
   "categories": [
-    "metric learning"
+    "neural network",
+    "images",
+    "metric learning",
+    "nn tools"
   ],
   "description": "",
   "docker_image": "supervisely/base-py-sdk:6.1.97",
