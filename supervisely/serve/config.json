@@ -3,7 +3,10 @@
   "type": "app",
   "restart_policy": "on_error",
   "categories": [
-    "metric learning"
+    "neural network",
+    "images",
+    "metric learning",
+    "serve"
   ],
   "description": "Google landmarks challenge models",
   "docker_image": "supervisely/base-pytorch:6.0.22",
