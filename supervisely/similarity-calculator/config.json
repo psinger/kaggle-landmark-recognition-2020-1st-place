@@ -2,7 +2,10 @@
   "name": "AI Recommendations",
   "type": "app",
   "categories": [
-    "metric learning"
+    "neural network",
+    "images",
+    "metric learning",
+    "serve"
   ],
   "description": "Recommends matching items from the catalog",
   "docker_image": "supervisely/base-pytorch:6.0.22",
