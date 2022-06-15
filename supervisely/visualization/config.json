@@ -8,7 +8,8 @@
     "nn tools"
   ],
   "description": "",
-  "docker_image": "supervisely/base-py-sdk:6.1.97",
+  "docker_image": "supervisely/base-py-sdk:6.23.1",
+  "instance_version": "6.4.57",
   "main_script": "supervisely/visualization/src/sly_train.py",
   "gui_template": "supervisely/visualization/src/gui.html",
   "task_location": "workspace_tasks",
@@ -16,5 +17,4 @@
   "icon": "https://img.icons8.com/color/100/000000/tesseract.png",
   "icon_background": "#FFFFFF",
   "icon_cover": true,
-  "instance_version": "6.4.21"
 }

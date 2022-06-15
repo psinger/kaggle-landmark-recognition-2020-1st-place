@@ -395,7 +395,7 @@ def add_images_to_project(data_to_process):
         anns=annotations
     )
 
-    new_images_urls = [current_image.full_storage_url for current_image in new_image_infos]
+    new_images_urls = [current_image.path_original for current_image in new_image_infos]
     new_bboxes = [[0, 0, current_image.height - 1, current_image.width - 1] for current_image in new_image_infos]
 
     return new_images_urls, new_bboxes

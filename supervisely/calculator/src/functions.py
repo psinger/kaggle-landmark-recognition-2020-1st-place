@@ -7,7 +7,7 @@ import tempfile
 import uuid
 
 import numpy as np
-import supervisely_lib as sly
+import supervisely as sly
 from functools import partial
 
 import sly_globals as g
@@ -212,11 +212,13 @@ def update_table(dataset_id, packed_data):
     dataset_uuid = get_uuid_by_string(str(dataset_id))
     dataset_info = g.api.dataset.get_info_by_id(dataset_id)
 
-    remote_table_path = os.path.join(g.remote_embeddings_dir, g.model_info['Model'],
-                                     f"{g.workspace_info.name}_{g.workspace_id}",
-                                     f"{g.project_info.name}_{g.project_id}",
-                                     f'embeddings_info.csv'
-                                     )
+    remote_table_path = os.path.join(
+        g.remote_embeddings_dir,
+        g.model_info['Model'],
+        f"{g.workspace_info.name}_{g.workspace_id}",
+        f"{g.project_info.name}_{g.project_id}",
+        'embeddings_info.csv',
+    )
 
     local_table_path_filtered = os.path.join(g.local_project_path, 'embeddings_table_filtered.csv')
     local_table_path_origin = os.path.join(g.local_project_path, 'embeddings_table_origin.csv')

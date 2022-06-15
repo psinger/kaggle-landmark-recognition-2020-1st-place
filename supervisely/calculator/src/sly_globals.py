@@ -2,7 +2,8 @@ import os
 import sys
 from pathlib import Path
 
-import supervisely_lib as sly
+import supervisely as sly
+from supervisely.app.v1.app_service import AppService
 # import dotenv
 #
 # dotenv.load_dotenv('./debug.env')
@@ -11,7 +12,7 @@ import supervisely_lib as sly
 
 logger = sly.sly_logger
 
-my_app = sly.AppService()
+my_app: AppService = AppService()
 api = my_app.public_api
 
 

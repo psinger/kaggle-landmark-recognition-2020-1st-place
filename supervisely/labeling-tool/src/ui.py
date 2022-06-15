@@ -1,5 +1,5 @@
 from collections import defaultdict
-import supervisely_lib as sly
+import supervisely as sly
 
 import sly_globals as g
 import info_tab

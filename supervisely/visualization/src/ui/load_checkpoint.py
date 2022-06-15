@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 import sly_globals as g
-import supervisely_lib as sly
+import supervisely as sly
 from sly_visualization_progress import get_progress_cb, reset_progress, init_progress, _update_progress_ui
 
 local_weights_path = None

@@ -8,7 +8,8 @@
     "serve"
   ],
   "description": "Recommends matching items from the catalog",
-  "docker_image": "supervisely/base-pytorch:6.0.22",
+  "docker_image": "supervisely/base-py-sdk:6.23.1",
+  "instance_version": "6.4.57",
   "main_script": "supervisely/similarity-calculator/src/main.py",
   "gui_template": "supervisely/similarity-calculator/src/gui.html",
   "modal_width": 700,
@@ -18,7 +19,6 @@
   "task_location": "application_sessions",
   "icon": "https://i.imgur.com/JiPxjlO.png",
   "icon_background": "#FFFFFF",
-  "instance_version": "6.4.21",
   "context_menu": {
     "target": [
       "images_project"

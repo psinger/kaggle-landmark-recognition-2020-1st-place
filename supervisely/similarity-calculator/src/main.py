@@ -2,7 +2,7 @@ import functools
 import itertools
 import os
 
-import supervisely_lib as sly
+import supervisely as sly
 
 import json
 import numpy as np
@@ -22,7 +22,6 @@ def warn_on_exception(func):
         return value
 
     return wrapper
-
 
 
 @g.my_app.callback("get_info")
@@ -58,7 +57,7 @@ def load_embeddings_to_memory(api: sly.Api, task_id, context, state, app_logger)
             embeddings_paths = np.hstack(list(embeddings_info))
     except Exception as ex:
         fields = [
-            {"field": f"state.loadingEmbeddings", "payload": False}
+            {"field": "state.loadingEmbeddings", "payload": False}
         ]
         g.api.task.set_fields(g.task_id, fields)
         raise ValueError('No embedding files found. Please reselect embeddings.')
@@ -73,9 +72,9 @@ def load_embeddings_to_memory(api: sly.Api, task_id, context, state, app_logger)
     }
 
     fields = [
-        {"field": f"state.embeddingsLoaded", "payload": True},
-        {"field": f"state.loadingEmbeddings", "payload": False},
-        {"field": f"data.embeddingsStats", "payload": g.embeddings_stats}
+        {"field": "state.embeddingsLoaded", "payload": True},
+        {"field": "state.loadingEmbeddings", "payload": False},
+        {"field": "data.embeddingsStats", "payload": g.embeddings_stats}
     ]
     g.api.task.set_fields(g.task_id, fields)
 

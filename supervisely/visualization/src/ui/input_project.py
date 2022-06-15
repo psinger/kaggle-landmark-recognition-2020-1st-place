@@ -1,7 +1,7 @@
 import os
 from collections import namedtuple
 import shelve
-import supervisely_lib as sly
+import supervisely as sly
 import sly_globals as g
 from sly_visualization_progress import get_progress_cb, reset_progress, init_progress
 

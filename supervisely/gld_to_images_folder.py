@@ -2,7 +2,7 @@ import json
 import os
 import shutil
 
-import supervisely_lib as sly
+import supervisely as sly
 
 from tqdm import tqdm
 

@@ -1,8 +1,9 @@
 from pathlib import Path
 import sys
 import os
-import supervisely_lib as sly
-from supervisely_lib import Api
+import supervisely as sly
+from supervisely import Api
+from supervisely.app.v1.app_service import AppService
 
 
 root_source_dir = str(Path(sys.argv[0]).parents[1])
@@ -21,7 +22,7 @@ sly.logger.info(f"Added to sys.path: {ui_sources_dir}")
 owner_id = int(os.environ['context.userId'])
 team_id = int(os.environ['context.teamId'])
 
-my_app: sly.AppService = sly.AppService(ignore_task_id=True)
+my_app: AppService = AppService(ignore_task_id=True)
 api = my_app.public_api
 task_id = my_app.task_id
 

@@ -1,5 +1,5 @@
 import sly_globals as g
-import supervisely_lib as sly
+import supervisely as sly
 from sly_visualization_progress import init_progress
 from grid_gallery_widget import CompareGallery
 import time

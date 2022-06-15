@@ -1,7 +1,7 @@
 import ast
 import json
 
-import supervisely_lib as sly
+import supervisely as sly
 import sly_globals as g
 import info_tab
 import ui

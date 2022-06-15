@@ -1,7 +1,7 @@
 import ast
 import json
 
-import supervisely_lib as sly
+import supervisely as sly
 import tag_utils
 
 import sly_globals as g

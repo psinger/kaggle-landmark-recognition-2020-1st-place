@@ -1,6 +1,6 @@
 import functools
 
-import supervisely_lib as sly
+import supervisely as sly
 
 import json
 import numpy as np

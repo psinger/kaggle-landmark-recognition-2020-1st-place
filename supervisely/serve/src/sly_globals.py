@@ -3,7 +3,8 @@ import os
 import sys
 from pathlib import Path
 
-import supervisely_lib as sly
+import supervisely as sly
+from supervisely.app.v1.app_service import AppService
 import dotenv
 import ast
 
@@ -14,7 +15,7 @@ dotenv.load_dotenv('./secret_debug.env')
 
 logger = sly.logger
 
-my_app = sly.AppService()
+my_app: AppService = AppService()
 api = my_app.public_api
 
 team_id = int(os.environ['context.teamId'])

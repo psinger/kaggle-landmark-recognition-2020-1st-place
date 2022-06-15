@@ -7,7 +7,7 @@ from collections import OrderedDict
 from dataclasses import fields
 from urllib.parse import urlparse
 
-import supervisely_lib as sly
+import supervisely as sly
 
 import sly_globals as g
 

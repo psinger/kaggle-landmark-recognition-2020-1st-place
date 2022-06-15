@@ -1,7 +1,7 @@
 import os
 import sys
 import pathlib
-import supervisely_lib as sly
+import supervisely as sly
 from dotenv import load_dotenv  # pip install python-dotenv\
 
 load_dotenv("../debug.env")

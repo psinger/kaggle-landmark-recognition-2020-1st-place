@@ -1,10 +1,11 @@
 import os
 from pathlib import Path
 import sys
-import supervisely_lib as sly
-from supervisely_lib.io.fs import mkdir
+import supervisely as sly
+from supervisely.app.v1.app_service import AppService
+from supervisely.io.fs import mkdir
 
-my_app = sly.AppService()
+my_app: AppService = AppService()
 api = my_app.public_api
 task_id = my_app.task_id
 
