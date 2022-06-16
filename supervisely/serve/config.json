@@ -74,5 +74,6 @@
   "session_tags": [
     "deployed_nn_embeddings"
   ],
-  "poster": "https://i.imgur.com/d6mC6qp.jpg"
+  "poster": "https://i.imgur.com/d6mC6qp.jpg",
+  "community_agent": false
 }
