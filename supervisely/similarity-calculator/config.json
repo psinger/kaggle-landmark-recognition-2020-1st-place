@@ -28,5 +28,6 @@
   "session_tags": [
     "deployed_nn_recommendations"
   ],
-  "poster": "https://i.imgur.com/ndhSKM8.jpg"
+  "poster": "https://i.imgur.com/ndhSKM8.jpg",
+  "community_agent": false
 }
