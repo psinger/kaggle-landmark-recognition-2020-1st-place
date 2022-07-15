@@ -9,7 +9,7 @@
     "serve"
   ],
   "description": "Google landmarks challenge models",
-  "docker_image": "supervisely/base-py-sdk:6.23.1",
+  "docker_image": "supervisely/base-py-sdk:6.35.0",
   "instance_version": "6.4.57",
   "main_script": "supervisely/serve/src/main.py",
   "modal_template": "supervisely/serve/src/modal.html",
