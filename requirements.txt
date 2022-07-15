@@ -9,5 +9,5 @@ apex==0.9.10dev
 scikit_learn==0.23.2
 python-dotenv==0.19.2
 torch==1.11.0
-supervisely==6.23.1
-supervisely[apps]==6.23.1
+supervisely==6.35.0
+supervisely[apps]==6.35.0
