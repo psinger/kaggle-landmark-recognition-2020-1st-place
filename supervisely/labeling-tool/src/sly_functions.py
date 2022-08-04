@@ -112,8 +112,9 @@ def calculate_nearest_labels(images_ids, annotations, figures_ids, top_n=5, padd
 def get_resized_image(image_storage_url, height):
     parsed_link = urlparse(image_storage_url)
 
-    return f'{parsed_link.scheme}://{parsed_link.netloc}' \
-           f'/previews/q/ext:jpeg/resize:fill:0:{height}:0/q:0/plain{parsed_link.path}'
+    # return f'{parsed_link.scheme}://{parsed_link.netloc}' \
+    #        f'/previews/q/ext:jpeg/resize:fill:0:{height}:0/q:0/plain{parsed_link.path}'
+    return f'/previews/q/ext:jpeg/resize:fill:0:{height}:0/q:0/plain{parsed_link.path}'
 
 
 def get_unique_elements(elements_list):
