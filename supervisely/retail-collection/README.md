@@ -18,8 +18,8 @@
 [![](https://img.shields.io/badge/supervisely-ecosystem-brightgreen)](https://ecosystem.supervise.ly/apps/supervisely-ecosystem/gl-metric-learning/supervisely/retail-collection)
 [![](https://img.shields.io/badge/slack-chat-green.svg?logo=slack)](https://supervise.ly/slack)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/supervisely-ecosystem/gl-metric-learning)
-[![views](https://app.supervise.ly/img/badges/views/supervisely-ecosystem/gl-metric-learning/supervisely/retail-collection)](https://supervise.ly)
-[![runs](https://app.supervise.ly/img/badges/runs/supervisely-ecosystem/gl-metric-learning/supervisely/retail-collection)](https://supervise.ly)
+[![views](https://app.supervise.ly/img/badges/views/supervisely-ecosystem/gl-metric-learning/supervisely/retail-collection.png)](https://supervise.ly)
+[![runs](https://app.supervise.ly/img/badges/runs/supervisely-ecosystem/gl-metric-learning/supervisely/retail-collection.png)](https://supervise.ly)
 
 
 <p float="left">
