@@ -36,8 +36,8 @@ local_project_path = os.path.join(my_app.data_dir, 'project')
 os.makedirs(local_project_path, exist_ok=True)
 sly.fs.clean_dir(local_project_path)
 
-batch_size = 256
-# batch_size = 10/
+# batch_size = 256
+batch_size = 5
 model_info = None
 
 root_source_dir = str(Path(sys.argv[0]).parents[3])
