@@ -50,4 +50,4 @@ Application key points:
 
 # Acknowledgment
 
-This app is based on the great work `Kaggle Landmark Recognition 2020 competition: Winner solution` ([paper](https://arxiv.org/abs/2010.01650),  [github](https://github.com/psinger/kaggle-landmark-recognition-2020-1st-place)). ![GitHub Org's stars](https://img.shields.io/github/stars/psinger/kaggle-landmark-recognition-2020-1st-place?style=social)
+This app is based on the great work `Kaggle Landmark Recognition 2020 competition: Winner solution` ([paper](https://arxiv.org/abs/2010.01650),  [github](https://github.com/psinger/kaggle-landmark-recognition-2020-1st-place)). ![GitHub Org's stars](https://img.shields.io/github/stars/psinger/kaggle-landmark-recognition-2020-1st-place?style=social) Code in this repository is distributed under the MIT license.
