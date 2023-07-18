@@ -27,6 +27,7 @@
   "icon": "https://i.imgur.com/FHHLYZQ.png",
   "icon_background": "#FFFFFF",
   "need_gpu": false,
+  "gpu": "preferred",
   "headless": true,
   "context_menu": {
     "target": [

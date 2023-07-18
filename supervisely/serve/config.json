@@ -71,6 +71,7 @@
   "isolate": true,
   "headless": true,
   "need_gpu": false,
+  "gpu": "preferred",
   "session_tags": [
     "deployed_nn_embeddings"
   ],
