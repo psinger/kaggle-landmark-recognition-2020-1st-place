@@ -1,0 +1,79 @@
+{
+  "name": "Serve Metric Learning",
+  "type": "app",
+  "restart_policy": "on_error",
+  "categories": [
+    "neural network",
+    "images",
+    "metric learning",
+    "serve"
+  ],
+  "description": "Google landmarks challenge models",
+  "docker_image": "supervisely/base-py-sdk:6.35.0",
+  "instance_version": "6.4.57",
+  "main_script": "supervisely/serve/src/main.py",
+  "modal_template": "supervisely/serve/src/modal.html",
+  "modal_width": 700,
+  "modal_template_state": {
+    "modelWeightsOptions": "pretrained",
+    "selectedModel": "retail [medium]",
+    "device": "cpu",
+    "batchSize": 128,
+    "weightsPath": "",
+    "models": [
+      {
+        "config": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/r2pk_and_10k.ckpt",
+        "Model": "retail [medium]",
+        "Classes": "12075"
+      },
+      {
+        "config": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/r2pk.ckpt",
+        "Model": "retail [small]",
+        "Classes": "2384"
+      },
+      {
+        "config": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/snacks_v1.ckpt",
+        "Model": "retail [nano]",
+        "Classes": "83"
+      },
+      {
+        "config": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/landmarks.ckpt",
+        "Model": "landmarks [medium]",
+        "Classes": "10752"
+      },
+      {
+        "config": "",
+        "weightsUrl": "https://github.com/supervisely-ecosystem/gl-metric-learning/releases/download/v0.0.1/pictures_v1.ckpt",
+        "Model": "pictures [nano]",
+        "Classes": "83"
+      }
+    ],
+    "modelColumns": [
+      {
+        "key": "Model",
+        "title": "Model",
+        "subtitle": null
+      },
+      {
+        "key": "Classes",
+        "title": "Classes",
+        "subtitle": null
+      }
+    ]
+  },
+  "task_location": "application_sessions",
+  "icon": "https://i.imgur.com/9ruNKUS.png",
+  "icon_background": "#FFFFFF",
+  "isolate": true,
+  "headless": true,
+  "need_gpu": false,
+  "session_tags": [
+    "deployed_nn_embeddings"
+  ],
+  "poster": "https://i.imgur.com/d6mC6qp.jpg",
+  "community_agent": false
+}

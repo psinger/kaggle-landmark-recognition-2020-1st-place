@@ -1,0 +1,93 @@
+<sly-card
+        class="mt5 ml15 mr5"
+        style="padding: 0 15px;">
+    <sly-field
+            style="padding-top: 8px"
+            title="Top N"
+            description="adjust count of predictions">
+        <el-input-number
+                class="mt5"
+                size="small" v-model="state.topn" :min="1"></el-input-number>
+    </sly-field>
+
+    <hr class="mt10 mb10" style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>
+
+    <!--    <sly-field-->
+    <!--            style="padding-top: 8px"-->
+    <!--            title="Object padding"-->
+    <!--            description="padding outside image patch">-->
+    <!--        <div class="fflex">-->
+    <!--            <el-input-number-->
+    <!--                    class="mt5"-->
+    <!--                    size="small" v-model="state.pad" :min="0"></el-input-number>-->
+    <!--            <div class="ml5">percent</div>-->
+    <!--        </div>-->
+    <!--    </sly-field>-->
+
+    <!--    <hr class="mt10 mb10" style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>-->
+
+    <div class="fflex"
+         style="padding-top: 8px;
+          padding-bottom: 15px;
+          flex-direction: row"
+    >
+        <el-switch
+                class="mr15"
+                v-model="state.addEveryAssignedToReference"
+                on-text=""
+                off-text="">
+
+        </el-switch>
+        <sly-field
+                class="ml10"
+                style="margin-bottom: 5px; margin-top: 5px"
+                title="Every patch to reference"
+                description="add every new patch to reference database">
+
+
+        </sly-field>
+    </div>
+
+    <hr class="mt10 mb10" style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>
+
+    <sly-field
+            style="padding-top: 8px"
+            title="Select description to show"
+            description="select fields of catalog data">
+
+        <div class="fflex">
+            <el-select v-model="state.selectedDescriptionsToShow" multiple placeholder="select"
+                       :disabled="state.databaseKeys.length == 0">
+                <el-option
+                        v-for="item in state.databaseKeys"
+                        v-if="item !== 'label'"
+                        :label="item"
+                        :value="item">
+                </el-option>
+            </el-select>
+        </div>
+    </sly-field>
+
+    <hr class="mt10 mb10" style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>
+
+    <div class="fflex"
+         style="padding-top: 8px;
+          padding-bottom: 15px;
+          flex-direction: row"
+    >
+        <el-switch
+                class="mr15"
+                v-model="state.tagPerObject"
+                on-text=""
+                off-text="">
+
+        </el-switch>
+        <sly-field
+                class="ml10"
+                style="margin-bottom: 5px; margin-top: 5px"
+                title="Tag per Object"
+                description="allows to assign only one tag per object">
+        </sly-field>
+    </div>
+
+</sly-card>

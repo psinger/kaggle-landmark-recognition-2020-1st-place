@@ -4,3 +4,8 @@ __pycache__/
 input/*
 models/*
 .vscode/settings.json
+.DS_Store
+secret_debug.env
+
+.idea
+venv

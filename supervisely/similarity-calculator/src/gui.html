@@ -1,0 +1,182 @@
+<div id="gl-similarity-calculator">
+
+    <sly-style>
+        #gl-similarity-calculator .el-tabs.el-tabs-cards .el-radio {
+        display: flex;
+        align-items: start;
+        /*margin-bottom: 10px;*/
+        margin-left: 0;
+        white-space: normal;
+        }
+
+        #gl-similarity-calculator .el-tabs.el-tabs-cards .el-radio__label div {
+        color: #7f858e;
+        font-size: 13px;
+        }
+
+        .beautiful-table { border-collapse: collapse; }
+        .beautiful-table tr:nth-child(2n) { background-color: #f6f8fa; }
+        .beautiful-table td, .beautiful-table th {
+        border: 1px solid #dfe2e5;
+        padding: 6px 13px;
+        text-align: center;
+        line-height: 20px;
+        }
+
+        #gl-similarity-calculator .el-tabs.el-tabs-cards { border-radius: 4px; box-shadow: none; }
+        #gl-similarity-calculator .el-tabs.el-tabs-cards .el-tabs__header { background-color: #f6fafd; }
+        #gl-similarity-calculator .el-tabs.el-tabs-cards .el-tabs__nav { float: none; display: flex; justify-content:
+        space-between; }
+        #gl-similarity-calculator .el-tabs.el-tabs-cards .el-tabs__item { flex: 1; margin-bottom: -3px; padding: 9px
+        16px
+        13px;
+        height: auto; line-height: normal; border-radius: 4px; }
+    </sly-style>
+
+    <sly-card title="Choose checkpoint"
+              subtitle="select the checkpoint with which you computed the embeddings"
+              style="margin-bottom: 0"
+              ref="step2"
+    >
+        <sly-field title="" description="">
+            <el-tabs type="border-card" class="el-tabs-cards" v-model="state.modelWeightsOptions">
+                <el-tab-pane name="pretrained">
+                    <el-radio slot="label" v-model="state.modelWeightsOptions" label="pretrained">
+                        Pretrained
+                    </el-radio>
+                    <table class="beautiful-table">
+                        <thead>
+                        <tr>
+                            <th v-for="row in state.modelColumns">
+                                <div v-html="row['title']"></div>
+                                <div style="color: #7f858e; font-weight: normal; font-size: 12px;">
+                                    {{row["subtitle"]}}
+                                </div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="model in state.models">
+                            <td v-for="column in state.modelColumns">
+                                <div v-if="column.key === 'Model'">
+                                    <el-radio class="radio" :disabled="state.checkpointSelected"
+                                              v-model="state.selectedModel" :label="model[column.key]">
+                                        {{model[column.key]}}
+                                    </el-radio>
+                                </div>
+                                <div v-else>
+                                    {{model[column.key]}}
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </el-tab-pane>
+                <el-tab-pane name="custom" :disabled="true">
+                    <el-radio slot="label" v-model="state.modelWeightsOptions" label="custom" :disabled="true">
+                        Custom
+                    </el-radio>
+                    <sly-field title="Weights path" description="Copy path in Team Files">
+                        <el-input v-model="state.weightsPath" placeholder="Path to .pt file in Team Files"></el-input>
+                    </sly-field>
+                </el-tab-pane>
+
+                <el-button
+                        style="margin-top: 15px; width: 200px"
+                        type="primary"
+                        class="regular"
+                        v-if="!state.checkpointSelected"
+                        :loading="state.loadingEmbeddingsList"
+                        @click="state.loadingEmbeddingsList=true; command('select_checkpoint')"
+                >
+                    select
+                </el-button>
+                <el-button type="warning" class="regular mt15" :plain="true"
+                           @click="state.checkpointSelected=false; command('clear_fields')"
+                           v-if="state.checkpointSelected"
+                           :disabled="false">
+                    <i class="zmdi zmdi-rotate-left mr5"></i> reselect
+                </el-button>
+            </el-tabs>
+
+
+        </sly-field>
+
+        <div>
+
+            <sly-field
+                    v-if="false"
+                    title="Select reference embeddings"
+                    description="">
+                <el-checkbox class="mt10 mb5 mr15"
+                             :disabled="!state.checkpointSelected || state.embeddingsLoaded"
+                             v-model="state.selectAllEmbeddings">All embeddings in workspace
+                </el-checkbox>
+
+                <el-select
+                        v-if="!state.selectAllEmbeddings"
+
+                        v-model="state.selectedEmbeddings" multiple placeholder="Select">
+
+
+                    <el-option
+                            v-for="emb_path, emb_name in data.embeddingsInfo"
+                            :disabled="state.embeddingsLoaded"
+                            :key="emb_name"
+                            :label="emb_name"
+                            :value="emb_path">
+                    </el-option>
+                </el-select>
+            </sly-field>
+
+
+        </div>
+
+        <sly-field
+                class="mt5 mb10"
+                v-if="state.selectedEmbeddings.length == 0"
+                title="WARNING: embeddings not found"
+                description="embeddings for project and model not found">
+            <sly-icon slot="icon" :options="{ color: '#fba607', bgColor: '#ffe9da', rounded: false }">
+                <i class="zmdi zmdi-alert-triangle"></i>
+            </sly-icon>
+        </sly-field>
+
+
+        <el-button
+                v-if="state.selectedEmbeddings.length > 0"
+                type="primary" class="regular"
+                @click="state.loadingEmbeddings=true; command('load_embeddings_to_memory');"
+                :loading="state.loadingEmbeddings"
+                :disabled="!state.checkpointSelected || (state.selectedEmbeddings.length===0 && !state.selectAllEmbeddings) || state.selectedEmbeddings.length == 0"
+                v-if="!state.embeddingsLoaded">
+            load selected embeddings
+        </el-button>
+
+        <div v-if="data.progressLoadingEmbeddingsTotal" class="mt15" style="width: 100%">
+            <div>{{ data.progressLoadingEmbeddingsMessage }}: <b><span
+                    style="color: #20a0ff">{{ data.progressLoadingEmbeddingsCurrent }}</span> /
+                {{ data.progressLoadingEmbeddingsTotal }}</b></div>
+            <el-progress
+                    :percentage="data.progressLoadingEmbeddingsPercent"></el-progress>
+
+        </div>
+<!--{{state.embeddingsLoaded}}-->
+        <div v-if="state.embeddingsLoaded"
+             class="mt10 mb5">
+            <sly-field title="INFO: embeddings ready to use"
+                       description="below stats"
+                       style="padding-top: 4px; padding-bottom: 6px">
+
+                <sly-icon slot="icon" :options="{ color: '#13ce66', bgColor: '#e1f7eb', rounded: false }">
+                    <i class="zmdi zmdi-circle"></i>
+                </sly-icon>
+            </sly-field>
+            <div v-for="v,k in data.embeddingsStats" class="mb10" style="word-break: break-all;">
+                <div style="margin-bottom: 4px">
+                    <b>{{k}}</b>: <span>{{v}}</span>
+                </div>
+            </div>
+        </div>
+    </sly-card>
+</div>

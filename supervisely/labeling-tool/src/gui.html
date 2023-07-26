@@ -1,0 +1,152 @@
+<div id="gl-ml-labeling-tool">
+    <div v-if="context.userId !== data.ownerId" style="color: red;">
+        You don't have permissions to open this application session.
+    </div>
+
+    <div v-if="context.userId === data.ownerId" style="height: 100%">
+        <sly-style>
+            #gl-ml-labeling-tool {
+            }
+            #small_table.tiny-table table thead th {
+            font-size: 10px;
+            }
+            #small_table.tiny-table table {
+            font-size: 11px;
+            }
+            #small_tabs .el-tabs__item {
+            font-size: 12px;
+            font-weight: 500;
+            height: 30px;
+            line-height: 30px;
+            }
+            #small_tabs .el-tabs__header {
+            background: white;
+            }
+            #gl-ml-labeling-tool .app-header {
+            background: white;
+            }
+            #gl-ml-labeling-tool .grid-gallery-views-scene.img-grid-gallery {
+            z-index: 0;
+            }
+            #gl-ml-labeling-tool {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            }
+            #gl-ml-labeling-tool .el-tabs {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 60px);
+            }
+            #gl-ml-labeling-tool .el-tabs__content {
+            overflow: auto;
+            }
+            #gl-ml-labeling-tool .el-tabs__header {
+            margin-bottom: 0
+            }
+
+
+            #gl-ml-labeling-tool .xxx .el-collapse-item__header {
+            height: 30px;
+            line-height: 30px;
+            background: #f8f9fc;
+            }
+
+
+            #gl-ml-labeling-tool .slider-wrapper .slider-tape .fflex {
+            width: 250 px;
+            }
+
+            #gl-ml-labeling-tool .sly-image-slider .slider-wrapper .slider-tape {
+            overflow: hidden;
+            }
+
+
+            #gl-ml-labeling-tool .custom-full-size-slider .slider-tape {
+            width: 100%;
+            }
+
+            #gl-ml-labeling-tool .custom-full-size-slider .slider-wrapper {
+            width: 100%;
+            }
+
+            #gl-ml-labeling-tool .copy-button-style {
+            display: inline-block;
+            line-height: 1;
+            white-space: nowrap;
+            cursor: pointer;
+            background: #fff;
+            border: 1px solid #c4c4c4;
+            color: #1f2d3d;
+            margin: 5px 2px;
+
+            padding: 7px 9px;
+            font-size: 12px;
+            border-radius: 4px;
+
+            transition: all 0.1s;
+
+            width: 100px;
+
+
+            }
+
+            #gl-ml-labeling-tool .black-to-gold-style {
+            color: black;
+
+            }
+
+            #gl-ml-labeling-tool .black-to-gold-style:hover * {
+
+            }
+
+        </sly-style>
+
+
+        <sly-stepper :active="state.activeStep"
+                     class="ml15 mt5"
+                     v-if="context.userId === data.ownerId && !state.done2">
+            <sly-stepper-item>
+                {% include 'src/ui/connector_first_step.html' %}
+            </sly-stepper-item>
+            <sly-stepper-item>
+                {% include 'src/ui/connector_second_step.html' %}
+            </sly-stepper-item>
+        </sly-stepper>
+
+
+        <!--        <div id="gl-ml-labeling-tool"-->
+        <!--             v-if="context.userId === data.ownerId && state.done2"-->
+        <!--             class="ml5 mr10"-->
+        <!--             style="margin-left: 2px; margin-right: 2px;"-->
+        <!--        >-->
+        <!--            -->
+        <!--            <hr style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>-->
+
+
+
+        <el-tabs id="small_tabs" v-model="state.tabName"
+                 style="height: 100%"
+                 v-if="context.userId === data.ownerId && state.done2"
+        >
+            <el-tab-pane label="INFO" name="info">
+                <span slot="label"><i class="zmdi zmdi-info mr5"></i></i>INFO</span>
+                {% include 'src/ui/info_tab.html' %}
+            </el-tab-pane>
+            <el-tab-pane label="TAGS" name="tags">
+                <span slot="label"><i class="zmdi zmdi-tag mr5"></i>TAGS</span>
+                {% include 'src/ui/tags_tab.html' %}
+            </el-tab-pane>
+            <el-tab-pane label="CATALOG" name="catalog">
+                <span slot="label"><i class="zmdi zmdi-storage mr5"></i>CATALOG</span>
+                {% include 'src/ui/catalog_tab.html' %}
+            </el-tab-pane>
+            <el-tab-pane label="SETTINGS" name="settings">
+                <span slot="label"><i class="zmdi zmdi-settings mr5"></i>SETTINGS</span>
+                {% include 'src/ui/settings_tab.html' %}
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+</div>

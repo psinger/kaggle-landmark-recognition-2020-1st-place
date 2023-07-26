@@ -31,13 +31,13 @@ def global_average_precision_score(y_true, y_pred, ignore_non_landmarks=False):
     correct_predictions = 0
     total_score = 0.
     i = 1
-    for k in indexes:
+    for k in indexes:  # for every prediction in descending order
         if ignore_non_landmarks and y_true[k] == args.n_classes:
             continue
         if y_pred[0][k] == args.n_classes:
             continue
         relevance_of_prediction_i = 0
-        if y_true[k] == y_pred[0][k]:
+        if y_true[k] == y_pred[0][k]:  # if we predict label right
             correct_predictions += 1
             relevance_of_prediction_i = 1
         precision_at_rank_i = correct_predictions / i
@@ -57,6 +57,7 @@ def cos_similarity_matrix(a, b, eps=1e-8):
     sim_mt = torch.mm(a_norm, b_norm.transpose(0, 1))
     return sim_mt
 
+
 def get_topk_cossim(test_emb, tr_emb, batchsize = 64, k=10, device='cuda:0',verbose=True):
     tr_emb = torch.tensor(tr_emb, dtype = torch.float32, device=torch.device(device))
     test_emb = torch.tensor(test_emb, dtype = torch.float32, device=torch.device(device))
@@ -70,3 +71,4 @@ def get_topk_cossim(test_emb, tr_emb, batchsize = 64, k=10, device='cuda:0',verb
     vals = torch.cat(vals)
     inds = torch.cat(inds)
     return vals, inds
+

@@ -1,0 +1,14 @@
+train_filtered
+
+classes count: 83
+images in train: 9130
+avg img in class: 110.0
+
+---
+
+test_filtered
+
+classes count: 10
+images in test: 27
+avg img in class: 2.7
+

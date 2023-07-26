@@ -1,0 +1,3 @@
+supervisely==6.35.0
+supervisely[apps]==6.35.0
+python-dotenv

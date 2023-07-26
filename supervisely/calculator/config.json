@@ -1,0 +1,39 @@
+{
+  "name": "Embeddings Calculator",
+  "type": "app",
+  "categories": [
+    "neural network",
+    "images",
+    "metric learning",
+    "nn tools"
+  ],
+  "description": "Calculate embeddings for images project",
+  "docker_image": "supervisely/base-py-sdk:6.35.0",
+  "instance_version": "6.4.57",
+  "main_script": "supervisely/calculator/src/main.py",
+  "modal_template": "supervisely/calculator/src/modal.html",
+  "modal_width": 700,
+  "modal_template_state": {
+    "sessionId": "None",
+    "ssOptions": {
+      "sessionTags": [
+        "deployed_nn_embeddings"
+      ],
+      "showLabel": false,
+      "size": "small"
+    }
+  },
+  "task_location": "workspace_tasks",
+  "icon": "https://i.imgur.com/FHHLYZQ.png",
+  "icon_background": "#FFFFFF",
+  "need_gpu": false,
+  "headless": true,
+  "context_menu": {
+    "target": [
+      "images_project"
+    ],
+    "context_category": "Metric Learning"
+  },
+  "poster": "https://i.imgur.com/XLxFpq8.jpg",
+  "community_agent": false
+}

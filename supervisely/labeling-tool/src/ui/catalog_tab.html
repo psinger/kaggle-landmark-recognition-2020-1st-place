@@ -1,0 +1,137 @@
+<sly-card
+
+        style="padding: 0 0;"
+>
+
+    <div v-loading="state.loading" element-loading-text="Loading...">
+        <span style="font-size: 11px; position: absolute; top: 2px; right: 5px; cursor: default;">
+            {{state.annotatedFiguresCount}} / {{state.allFiguresCount}}</span>
+        <div class="app-header">
+            <div class="fflex" style="justify-content: center; margin: 0 10px">
+                <div class="fflex" style="justify-content: center; margin: 3px 0">
+                    <div class="fflex" style="justify-content: center; flex-direction: column">
+
+                        <el-button type="primary"
+                                   size="small"
+                                   class="regular"
+                                   @click="state.loading = true; command('prev_object');"
+                                   style="width: 140px; margin: 2px 3px">
+                            <i class="el-icon-arrow-left el-icon-left"></i>
+                        </el-button>
+                        <p style="font-size: 10px; color: #5a6772; margin: 1px 0">prev object&nbsp;&nbsp;|&nbsp;&nbsp;<b
+                                style="color: #ef23f1;">CTRL + [</b></p>
+                    </div>
+                    <div class="fflex" style="justify-content: center; flex-direction: column">
+
+                        <el-button type="primary"
+                                   size="small"
+                                   class="regular"
+                                   @click="state.loading = true; command('next_object');"
+                                   style="width: 140px; margin: 2px 3px">
+                            <i class="el-icon-arrow-right el-icon-right ml10"></i>
+                        </el-button>
+                        <p style="font-size: 10px; color: #5a6772; margin: 1px 0">next object&nbsp;&nbsp;|&nbsp;&nbsp;<b
+                                style="color: #ef23f1;">CTRL + ]</b></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <sly-card>
+            <div v-if="!state.selectedDatabaseItem">
+                <sly-field title="INFO: object is not selected"
+                           description="search and select from table below"
+                           style="padding-top: 0; padding-bottom: 4px">
+
+                    <sly-icon slot="icon" :options="{ color: '#13ce66', bgColor: '#e1f7eb', rounded: false }">
+                        <i class="zmdi zmdi-info"></i>
+                    </sly-icon>
+                </sly-field>
+            </div>
+            <div v-if="state.selectedDatabaseItem">
+
+                <div class="fflex"
+                     style="flex-direction: column; justify-content: center;">
+
+                    <div style="margin-bottom: 0; width: 100%">
+                        <div class="fflex"
+                             style="flex-direction: column; justify-content: center;">
+                            <div class="fflex"
+                                 style="flex-direction: row; justify-content: space-between; width: 100%">
+
+                                <div>
+                                    <!--                                    <el-tag style="font-size: 15px; margin: 0 2px;" type="primary">-->
+                                    <!--                                        <b>SELECTED:</b>-->
+                                    <!--                                    </el-tag>-->
+
+
+                                    <el-tag style="font-size: 13px; margin: 0 2px;">
+                                        TAG: {{state.selectedDatabaseItem.current_label}}
+                                    </el-tag>
+                                </div>
+
+                                <div
+                                        class="fflex"
+                                        style="flex-direction: row; margin: 0 0; justify-content: center">
+                                    <el-button
+                                            v-if="!state.addEveryAssignedToReference"
+                                            type="warning"
+                                            style="margin: 5px; width: 100px"
+                                            size="small"
+                                            @click="state.itemToReference=state.selectedDatabaseItem; state.selectedDatabaseItem.referenceDisabled=true; command('add_to_reference');"
+                                            :disabled="state.selectedDatabaseItem.referenceDisabled"
+
+                                    >
+                                        Reference
+                                    </el-button>
+                                    <el-button type="success"
+                                               style="margin: 5px; width: 100px"
+                                               size="small"
+                                               @click="state.lastAssignedTag = state.selectedDatabaseItem;
+                                               state.selectedDatabaseItem.assignDisabled = true; command('assign_tag_to_figure');"
+                                               :disabled="state.selectedDatabaseItem.assignDisabled"
+                                    >
+                                        Assign
+                                    </el-button>
+
+                                </div>
+                            </div>
+
+
+                            <div class=""
+                                 style="width: 100%; flex: 1;"
+                            >
+
+                                <sly-image-slider
+                                        class="custom-full-size-slider"
+                                        style="height: 213px; justify-content: flex-end; align-items: center"
+                                        :data="state.selectedDatabaseItem.url"></sly-image-slider>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <hr class="mt10 mb10" style="border: 0; border-top: 1px solid rgba(0,0,0,.12);"/>
+            <sly-field title="Database of reference data"
+                       description=""
+                       style="padding-top: 4px; padding-bottom: 0">
+
+                <!--                {{state.selectedRowData}}-->
+                <sly-table class="mt10"
+                           v-if="data.itemsDatabase.length > 0"
+                           :options="{perPage: 20, pageSize: 20}"
+                           :content="data.itemsDatabase"
+                           @input="state.selectedRowLabel = $event.selectedRowData.label; command('show_database_row')"
+                >
+                </sly-table>
+            </sly-field>
+
+        </sly-card>
+
+
+    </div>
+</sly-card>
